@@ -421,6 +421,14 @@
 		},
 		"operator": {
             "patterns": [
+				{
+					"match": "\\bmay\\s+be\\s+performed\\s+only\\s+by\\s+tx\\b",
+             		"name": "keyword.operator.logic.specific"
+				},
+				{
+					"match": "\\bmay\\s+be\\s+performed\\s+only\\s+by\\s+role\\b",
+             		"name": "keyword.operator.logic.specific"
+				},
                 {
                     "match": "(and|or|not|\\->)",
              		"name": "keyword.operator.logic.archetype"
