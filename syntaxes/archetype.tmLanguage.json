@@ -402,7 +402,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(state|now|transferred|caller|balance|conditions|effects|none|any|transfer|mem|idem|before|after|fixed|subset|default|type)\\b",
+					"match": "\\b(state|now|transferred|caller|balance|requires|effects|none|any|transfer|mem|idem|before|after|fixed|subset|default|type)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
@@ -532,10 +532,10 @@
 					"name": "markup.heading.calledby.archetype"
 				},
 				{
-					"match": "\\b(condition|when)\\b",
+					"match": "\\b(require|when)\\b",
 					"captures": {
 						"1": {
-							"name": "markup.heading.condition.archetype"
+							"name": "markup.heading.require.archetype"
 						}
 					}
 				},
@@ -587,7 +587,7 @@
 					"name": "markup.bold.label.archetype"
 				},
 				{
-					"match": "\\b(if|then|else|for|in|break|otherwise|transfer|to|end?)\\b",
+					"match": "\\b(if|then|else|for|in|break|otherwise|transfer|require|failif|to|end?)\\b",
 					"name": "keyword.control.flow.archetype"
 				}
 			]
