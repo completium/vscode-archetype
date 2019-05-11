@@ -532,6 +532,10 @@
 					"name": "markup.heading.calledby.archetype"
 				},
 				{
+					"match": "(accept)(\\s+)(transfer)",
+					"name": "markup.heading.calledby.archetype"
+				},
+				{
 					"match": "\\b(require|when)\\b",
 					"captures": {
 						"1": {
