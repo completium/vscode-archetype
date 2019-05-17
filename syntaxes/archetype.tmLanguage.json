@@ -9,16 +9,16 @@
 			"include": "#declarations"
 		},
 		{
-		    "include": "#description"
+			"include": "#description"
 		},
 		{
 			"include": "#type"
 		},
 		{
-		    "include": "#operator"
+			"include": "#operator"
 		},
 		{
-		    "include": "#control"
+			"include": "#control"
 		},
 		{
 			"include": "#global"
@@ -420,36 +420,36 @@
 			]
 		},
 		"operator": {
-            "patterns": [
-							{
-								"match": "\\bmay\\s+be\\s+performed\\s+only\\s+by\\s+action\\b",
-											 "name": "keyword.operator.logic.specific"
-							},
-							{
-								"match": "\\bmay\\s+be\\s+performed\\s+only\\s+by\\s+role\\b",
-											 "name": "keyword.operator.logic.specific"
-							},
-							{
-								"match": "\\bmay\\s+be\\s+performed\\s+by\\s+action\\b",
-											 "name": "keyword.operator.logic.specific"
-							},
-							{
-								"match": "\\bmay\\s+be\\s+performed\\s+by\\s+role\\b",
-											 "name": "keyword.operator.logic.specific"
-							},
-														{
-                    "match": "(and|or|not|\\->)",
-             		"name": "keyword.operator.logic.archetype"
-                },
-                {
-                    "match": "(=|<>|>=|>|<|<=)",
-             		"name": "keyword.operator.comparison.archetype"
-                },
-                {
+			"patterns": [
+				{
+					"match": "\\bmay\\s+be\\s+performed\\s+only\\s+by\\s+action\\b",
+					"name": "keyword.operator.logic.specific"
+				},
+				{
+					"match": "\\bmay\\s+be\\s+performed\\s+only\\s+by\\s+role\\b",
+					"name": "keyword.operator.logic.specific"
+				},
+				{
+					"match": "\\bmay\\s+be\\s+performed\\s+by\\s+action\\b",
+					"name": "keyword.operator.logic.specific"
+				},
+				{
+					"match": "\\bmay\\s+be\\s+performed\\s+by\\s+role\\b",
+					"name": "keyword.operator.logic.specific"
+				},
+				{
+					"match": "(and|or|not|\\->)",
+					"name": "keyword.operator.logic.archetype"
+				},
+				{
+					"match": "(=|<>|>=|>|<|<=)",
+					"name": "keyword.operator.comparison.archetype"
+				},
+				{
 					"match": "(\\+|\\-|\\*|\\/|\\%)",
 					"name": "keyword.operator.arithmetic.archetype"
-                },
-                {
+				},
+				{
 					"match": "(forall|exists)(\\s+([A-Za-z_]\\w*))",
 					"captures": {
 						"1": {
@@ -459,13 +459,13 @@
 							"name": "entity.name.id_quantifier.archetype"
 						}
 					}
-                },
-                {
+				},
+				{
 					"match": "(\\:=|\\+=|\\-=|\\*=|\\/=|\\&=|\\|=)",
 					"name": "keyword.operator.assignment.archetype"
-                }
-            ]
-        },
+				}
+			]
+		},
 		"punctuation": {
 			"patterns": [
 				{
@@ -508,6 +508,10 @@
 							"name": "entity.name.as.archetype"
 						}
 					}
+				},
+				{
+					"match": "\\b(at)\\b",
+					"name": "markup.heading.at.archetype"
 				},
 				{
 					"match": "\\b(on)(\\s+([A-Za-z_]\\w*))\\b",
@@ -591,7 +595,6 @@
 						"3": {
 							"name": "keyword.control.with.archetype"
 						}
-
 					}
 				},
 				{
@@ -627,15 +630,15 @@
 				},
 				{
 					"match": "\\b(\\d+\\.\\d+)\\b",
-       			    "name": "constant.numeric.rational.decimal.archetype"
+					"name": "constant.numeric.rational.decimal.archetype"
 				},
 				{
 					"match": "\\b\\d+Y\\b",
-			  		"name": "constant.language.duration.archetype"
+					"name": "constant.language.duration.archetype"
 				},
 				{
 					"match": "@(\\w+)",
-	       			"name": "constant.language.address.archetype"
+					"name": "constant.language.address.archetype"
 				},
 				{
 					"match": "\\b([\\+-]?\\d{4}(?!\\d{2}\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?\\b",
@@ -643,11 +646,11 @@
 				},
 				{
 					"match": "\\b\\d+\\b",
-	       			"name": "constant.numeric.number.archetype"
+					"name": "constant.numeric.number.archetype"
 				},
 				{
 					"match": "\\b(true|false)\\b",
-			  		"name": "constant.language.bool.archetype"
+					"name": "constant.language.bool.archetype"
 				}
 			]
 		}
