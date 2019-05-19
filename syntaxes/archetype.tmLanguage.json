@@ -187,6 +187,20 @@
 							"name": "entity.name.type.asset.archetype"
 						}
 					}
+				},
+				{
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\])?\\s*\\:\\s*(\\s+([A-Za-z_]\\w*))",
+					"captures": {
+						"1": {
+							"name": "entity.name.asset.name"
+						},
+						"2": {
+							"name": "markup.underline.extension.archetype"
+						},
+						"4": {
+							"name": "storage.type.asset.type"
+						}
+					}
 				}
 			]
 		},
@@ -271,6 +285,20 @@
 						},
 						"4": {
 							"name": "entity.name.type.function.archetype"
+						}
+					}
+				},
+				{
+					"match": "\\(([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\])?\\s*\\:\\s*(\\s+([A-Za-z_]\\w*))\\)",
+					"captures": {
+						"1": {
+							"name": "entity.name.argument.name"
+						},
+						"2": {
+							"name": "markup.underline.extension.archetype"
+						},
+						"4": {
+							"name": "storage.type.argument.type"
 						}
 					}
 				}
@@ -540,12 +568,19 @@
 					"name": "markup.heading.effect.archetype"
 				},
 				{
-					"match": "(called)(\\s+)(by)",
-					"name": "markup.heading.calledby.archetype"
+					"match": "((called)(\\s*)(by))\\s*(\\[\\%\\w+\\])?",
+					"captures": {
+						"1": {
+							"name": "markup.heading.calledby.archetype"
+						},
+						"5": {
+							"name": "markup.underline.extension.archetype"
+						}
+					}
 				},
 				{
 					"match": "(accept)(\\s+)(transfer)",
-					"name": "markup.heading.calledby.archetype"
+					"name": "markup.heading.accepttransfer.archetype"
 				},
 				{
 					"match": "\\b(require|when)\\b",
