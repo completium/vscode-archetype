@@ -1,6 +1,6 @@
 # Archetype support for Visual Studio code
 
-Archetype language is a DSL (Domain Specific Language) to describe blockchain business processes, this extension provides:
+Archetype is a smart contract development solution dedicated to contract quality insurance, this extension provides:
 
 * Syntax highlighting
 
