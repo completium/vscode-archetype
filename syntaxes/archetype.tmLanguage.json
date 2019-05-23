@@ -527,17 +527,6 @@
 					}
 				},
 				{
-					"match": "\\b(as)(\\s+([A-Za-z_]\\w*))\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.as.archetype"
-						},
-						"3": {
-							"name": "entity.name.as.archetype"
-						}
-					}
-				},
-				{
 					"match": "\\b(at)\\b",
 					"name": "markup.heading.at.archetype"
 				},
