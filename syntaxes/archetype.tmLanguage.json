@@ -103,7 +103,7 @@
 		"declaration-archetype": {
 			"patterns": [
 				{
-					"match": "\\b(archetype)(\\[\\%(.)+\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(archetype)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.archetype.archetype"
@@ -121,7 +121,7 @@
 		"declaration-variable": {
 			"patterns": [
 				{
-					"match": "\\b(variable|constant)(\\[\\%(.)+\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(variable|constant)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.variable.archetype"
@@ -139,7 +139,7 @@
 		"declaration-enum": {
 			"patterns": [
 				{
-					"match": "\\b(enum)(\\[\\%(.)+\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(enum)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.enum.archetype"
@@ -157,7 +157,7 @@
 		"declaration-states": {
 			"patterns": [
 				{
-					"match": "\\b(states)(\\[\\%(.)+\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(states)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.states.archetype"
@@ -175,7 +175,7 @@
 		"declaration-asset": {
 			"patterns": [
 				{
-					"match": "\\b(asset)(\\[\\%(.)+\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(asset)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.asset.archetype"
@@ -189,7 +189,7 @@
 					}
 				},
 				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\])?\\s*\\:\\s*(\\s+([A-Za-z_]\\w*))",
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(\\s+([A-Za-z_]\\w*))",
 					"captures": {
 						"1": {
 							"name": "entity.name.asset.name"
@@ -207,7 +207,7 @@
 		"declaration-action": {
 			"patterns": [
 				{
-					"match": "\\b(action)(\\[\\%(.)+\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(action)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.action.archetype"
@@ -225,7 +225,7 @@
 		"declaration-transition": {
 			"patterns": [
 				{
-					"match": "\\b(transition)(\\[\\%(.)+\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(transition)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.transition.archetype"
@@ -243,7 +243,7 @@
 		"declaration-contract": {
 			"patterns": [
 				{
-					"match": "\\b(contract)(\\[\\%(.)+\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(contract)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.contract.archetype"
@@ -275,7 +275,7 @@
 		"declaration-function": {
 			"patterns": [
 				{
-					"match": "\\b(function)(\\[\\%(.)+\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(function)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.function.archetype"
@@ -289,7 +289,7 @@
 					}
 				},
 				{
-					"match": "\\(([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\])?\\s*\\:\\s*(\\s+([A-Za-z_]\\w*))\\)",
+					"match": "\\(([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(\\s+([A-Za-z_]\\w*))\\)",
 					"captures": {
 						"1": {
 							"name": "entity.name.argument.name"
@@ -307,7 +307,7 @@
 		"declaration-verification": {
 			"patterns": [
 				{
-					"match": "\\b(verification)(\\[\\%(.)+\\])?\\b",
+					"match": "\\b(verification)(\\[\\%(.)+\\%\\])?\\b",
 					"name": "storage.type.verification.archetype"
 				}
 			]
