@@ -557,7 +557,7 @@
 					"name": "markup.heading.effect.archetype"
 				},
 				{
-					"match": "((called)(\\s*)(by))\\s*(\\[\\%\\w+\\])?",
+					"match": "((called)(\\s*)(by))\\s*(\\[\\%\\w+\\%\\])?",
 					"captures": {
 						"1": {
 							"name": "markup.heading.calledby.archetype"

@@ -1,7 +1,24 @@
 {
     "name": "archetype",
     "displayName": "Archetype language support for Visual Studio Code",
-    "description": "",
+    "keywords": [
+        "archetype",
+        "tezos",
+        "blockchain",
+        "compiler",
+        "smart-contract",
+        "formal-verification"
+    ],
+    "description": "Archetype is a smart contract development solution dedicated to contract quality insurance.",
+    "publisher": "edukera",
+    "bugs": {
+        "url": "https://github.com/edukera/vscode-archetype/issues"
+    },
+    "icon": "images/icon.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/edukera/vscode-archetype"
+    },
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.33.0"
@@ -9,20 +26,33 @@
     "categories": [
         "Programming Languages"
     ],
-    "contributes": {
-        "languages": [{
-            "id": "archetype",
-            "aliases": ["archetype", "archetype"],
-            "extensions": ["arl", "arlx"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "archetype",
-            "scopeName": "source.archetype",
-            "path": "./syntaxes/archetype.tmLanguage.json"
-        }]
+    "dependencies": {
+        "tar": ">=4.2.2"
     },
     "devDependencies": {
-	    "tar": ">=4.4.2"
-	}
+        "tar": ">=4.4.2"
+    },
+    "contributes": {
+        "languages": [
+            {
+                "id": "archetype",
+                "aliases": [
+                    "archetype",
+                    "archetype"
+                ],
+                "extensions": [
+                    "arl",
+                    "arlx"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "archetype",
+                "scopeName": "source.archetype",
+                "path": "./syntaxes/archetype.tmLanguage.json"
+            }
+        ]
+    }
 }
