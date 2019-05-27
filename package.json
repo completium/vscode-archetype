@@ -11,6 +11,7 @@
     ],
     "description": "Archetype is a smart contract development solution dedicated to contract quality insurance.",
     "publisher": "edukera",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/edukera/vscode-archetype/issues"
     },
