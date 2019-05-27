@@ -22,6 +22,7 @@
       "states =",
       "\t| Created initial",
       "\t| Aborted",
+      "\t| Confirmed",
       "\t| Canceled",
       "\t| Completed"
     ],
