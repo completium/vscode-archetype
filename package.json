@@ -15,6 +15,10 @@
         "url": "https://github.com/edukera/vscode-archetype/issues"
     },
     "icon": "images/icon.png",
+    "galleryBanner": {
+        "color": "#243564",
+        "theme": "dark"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/edukera/vscode-archetype"
@@ -24,7 +28,8 @@
         "vscode": "^1.33.0"
     },
     "categories": [
-        "Programming Languages"
+        "Programming Languages",
+        "Snippets"
     ],
     "dependencies": {
         "tar": ">=2.2.2"
@@ -33,6 +38,12 @@
         "tar": ">=2.2.2"
     },
     "contributes": {
+        "snippets": [
+            {
+                "language": "archetype",
+                "path": "./snippets/archetype.json"
+            }
+        ],
         "languages": [
             {
                 "id": "archetype",

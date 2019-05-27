@@ -1,0 +1,61 @@
+{
+  "Asset": {
+    "prefix": "asset",
+    "body": [
+      "asset ${1:ident} identified by ${2:id} = {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Asset"
+  },
+  "Enum": {
+    "prefix": "enum",
+    "body": [
+      "enum ${1:ident} =",
+      "\t| $0"
+    ],
+    "description": "Enum"
+  },
+  "States": {
+    "prefix": "states",
+    "body": [
+      "states =",
+      "\t| $0"
+    ],
+    "description": "States"
+  },
+  "Variable": {
+    "prefix": "var",
+    "body": [
+      "variable ${0:ident} ${1:type} = ${2:value}"
+    ],
+    "description": "States"
+  },
+  "Constant": {
+    "prefix": "cst",
+    "body": [
+      "constant ${0:ident} ${1:type} = ${2:value}"
+    ],
+    "description": "States"
+  },
+  "Action_Transaction": {
+    "prefix": "action",
+    "body": [
+      "action ${1:ident} = {",
+      "\teffect {",
+      "\t\t${0:instructions}",
+      "\t}",
+      "}"
+    ],
+    "description": "Action transaction"
+  },
+  "Transition_Transaction": {
+    "prefix": "trans",
+    "body": [
+      "transition ${1:ident} from ${2:source} = {",
+      "\tto ${3:target}",
+      "}"
+    ],
+    "description": "Transition transaction"
+  }
+}
