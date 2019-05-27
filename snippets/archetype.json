@@ -3,7 +3,7 @@
     "prefix": "asset",
     "body": [
       "asset ${1:ident} identified by ${2:id} = {",
-      "\t$0",
+      "\t${2:id} : int",
       "}"
     ],
     "description": "Asset"
@@ -20,7 +20,10 @@
     "prefix": "states",
     "body": [
       "states =",
-      "\t| $0"
+      "\t| Created initial",
+      "\t| Aborted",
+      "\t| Canceled",
+      "\t| Completed"
     ],
     "description": "States"
   },
@@ -38,10 +41,28 @@
     ],
     "description": "States"
   },
+  "Action_Transaction_with_verification": {
+    "prefix": "action",
+    "body": [
+      "action ${1:ident} = {",
+      "\tcalled by ${2:role}",
+      "\tverification {",
+      "\t\tspecification {",
+      "\t\t\ts1 : true",
+      "\t\t}",
+      "\t}",
+      "\teffect {",
+      "\t\t${0:instructions}",
+      "\t}",
+      "}"
+    ],
+    "description": "Action transaction"
+  },
   "Action_Transaction": {
     "prefix": "action",
     "body": [
       "action ${1:ident} = {",
+      "\tcalled by ${2:role}",
       "\teffect {",
       "\t\t${0:instructions}",
       "\t}",
@@ -53,6 +74,7 @@
     "prefix": "trans",
     "body": [
       "transition ${1:ident} from ${2:source} = {",
+      "\tcalled by ${4:role}",
       "\tto ${3:target}",
       "}"
     ],
