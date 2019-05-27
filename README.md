@@ -4,7 +4,7 @@
 
 # Archetype support for Visual Studio code
 
-Archetype is a smart contract development solution dedicated to contract quality insurance, this extension provides:
+Archetype is a Tezos smart contract development solution dedicated to contract quality insurance, this extension provides:
 
 ##  Quick start
 ### Install archetype compiler
@@ -39,3 +39,4 @@ with this repository
 - [ ] Auto-Completion
 - [ ] Outline
 - [ ] Linter
+- [ ] Debug
