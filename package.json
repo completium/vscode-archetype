@@ -32,12 +32,6 @@
         "Programming Languages",
         "Snippets"
     ],
-    "dependencies": {
-        "tar": ">=2.2.2"
-    },
-    "devDependencies": {
-        "tar": ">=2.2.2"
-    },
     "contributes": {
         "snippets": [
             {
@@ -66,6 +60,20 @@
                 "path": "./syntaxes/archetype.tmLanguage.json"
             }
         ],
+        "commands": [
+            {
+                "command": "archetype.compile",
+                "title": "Archetype: Compile contract"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "archetype.compile",
+                "key": "f5",
+                "mac": "f5",
+                "when": "editorTextFocus && editorLangId == 'archetype'"
+            }
+        ],
         "iconThemes": [
             {
                 "id": "archetype",
@@ -73,5 +81,18 @@
                 "path": "./themes/archetype-icon-theme.json"
             }
         ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc  -p ./",
+        "lint": "tslint -p ./",
+        "watch": "tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "@types/node": "^10.14.6",
+        "@types/vscode": "^1.33.0",
+        "tslint": "^5.16.0",
+        "typescript": "^3.4.5",
+        "tar": ">=4.2.2"
     }
 }
