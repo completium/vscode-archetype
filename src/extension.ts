@@ -1,9 +1,7 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Congratulations, your extension "helloworld-sample" is now active!');
-
-  let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
+  let disposable = vscode.commands.registerCommand('archetype.compile', () => {
     vscode.window.showInformationMessage('Hello World!');
   });
 
