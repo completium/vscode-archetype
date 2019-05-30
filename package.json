@@ -65,6 +65,13 @@
                 "scopeName": "source.archetype",
                 "path": "./syntaxes/archetype.tmLanguage.json"
             }
+        ],
+        "iconThemes": [
+            {
+                "id": "archetype",
+                "label": "archetype",
+                "path": "./themes/archetype-icon-theme.json"
+            }
         ]
     }
 }

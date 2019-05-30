@@ -1,0 +1,17 @@
+{
+	"iconDefinitions": {
+		"archetype_main_icon": {
+			"iconPath": "./logo-B2B-128-128.png"
+		},
+		"archetype_aux_icon": {
+			"iconPath": "./logo-sober-128-128.png"
+		}
+	},
+	"fileExtensions": {
+		"arl": "archetype_main_icon",
+		"arlx": "archetype_aux_icon"
+	},
+	"languageIds": {
+		"archetype": "archetype_main_icon"
+	}
+}
