@@ -15,7 +15,7 @@
     "bugs": {
         "url": "https://github.com/edukera/vscode-archetype/issues"
     },
-    "icon": "images/logo-archetype-256px.png",
+    "icon": "images/icon.png",
     "galleryBanner": {
         "color": "#243564",
         "theme": "dark"
