@@ -96,6 +96,9 @@
 					"include": "#declaration-invariant"
 				},
 				{
+					"include": "#declaration-assert"
+				},
+				{
 					"include": "#declaration-specification"
 				}
 			]
@@ -375,10 +378,13 @@
 		"declaration-invariant": {
 			"patterns": [
 				{
-					"match": "\\b(invariant)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(invariants)\\s+(for)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.invariant.archetype"
+							"name": "storage.type.invariants.archetype"
+						},
+						"2": {
+							"name": "storage.type.invariants.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.invariant.archetype"
@@ -387,10 +393,31 @@
 				}
 			]
 		},
+		"declaration-assert": {
+			"patterns": [
+				{
+					"match": "\\b(assert)(\\s+([A-Za-z_]\\w*))(\\s+(at))(\\s+([A-Za-z_]\\w*))\\b",
+					"captures": {
+						"1": {
+							"name": "storage.type.assert.archetype"
+						},
+						"3": {
+							"name": "entity.name.type.assert.archetype"
+						},
+						"5": {
+							"name": "storage.type.at.archetype"
+						},
+						"7": {
+							"name": "entity.name.type.at.archetype"
+						}
+					}
+				}
+			]
+		},
 		"declaration-specification": {
 			"patterns": [
 				{
-					"match": "\\b(specification)\\b",
+					"match": "\\b(specification)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.specification.archetype"
@@ -438,7 +465,7 @@
 		"global-functions": {
 			"patterns": [
 				{
-					"match": "\\b(assert|fail)\\b",
+					"match": "\\b(fail)\\b",
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
@@ -576,6 +603,17 @@
 					"captures": {
 						"1": {
 							"name": "markup.heading.require.archetype"
+						}
+					}
+				},
+				{
+					"match": "\\b(label)(\\s+([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "markup.heading.label.archetype"
+						},
+						"3": {
+							"name": "entity.name.type.label.archetype"
 						}
 					}
 				},
