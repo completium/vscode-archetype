@@ -26,12 +26,17 @@
     },
     "version": "0.0.1",
     "engines": {
-        "vscode": "^1.33.0"
+        "vscode": "^1.34.0"
     },
     "categories": [
         "Programming Languages",
         "Snippets"
     ],
+    "activationEvents": [
+        "onCommand:archetype.compile",
+        "onCommand:archetype.genMarkdown" 
+    ],
+    "main": "./out/extension.js",
     "contributes": {
         "snippets": [
             {
@@ -64,6 +69,14 @@
             {
                 "command": "archetype.compile",
                 "title": "Archetype: Compile contract"
+            },
+            {
+                "command": "archetype.genMarkdown",
+                "title": "Archetype: Generate markdown",
+                "icon": {
+                    "light": "images/cc.svg",
+                    "dark": "images/cc.svg"
+                }
             }
         ],
         "keybindings": [
@@ -79,6 +92,15 @@
                 "id": "archetype",
                 "label": "archetype",
                 "path": "./themes/archetype-icon-theme.json"
+            }
+        ]
+    },
+    "menus": {
+        "editor/title": [
+            {
+                "when": "resourceLangId != 2archetype",
+                "command": "archetype.genMarkdown",
+                "group": "navigation"
             }
         ]
     },
