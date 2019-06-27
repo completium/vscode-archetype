@@ -51,6 +51,9 @@
 					"include": "#declaration-variable"
 				},
 				{
+					"include": "#declaration-instance"
+				},
+				{
 					"include": "#declaration-enum"
 				},
 				{
@@ -134,6 +137,30 @@
 						},
 						"4": {
 							"name": "entity.name.type.variable.archetype"
+						}
+					}
+				}
+			]
+		},
+		"declaration-instance": {
+			"patterns": [
+				{
+					"match": "\\b(instance)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))(\\s+of)(\\s+([A-Za-z_]\\w*))\\b",
+					"captures": {
+						"1": {
+							"name": "storage.type.instance.archetype"
+						},
+						"2": {
+							"name": "markup.underline.extension.archetype"
+						},
+						"5": {
+							"name": "entity.name.type.instance.archetype"
+						},
+						"6": {
+							"name": "storage.type.of.archetype"
+						},
+						"7": {
+							"name": "entity.name.contract.archetype"
 						}
 					}
 				}
@@ -664,7 +691,7 @@
 					"name": "markup.bold.label.archetype"
 				},
 				{
-					"match": "\\b(if|then|else|for|in|break|otherwise|transfer|require|failif|to|end?)\\b",
+					"match": "\\b(if|then|else|for|in|break|otherwise|transfer|require|failif|to|end|return?)\\b",
 					"name": "keyword.control.flow.archetype"
 				}
 			]
