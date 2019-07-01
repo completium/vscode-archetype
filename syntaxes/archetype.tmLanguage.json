@@ -722,7 +722,7 @@
 					"name": "constant.numeric.rational.decimal.archetype"
 				},
 				{
-					"match": "\\b\\d+Y\\b",
+					"match": "\\b\\d+d\\b",
 					"name": "constant.language.duration.archetype"
 				},
 				{
