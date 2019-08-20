@@ -90,7 +90,7 @@
 					"include": "#declaration-definition"
 				},
 				{
-					"include": "#declaration-axiom"
+					"include": "#declaration-lemma"
 				},
 				{
 					"include": "#declaration-theorem"
@@ -372,16 +372,16 @@
 				}
 			]
 		},
-		"declaration-axiom": {
+		"declaration-lemma": {
 			"patterns": [
 				{
-					"match": "\\b(axiom)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(lemma)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.axiom.archetype"
+							"name": "storage.type.lemma.archetype"
 						},
 						"3": {
-							"name": "entity.name.type.axiom.archetype"
+							"name": "entity.name.type.lemma.archetype"
 						}
 					}
 				}
