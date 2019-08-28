@@ -49,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
     { cmd: "genLigo", target: "ligo", ext: "lig", action: "openFile" },
     { cmd: "genSmartPy", target: "smartpy", ext: "spy", action: "openFile" },
     { cmd: "genOCaml", target: "ocaml", ext: "ml", action: "openFile"},
-    { cmd: "genWhyml", target: "whyml", ext: "wml", action: "openFile"}
+    { cmd: "genWhyml", target: "whyml", ext: "mlw", action: "openFile"}
   ];
 
   targets.forEach( (target) => {
