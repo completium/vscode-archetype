@@ -1,151 +1,153 @@
 {
-    "name": "archetype",
-    "displayName": "Archetype language support for Visual Studio Code",
-    "keywords": [
-        "archetype",
-        "tezos",
-        "blockchain",
-        "compiler",
-        "smart-contract",
-        "formal-verification"
-    ],
-    "description": "Archetype is a smart contract development solution dedicated to contract quality insurance.",
-    "publisher": "edukera",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/edukera/vscode-archetype/issues"
-    },
-    "icon": "images/icon.png",
-    "galleryBanner": {
-        "color": "#243564",
-        "theme": "dark"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/edukera/vscode-archetype"
-    },
-    "version": "0.0.1",
-    "engines": {
-        "vscode": "^1.34.0"
-    },
-    "categories": [
-        "Programming Languages",
-        "Snippets"
-    ],
-    "activationEvents": [
-        "onCommand:archetype.compile",
-        "onCommand:archetype.genMarkdown",
-        "onCommand:archetype.genLiquidityUrl",
-        "onCommand:archetype.genLiquidity",
-        "onCommand:archetype.genLigo",
-        "onCommand:archetype.genSmartPy",
-        "onCommand:archetype.genOCaml",
-        "onCommand:archetype.genWhyml"
-    ],
-    "main": "./out/extension.js",
-    "contributes": {
-        "snippets": [
-            {
-                "language": "archetype",
-                "path": "./snippets/archetype.json"
-            }
-        ],
-        "languages": [
-            {
-                "id": "archetype",
-                "aliases": [
-                    "archetype",
-                    "archetype"
-                ],
-                "extensions": [
-                    "arl",
-                    "arlx"
-                ],
-                "configuration": "./language-configuration.json"
-            }
-        ],
-        "grammars": [
-            {
-                "language": "archetype",
-                "scopeName": "source.archetype",
-                "path": "./syntaxes/archetype.tmLanguage.json"
-            }
-        ],
-        "commands": [
-            {
-                "command": "archetype.compile",
-                "title": "Archetype: Compile contract"
-            },
-            {
-                "command": "archetype.genMarkdown",
-                "title": "Archetype: Generate markdown",
-                "icon": {
-                    "light": "images/cc.svg",
-                    "dark": "images/cc.svg"
-                }
-            },
-            {
-                "command": "archetype.genLiquidityUrl",
-                "title": "Archetype: Generate liquidity and open in TryLiquidity"
-            },
-            {
-                "command": "archetype.genLiquidity",
-                "title": "Archetype: Generate liquidity"
-            },
-            {
-                "command": "archetype.genLigo",
-                "title": "Archetype: Generate ligo"
-            },
-            {
-                "command": "archetype.genSmartPy",
-                "title": "Archetype: Generate smartPy"
-            },
-            {
-                "command": "archetype.genOCaml",
-                "title": "Archetype: Generate OCaml"
-            },
-            {
-                "command": "archetype.genWhyml",
-                "title": "Archetype: Generate Whyml"
-            }
-        ],
-        "keybindings": [
-            {
-                "command": "archetype.compile",
-                "key": "f5",
-                "mac": "f5",
-                "when": "editorTextFocus && editorLangId == 'archetype'"
-            }
-        ],
-        "iconThemes": [
-            {
-                "id": "archetype",
-                "label": "archetype",
-                "path": "./themes/archetype-icon-theme.json"
-            }
-        ]
-    },
-    "menus": {
-        "editor/title": [
-            {
-                "when": "resourceLangId != 2archetype",
-                "command": "archetype.genMarkdown",
-                "group": "navigation"
-            }
-        ]
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc  -p ./",
-        "lint": "tslint -p ./",
-        "watch": "tsc -watch -p ./"
-    },
-    "devDependencies": {
-        "@types/node": "^10.14.7",
-        "@types/vscode": "^1.34.0",
-        "tslint": "^5.16.0",
-        "typescript": "^3.4.5",
-        "tar": ">=4.2.2",
-        "fstream": ">=1.0.12"
-    }
+	"name": "archetype",
+	"displayName": "Archetype language support for Visual Studio Code",
+	"keywords": [
+		"archetype",
+		"tezos",
+		"blockchain",
+		"compiler",
+		"smart-contract",
+		"formal-verification"
+	],
+	"description": "Archetype is a smart contract development solution dedicated to contract quality insurance.",
+	"publisher": "edukera",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/edukera/vscode-archetype/issues"
+	},
+	"icon": "images/icon.png",
+	"galleryBanner": {
+		"color": "#243564",
+		"theme": "dark"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/edukera/vscode-archetype"
+	},
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.34.0"
+	},
+	"categories": [
+		"Programming Languages",
+		"Snippets"
+	],
+	"activationEvents": [
+		"onLanguage:plaintext",
+		"onCommand:archetype.compile",
+		"onCommand:archetype.genMarkdown",
+		"onCommand:archetype.genLiquidityUrl",
+		"onCommand:archetype.genLiquidity",
+		"onCommand:archetype.genLigo",
+		"onCommand:archetype.genSmartPy",
+		"onCommand:archetype.genOCaml",
+		"onCommand:archetype.genWhyml"
+	],
+	"main": "./client/out/extension.js",
+	"contributes": {
+		"snippets": [
+			{
+				"language": "archetype",
+				"path": "./snippets/archetype.json"
+			}
+		],
+		"languages": [
+			{
+				"id": "archetype",
+				"aliases": [
+					"archetype",
+					"archetype"
+				],
+				"extensions": [
+					"arl",
+					"arlx"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "archetype",
+				"scopeName": "source.archetype",
+				"path": "./syntaxes/archetype.tmLanguage.json"
+			}
+		],
+		"commands": [
+			{
+				"command": "archetype.compile",
+				"title": "Archetype: Compile contract"
+			},
+			{
+				"command": "archetype.genMarkdown",
+				"title": "Archetype: Generate markdown",
+				"icon": {
+					"light": "images/cc.svg",
+					"dark": "images/cc.svg"
+				}
+			},
+			{
+				"command": "archetype.genLiquidityUrl",
+				"title": "Archetype: Generate liquidity and open in TryLiquidity"
+			},
+			{
+				"command": "archetype.genLiquidity",
+				"title": "Archetype: Generate liquidity"
+			},
+			{
+				"command": "archetype.genLigo",
+				"title": "Archetype: Generate ligo"
+			},
+			{
+				"command": "archetype.genSmartPy",
+				"title": "Archetype: Generate smartPy"
+			},
+			{
+				"command": "archetype.genOCaml",
+				"title": "Archetype: Generate OCaml"
+			},
+			{
+				"command": "archetype.genWhyml",
+				"title": "Archetype: Generate Whyml"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "archetype.compile",
+				"key": "f5",
+				"mac": "f5",
+				"when": "editorTextFocus && editorLangId == 'archetype'"
+			}
+		],
+		"iconThemes": [
+			{
+				"id": "archetype",
+				"label": "archetype",
+				"path": "./themes/archetype-icon-theme.json"
+			}
+		]
+	},
+	"menus": {
+		"editor/title": [
+			{
+				"when": "resourceLangId != 2archetype",
+				"command": "archetype.genMarkdown",
+				"group": "navigation"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "cd client && npm run update-vscode && cd .. && npm run compile",
+		"compile": "tsc -b",
+		"watch": "tsc -b -w",
+		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+		"test": "sh ./scripts/e2e.sh"
+	},
+	"devDependencies": {
+		"@types/mocha": "^5.2.0",
+		"@types/vscode": "^1.34.0",
+		"tslint": "^5.16.0",
+		"typescript": "^3.4.5",
+		"tar": ">=4.2.2",
+		"fstream": ">=1.0.12"
+	}
 }
