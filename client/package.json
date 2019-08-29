@@ -1,5 +1,5 @@
 {
-	"name": "lsp-sample-client",
+	"name": "archetype-client",
 	"description": "VSCode part of a language server",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
@@ -10,7 +10,7 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.23.0"
+		"vscode": "^1.34.0"
 	},
 	"scripts": {
 		"update-vscode": "vscode-install",
