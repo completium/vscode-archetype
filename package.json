@@ -59,10 +59,21 @@
 					"archetype"
 				],
 				"extensions": [
-					"arl",
-					"arlx"
+					".arl",
+					".arlx"
 				],
 				"configuration": "./language-configuration.json"
+			},
+			{
+				"id": "michelson",
+				"aliases": [
+					"michelson",
+					"michelson"
+				],
+				"extensions": [
+					".tz"
+				],
+				"configuration": "./michelson-language-configuration.json"
 			}
 		],
 		"grammars": [
@@ -70,6 +81,11 @@
 				"language": "archetype",
 				"scopeName": "source.archetype",
 				"path": "./syntaxes/archetype.tmLanguage.json"
+			},
+			{
+				"language": "michelson",
+				"scopeName": "source.michelson",
+				"path": "./syntaxes/michelson.tmLanguage.json"
 			}
 		],
 		"commands": [
