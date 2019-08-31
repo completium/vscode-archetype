@@ -40,7 +40,7 @@
 			"patterns": [
 				{
 					"match": "\\b(parameter|storage|code?)\\b",
-					"name": "markup.italic.block.michelson"
+					"name": "storage.modifier.michelson"
 				}
 			]
 		},
@@ -48,7 +48,7 @@
 			"patterns": [
 				{
 					"match": "\\b(Unit|True|False|Pair|Left|Right|Some|None|Elt?)\\b",
-					"name": "entity.name.constant.michelson"
+					"name": "support.constant.michelson"
 				}
 			]
 		},
@@ -56,7 +56,7 @@
 			"patterns": [
 				{
 					"match": "\\b(DROP|DUP|SWAP|PUSH|SOME|NONE|UNIT|IF_NONE|PAIR|CAR|CDR|LEFT|RIGHT|IF_LEFT|IF_RIGHT|NIL|CONS|IF_CONS|SIZE|EMPTY_SET|EMPTY_MAP|MAP|ITER|MEM|GET|UPDATE|IF|LOOP|LOOP_LEFT|LAMBDA|EXEC|DIP|FAILWITH|CAST|RENAME|CONCAT|SLICE|PACK|UNPACK|ADD|SUB|MUL|EDIV|ABS|NEG|LSL|LSR|OR|AND|XOR|NOT|COMPARE|EQ|NEQ|LT|GT|LE|GE|SELF|CONTRACT|TRANSFER_TOKENS|SET_DELEGATE|CREATE_ACCOUNT|CREATE_CONTRACT|CREATE_CONTRACT|IMPLICIT_ACCOUNT|NOW|AMOUNT|BALANCE|CHECK_SIGNATURE|BLAKE2B|SHA256|SHA512|HASH_KEY|STEPS_TO_QUOTA|SOURCE|SENDER|ADDRESS)\\b",
-					"name": "markup.heading.instruction.michelson"
+					"name": "keyword.control.michelson"
 				}
 			]
 		},
@@ -64,7 +64,7 @@
 			"patterns": [
 				{
 					"match": "\\b(option|list|set|contract|pair|or|lambda|map|big_map?)\\b",
-					"name": "storage.type.constant.michelson"
+					"name": "support.function.michelson"
 				}
 			]
 		},
@@ -72,7 +72,7 @@
 			"patterns": [
 				{
 					"match": "\\b(key|unit|signature|operation|address|int|nat|string|bytes|mutez|bool|key_hash|timestamp?)\\b",
-					"name": "variable.language.global.constant.michelson"
+					"name": "support.type.michelson"
 				}
 			]
 		},
