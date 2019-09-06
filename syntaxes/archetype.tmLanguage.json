@@ -495,7 +495,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(state|now|transferred|caller|balance|requires|effects|none|any|transfer|mem|idem|before|after|fixed|subset|default|type)\\b",
+					"match": "\\b(state|now|transferred|caller|balance|requires|effects|none|any|transfer|mem|idem|before|added|removed|toiterate|iterated|after|fixed|subset|default|type)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
