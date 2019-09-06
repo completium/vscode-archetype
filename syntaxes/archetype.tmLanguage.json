@@ -112,13 +112,13 @@
 		"declaration-archetype": {
 			"patterns": [
 				{
-					"match": "\\b(archetype)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(archetype)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.archetype.archetype"
+							"name": "markup.heading.archetype.archetype"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"4": {
 							"name": "entity.name.type.archetype.archetype"
@@ -130,16 +130,16 @@
 		"declaration-variable": {
 			"patterns": [
 				{
-					"match": "\\b(variable|constant)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(variable|constant)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.variable.archetype"
+							"name": "keyword.control.variable.archetype"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.variable.archetype"
+							"name": "markup.underline.variable.archetype"
 						}
 					}
 				}
@@ -154,7 +154,7 @@
 							"name": "storage.type.instance.archetype"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"5": {
 							"name": "entity.name.type.instance.archetype"
@@ -178,7 +178,7 @@
 							"name": "storage.type.enum.archetype"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"4": {
 							"name": "entity.name.type.enum.archetype"
@@ -193,10 +193,10 @@
 					"match": "\\b(states)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.states.archetype"
+							"name": "keyword.control.states.archetype"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"4": {
 							"name": "entity.name.type.states.archetype"
@@ -208,27 +208,27 @@
 		"declaration-asset": {
 			"patterns": [
 				{
-					"match": "\\b(asset)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(asset)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.asset.archetype"
+							"name": "keyword.control.underline.asset.archetype"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.asset.archetype"
+							"name": "markup.underline.type.asset.archetype"
 						}
 					}
 				},
 				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*([A-Za-z_]\\w*)+(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*([A-Za-z_ ]\\w*)+(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
 					"captures": {
 						"1": {
 							"name": "entity.name.asset.name"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"4": {
 							"name": "storage.type.asset.type"
@@ -240,16 +240,16 @@
 		"declaration-action": {
 			"patterns": [
 				{
-					"match": "\\b(action)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(action)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.action.archetype"
+							"name": "markup.heading.action.archetype"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.action.archetype"
+							"name": "markup.underline.action.archetype"
 						}
 					}
 				}
@@ -258,16 +258,16 @@
 		"declaration-transition": {
 			"patterns": [
 				{
-					"match": "\\b(transition)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(transition)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.transition.archetype"
+							"name": "markup.heading.transition.archetype"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.transition.archetype"
+							"name": "markup.underline.type.transition.archetype"
 						}
 					}
 				}
@@ -276,16 +276,16 @@
 		"declaration-contract": {
 			"patterns": [
 				{
-					"match": "\\b(contract)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(contract)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.contract.archetype"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.contract.archetype"
+							"name": "markup.underline.type.contract.archetype"
 						}
 					}
 				}
@@ -308,16 +308,16 @@
 		"declaration-function": {
 			"patterns": [
 				{
-					"match": "\\b(function)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(function)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.function.archetype"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.function.archetype"
+							"name": "markup.underline.type.function.archetype"
 						}
 					}
 				},
@@ -341,7 +341,7 @@
 			"patterns": [
 				{
 					"match": "\\b(specification)(\\[\\%(.)+\\%\\])?\\b",
-					"name": "storage.type.specification.archetype"
+					"name": "markup.heading.specification.archetype"
 				}
 			]
 		},
@@ -349,7 +349,7 @@
 			"patterns": [
 				{
 					"match": "\\b(security)(\\[\\%(.)+\\%\\])?\\b",
-					"name": "storage.type.security.archetype"
+					"name": "markup.heading.security.archetype"
 				}
 			]
 		},
@@ -359,7 +359,7 @@
 					"match": "\\b(predicate)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.predicate.archetype"
+							"name": "markup.heading.predicate.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.predicate.archetype"
@@ -374,7 +374,7 @@
 					"match": "\\b(definition)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.definition.archetype"
+							"name": "markup.heading.definition.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.definition.archetype"
@@ -389,7 +389,7 @@
 					"match": "\\b(lemma)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.lemma.archetype"
+							"name": "markup.heading.lemma.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.lemma.archetype"
@@ -404,7 +404,7 @@
 					"match": "\\b(theorem)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.theorem.archetype"
+							"name": "markup.heading.theorem.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.theorem.archetype"
@@ -437,7 +437,7 @@
 					"match": "\\b(assert)(\\s+([A-Za-z_]\\w*))\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.assert.archetype"
+							"name": "keyword.control.assert.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.assert.archetype"
@@ -458,7 +458,7 @@
 					"match": "\\b(postcondition)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.postcondition.archetype"
+							"name": "keyword.control.postcondition.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.postcondition.archetype"
@@ -478,7 +478,7 @@
 			"patterns": [
 				{
 					"match": "\\b(bool|int|uint|rational|date|duration|string|address|role|tez|mtez|object|key)\\b",
-					"name": "support.type.primitive.archetype"
+					"name": "storage.type.primitive.archetype"
 				}
 			]
 		},
@@ -618,7 +618,18 @@
 					"match": "\\b(identified(\\s+)by)(\\s+([A-Za-z_]\\w*))\\b",
 					"captures": {
 						"1": {
-							"name": "markup.heading.identifiedby.archetype"
+							"name": "keyword.control.identifiedby.archetype"
+						},
+						"2": {
+							"name": "entity.name.id.archetype"
+						}
+					}
+				},
+				{
+					"match": "\\b(sorted(\\s+)by)(\\s+([A-Za-z_]\\w*))\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.sortedby.archetype"
 						},
 						"2": {
 							"name": "entity.name.id.archetype"
@@ -636,7 +647,7 @@
 							"name": "markup.heading.calledby.archetype"
 						},
 						"5": {
-							"name": "markup.underline.extension.archetype"
+							"name": "markup.italic.extension.archetype"
 						}
 					}
 				},
@@ -677,7 +688,7 @@
 				},
 				{
 					"match": "\\b(initial)\\b",
-					"name": "markup.heading.initial.archetype"
+					"name": "keyword.control.initial.archetype"
 				}
 			]
 		},
@@ -707,7 +718,7 @@
 				},
 				{
 					"match": "(([A-Za-z0-9_]\\w*)\\s+\\:\\s+)",
-					"name": "markup.bold.label.archetype"
+					"name": "entity.name.type.label.archetype"
 				},
 				{
 					"match": "\\b(if|then|else|for|in|break|otherwise|transfer|require|failif|to|end|return?)\\b",
