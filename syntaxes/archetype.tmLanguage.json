@@ -84,6 +84,9 @@
 					"include": "#declaration-verification"
 				},
 				{
+					"include": "#declaration-security"
+				},
+				{
 					"include": "#declaration-predicate"
 				},
 				{
@@ -342,6 +345,14 @@
 				}
 			]
 		},
+		"declaration-security": {
+			"patterns": [
+				{
+					"match": "\\b(security)(\\[\\%(.)+\\%\\])?\\b",
+					"name": "storage.type.security.archetype"
+				}
+			]
+		},
 		"declaration-predicate": {
 			"patterns": [
 				{
@@ -518,6 +529,14 @@
 				{
 					"match": "\\bmay\\s+be\\s+performed\\s+by\\s+role\\b",
 					"name": "keyword.operator.logic.specific"
+				},
+				{
+					"match": "\\b(only_by_role|only_by_action|only_by_role_in_action|not_by_role|not_by_action|not_by_role_in_action)\\b",
+					"name": "keyword.control.security.archetype"
+				},
+				{
+					"match": "\\b(anyaction|noaction|anychange|nochange)\\b",
+					"name": "constant.language.security.archetype"
 				},
 				{
 					"match": "(and|or|not|\\->)",
