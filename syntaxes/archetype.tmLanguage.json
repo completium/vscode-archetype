@@ -81,7 +81,7 @@
 					"include": "#declaration-function"
 				},
 				{
-					"include": "#declaration-verification"
+					"include": "#declaration-specification"
 				},
 				{
 					"include": "#declaration-security"
@@ -105,7 +105,7 @@
 					"include": "#declaration-assert"
 				},
 				{
-					"include": "#declaration-specification"
+					"include": "#declaration-postcondition"
 				}
 			]
 		},
@@ -337,11 +337,11 @@
 				}
 			]
 		},
-		"declaration-verification": {
+		"declaration-specification": {
 			"patterns": [
 				{
-					"match": "\\b(verification)(\\[\\%(.)+\\%\\])?\\b",
-					"name": "storage.type.verification.archetype"
+					"match": "\\b(specification)(\\[\\%(.)+\\%\\])?\\b",
+					"name": "storage.type.specification.archetype"
 				}
 			]
 		},
@@ -452,16 +452,16 @@
 				}
 			]
 		},
-		"declaration-specification": {
+		"declaration-postcondition": {
 			"patterns": [
 				{
-					"match": "\\b(specification)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(postcondition)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.specification.archetype"
+							"name": "storage.type.postcondition.archetype"
 						},
 						"3": {
-							"name": "entity.name.type.specification.archetype"
+							"name": "entity.name.type.postcondition.archetype"
 						}
 					}
 				}
@@ -653,13 +653,13 @@
 					}
 				},
 				{
-					"match": "\\b(label)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(assert)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "markup.heading.label.archetype"
+							"name": "markup.heading.assert.archetype"
 						},
 						"3": {
-							"name": "entity.name.type.label.archetype"
+							"name": "entity.name.type.assert.archetype"
 						}
 					}
 				},
