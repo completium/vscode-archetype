@@ -416,13 +416,13 @@
 		"declaration-invariant": {
 			"patterns": [
 				{
-					"match": "\\b(invariants)\\s+(for)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(invariant)\\s+(for)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.invariants.archetype"
+							"name": "storage.type.invariant.archetype"
 						},
 						"2": {
-							"name": "storage.type.invariants.archetype"
+							"name": "storage.type.invariant.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.invariant.archetype"
