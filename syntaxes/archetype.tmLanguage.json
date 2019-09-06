@@ -434,7 +434,7 @@
 		"declaration-assert": {
 			"patterns": [
 				{
-					"match": "\\b(assert)(\\s+([A-Za-z_]\\w*))(\\s+(at))(\\s+([A-Za-z_]\\w*))\\b",
+					"match": "\\b(assert)(\\s+([A-Za-z_]\\w*))\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.assert.archetype"
