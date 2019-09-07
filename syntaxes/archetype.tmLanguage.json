@@ -148,19 +148,19 @@
 		"declaration-instance": {
 			"patterns": [
 				{
-					"match": "\\b(instance)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))(\\s+of)(\\s+([A-Za-z_]\\w*))\\b",
+					"match": "\\b(instance)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))(\\s+of)\\s+(([A-Za-z_]\\w*))\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.instance.archetype"
+							"name": "keyword.control.instance.archetype"
 						},
 						"2": {
 							"name": "markup.italic.extension.archetype"
 						},
 						"5": {
-							"name": "entity.name.type.instance.archetype"
+							"name": "markup.underline.instance.archetype"
 						},
 						"6": {
-							"name": "storage.type.of.archetype"
+							"name": "keyword.control.of.archetype"
 						},
 						"7": {
 							"name": "entity.name.contract.archetype"
@@ -279,7 +279,7 @@
 					"match": "\\b(contract)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.contract.archetype"
+							"name": "keyword.control.contract.archetype"
 						},
 						"2": {
 							"name": "markup.italic.extension.archetype"
