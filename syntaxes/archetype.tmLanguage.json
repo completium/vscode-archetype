@@ -118,7 +118,7 @@
 							"name": "markup.heading.archetype.archetype"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
 							"name": "entity.name.type.archetype.archetype"
@@ -136,10 +136,10 @@
 							"name": "keyword.control.variable.archetype"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "markup.underline.variable.archetype"
+							"name": "entity.name.type.variable.archetype"
 						}
 					}
 				}
@@ -154,10 +154,10 @@
 							"name": "keyword.control.instance.archetype"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"5": {
-							"name": "markup.underline.instance.archetype"
+							"name": "entity.name.type.instance.archetype"
 						},
 						"6": {
 							"name": "keyword.control.of.archetype"
@@ -175,10 +175,10 @@
 					"match": "\\b(enum)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.enum.archetype"
+							"name": "keyword.control.enum.archetype"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
 							"name": "entity.name.type.enum.archetype"
@@ -196,7 +196,7 @@
 							"name": "keyword.control.states.archetype"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
 							"name": "entity.name.type.states.archetype"
@@ -214,10 +214,10 @@
 							"name": "keyword.control.underline.asset.archetype"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "markup.underline.type.asset.archetype"
+							"name": "entity.name.type.type.asset.archetype"
 						}
 					}
 				},
@@ -228,7 +228,7 @@
 							"name": "entity.name.asset.name"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
 							"name": "storage.type.asset.type"
@@ -246,10 +246,10 @@
 							"name": "markup.heading.action.archetype"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "markup.underline.action.archetype"
+							"name": "entity.name.type.action.archetype"
 						}
 					}
 				}
@@ -264,10 +264,10 @@
 							"name": "markup.heading.transition.archetype"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "markup.underline.type.transition.archetype"
+							"name": "entity.name.type.type.transition.archetype"
 						}
 					}
 				}
@@ -282,10 +282,10 @@
 							"name": "keyword.control.contract.archetype"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "markup.underline.type.contract.archetype"
+							"name": "entity.name.type.type.contract.archetype"
 						}
 					}
 				}
@@ -314,10 +314,10 @@
 							"name": "storage.type.function.archetype"
 						},
 						"2": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "markup.underline.type.function.archetype"
+							"name": "entity.name.type.type.function.archetype"
 						}
 					}
 				},
@@ -328,7 +328,7 @@
 							"name": "entity.name.argument.name"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "entity.name.type.extension.archetype"
 						},
 						"4": {
 							"name": "storage.type.argument.type"
@@ -647,7 +647,7 @@
 							"name": "markup.heading.calledby.archetype"
 						},
 						"5": {
-							"name": "markup.italic.extension.archetype"
+							"name": "markup.underline.extension.archetype"
 						}
 					}
 				},
