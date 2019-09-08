@@ -222,7 +222,7 @@
 					}
 				},
 				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(bool|int|rational|date|duration|string|address|role|key|(([A-Za-z_]\\w*)\\s+(partition|collection|subset)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(bool|int|rational|date|duration|string|address|role|mtez|key|(([A-Za-z_]\\w*)\\s+(partition|collection|subset)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
 					"captures": {
 						"1": {
 							"name": "entity.other.attribute-name.field.name"
@@ -477,7 +477,7 @@
 		"type-primitive": {
 			"patterns": [
 				{
-					"match": "\\b(bool|int|uint|rational|date|duration|string|address|role|tez|mtez|object|key)\\b",
+					"match": "\\b(bool|int|rational|date|duration|string|address|role|mtez|key)\\b",
 					"name": "storage.type.primitive.archetype"
 				}
 			]
