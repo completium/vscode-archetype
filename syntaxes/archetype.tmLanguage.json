@@ -755,7 +755,7 @@
 					"name": "constant.numeric.rational.archetype"
 				},
 				{
-					"match": "\\b(\\d+(\\.\\d+)?tz)\\b",
+					"match": "\\b(\\d+(\\.\\d+)?mtz)\\b",
 					"name": "constant.language.currency.archetype"
 				},
 				{
