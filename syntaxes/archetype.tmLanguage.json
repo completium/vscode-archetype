@@ -222,10 +222,10 @@
 					}
 				},
 				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*([A-Za-z_ ]\\w*)+(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(bool|int|rational|date|duration|string|address|role|key|(([A-Za-z_]\\w*)\\s+(partition|collection|subset)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
 					"captures": {
 						"1": {
-							"name": "entity.name.asset.name"
+							"name": "entity.other.attribute-name.field.name"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
@@ -507,7 +507,7 @@
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
-					"match": "\\b(nth|clear|select|removeif|sort|count|sum|max|min|enqueue|dequeue|push|pop|add|addifnotexist|remove|get|contains|update|mem|subsetof)\\b",
+					"match": "\\b(nth|clear|select|removeif|sort|count|sum|max|min|enqueue|dequeue|push|pop|add|addifnotexist|remove|get|contains|update|mem|subsetof|head|tail)\\b",
 					"name": "support.function.asset_function.archetype"
 				}
 			]
@@ -717,11 +717,22 @@
 					}
 				},
 				{
+					"match": "\\b(for)(\\s+\\:\\s+([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.for.archetype"
+						},
+						"2": {
+							"name": "entity.name.type.for_label.archetype"
+						}
+					}
+				},
+				{
 					"match": "(([A-Za-z0-9_]\\w*)\\s+\\:\\s+)",
 					"name": "entity.name.type.label.archetype"
 				},
 				{
-					"match": "\\b(if|then|else|for|in|break|otherwise|transfer|require|failif|to|end|return?)\\b",
+					"match": "\\b(if|then|else|in|break|otherwise|transfer|require|failif|to|end|return?)\\b",
 					"name": "keyword.control.flow.archetype"
 				}
 			]
