@@ -728,11 +728,22 @@
 					}
 				},
 				{
+					"match": "\\b(iter)(\\s+\\:\\s+([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.iter.archetype"
+						},
+						"2": {
+							"name": "entity.name.type.iter_label.archetype"
+						}
+					}
+				},
+				{
 					"match": "(([A-Za-z0-9_]\\w*)\\s+\\:\\s+)",
 					"name": "entity.name.type.label.archetype"
 				},
 				{
-					"match": "\\b(if|then|else|in|break|otherwise|transfer|require|failif|to|end|return?)\\b",
+					"match": "\\b(if|then|else|in|break|otherwise|transfer|require|failif|to|from|end|return?)\\b",
 					"name": "keyword.control.flow.archetype"
 				}
 			]
