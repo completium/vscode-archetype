@@ -103,19 +103,19 @@
 			},
 			{
 				"command": "archetype.genLiquidityUrl",
-				"title": "Archetype: Generate liquidity and open in TryLiquidity"
+				"title": "Archetype: Generate Liquidity and open in TryLiquidity"
 			},
 			{
 				"command": "archetype.genLiquidity",
-				"title": "Archetype: Generate liquidity"
+				"title": "Archetype: Generate Liquidity"
 			},
 			{
 				"command": "archetype.genLigo",
-				"title": "Archetype: Generate ligo"
+				"title": "Archetype: Generate LIGO"
 			},
 			{
 				"command": "archetype.genSmartPy",
-				"title": "Archetype: Generate smartPy"
+				"title": "Archetype: Generate SmartPy"
 			},
 			{
 				"command": "archetype.genOCaml",
