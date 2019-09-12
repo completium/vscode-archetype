@@ -531,7 +531,7 @@
 					"name": "keyword.operator.logic.specific"
 				},
 				{
-					"match": "\\b(only_by_role|only_in_action|only_by_role_in_action|not_by_role|not_in_action|not_by_role_in_action|transferred_by|transferred_to|no_fail)\\b",
+					"match": "\\b(only_by_role|only_in_action|only_by_role_in_action|not_by_role|not_in_action|not_by_role_in_action|transferred_by|transferred_to|no_storage_fail)\\b",
 					"name": "keyword.control.security.archetype"
 				},
 				{
