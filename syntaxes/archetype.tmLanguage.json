@@ -656,6 +656,10 @@
 					"name": "markup.heading.accepttransfer.archetype"
 				},
 				{
+					"match": "(refuse)(\\s+)(transfer)",
+					"name": "markup.heading.refusetransfer.archetype"
+				},
+				{
 					"match": "\\b(when)\\b",
 					"captures": {
 						"1": {
