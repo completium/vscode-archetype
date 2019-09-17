@@ -222,7 +222,7 @@
 					}
 				},
 				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(bool|int|rational|date|duration|string|address|role|mtez|key|(([A-Za-z_]\\w*)\\s+(partition|collection|subset)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(([A-Za-z_]\\w*)|bool|int|rational|date|duration|string|address|role|mtez|key|(([A-Za-z_]\\w*)\\s+(partition|collection|subset)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
 					"captures": {
 						"1": {
 							"name": "entity.other.attribute-name.field.name"
@@ -531,7 +531,7 @@
 					"name": "keyword.operator.logic.specific"
 				},
 				{
-					"match": "\\b(only_by_role|only_in_action|only_by_role_in_action|not_by_role|not_in_action|not_by_role_in_action|no_storage_fail)\\b",
+					"match": "\\b(only_by_role|only_in_action|only_by_role_in_action|not_by_role|not_in_action|not_by_role_in_action|transferred_by|transferred_to|no_storage_fail)\\b",
 					"name": "keyword.control.security.archetype"
 				},
 				{
@@ -656,10 +656,26 @@
 					"name": "markup.heading.accepttransfer.archetype"
 				},
 				{
-					"match": "\\b(require|when)\\b",
+					"match": "\\b(when)\\b",
+					"captures": {
+						"1": {
+							"name": "markup.heading.when.archetype"
+						}
+					}
+				},
+				{
+					"match": "(require)\\s+\\{",
 					"captures": {
 						"1": {
 							"name": "markup.heading.require.archetype"
+						}
+					}
+				},
+				{
+					"match": "(failif)\\s+\\{",
+					"captures": {
+						"1": {
+							"name": "markup.heading.failif.archetype"
 						}
 					}
 				},
