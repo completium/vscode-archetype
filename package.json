@@ -95,7 +95,7 @@
 			},
 			{
 				"command": "archetype.genMarkdown",
-				"title": "Archetype: Generate markdown",
+				"title": "Archetype: Generate Markdown",
 				"icon": {
 					"light": "images/cc.svg",
 					"dark": "images/cc.svg"
