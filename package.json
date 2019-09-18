@@ -9,7 +9,7 @@
 		"smart-contract",
 		"formal-verification"
 	],
-	"description": "Archetype is a smart contract development solution dedicated to contract quality insurance.",
+	"description": "DSL to develop smart contracts on the Tezos blockchain.",
 	"publisher": "edukera",
 	"license": "MIT",
 	"bugs": {
