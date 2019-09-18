@@ -32,7 +32,7 @@ with this repository
 
 - [X] Syntax highlighting
 - [X] Snippets
-- [X] Icons for archetype files
+- [ ] Icons for archetype files
 - [ ] Code navigation
 - [ ] Hover Information
 - [ ] Formatting
