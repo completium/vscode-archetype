@@ -477,7 +477,7 @@
 		"type-primitive": {
 			"patterns": [
 				{
-					"match": "\\b(bool|int|rational|date|duration|string|address|role|mtez|key)\\b",
+					"match": "\\b(bool|int|rational|date|duration|string|address|role|tez|key)\\b",
 					"name": "storage.type.primitive.archetype"
 				}
 			]
@@ -786,8 +786,12 @@
 					"name": "constant.numeric.rational.archetype"
 				},
 				{
+					"match": "\\b(\\d+(\\.\\d+)?tz)\\b",
+					"name": "constant.language.currency.tz.archetype"
+				},
+				{
 					"match": "\\b(\\d+(\\.\\d+)?mtz)\\b",
-					"name": "constant.language.currency.archetype"
+					"name": "constant.language.currency.mtz.archetype"
 				},
 				{
 					"match": "\\b(\\d+\\.\\d+)\\b",
