@@ -4,7 +4,8 @@
 
 # Archetype support for Visual Studio code
 
-Archetype is a Tezos smart contract development solution dedicated to contract quality insurance, this extension provides:
+Archetype is a domain-specific language (DSL) to develop smart contracts on the Tezos blockchain, with a specific focus on contract security,
+this extension provides:
 
 ##  Quick start
 ### Install archetype compiler
@@ -18,7 +19,7 @@ https://github.com/edukera/archetype-lang
 ### Install this extenstion
 
 #### via vscode marketplace
-https://marketplace.visualstudio.com/items?itemName=edukera.vscode-archetype
+https://marketplace.visualstudio.com/items?itemName=edukera.archetype
 
 #### via `.visx`
 with this repository
