@@ -4,8 +4,7 @@
 
 # Archetype support for Visual Studio code
 
-Archetype is a domain-specific language (DSL) to develop smart contracts on the Tezos blockchain, with a specific focus on contract security,
-this extension provides:
+Archetype is a domain-specific language (DSL) to develop smart contracts on the Tezos blockchain, with a specific focus on contract security.
 
 ##  Quick start
 ### Install archetype compiler
