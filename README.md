@@ -1,6 +1,6 @@
-[![Latest Release](https://vsmarketplacebadge.apphb.com/version-short/edukera.vscode-archetype.svg)](https://marketplace.visualstudio.com/items?itemName=edukera.vscode-archetype)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs/edukera.vscode-archetype.svg)](https://marketplace.visualstudio.com/items?itemName=edukera.vscode-archetype)
-[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/edukera.vscode-archetype.svg)](https://marketplace.visualstudio.com/items?itemName=edukera.vscode-archetype#review-details)
+[![Latest Release](https://vsmarketplacebadge.apphb.com/version-short/edukera.archetype.svg)](https://marketplace.visualstudio.com/items?itemName=edukera.vscode-archetype)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs/edukera.archetype.svg)](https://marketplace.visualstudio.com/items?itemName=edukera.vscode-archetype)
+[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/edukera.archetype.svg)](https://marketplace.visualstudio.com/items?itemName=edukera.vscode-archetype#review-details)
 
 # Archetype support for Visual Studio code
 
