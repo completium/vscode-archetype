@@ -45,6 +45,17 @@
 	],
 	"main": "./client/out/extension.js",
 	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Archetype configuration",
+			"properties": {
+				"archetype.archetypeWhy3Lib": {
+					"type": "string",
+					"default": "$OPAM_SWITCH_PREFIX/share/archetype",
+					"description": "Path to Why3 library for archetype verification."
+				}
+			}
+		},
 		"snippets": [
 			{
 				"language": "archetype",

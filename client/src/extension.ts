@@ -7,6 +7,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 
 import {
+	ConfigurationParams,
 	LanguageClient,
 	LanguageClientOptions,
 	ServerOptions,
@@ -86,7 +87,9 @@ export function activate(context: vscode.ExtensionContext) {
 		let cp0 = require('child_process');
 		let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
 		let inputFsPath = fsPath.replace(/arl$/, "mlw");
-		let cmd = 'pkill why3ide; why3 ide -L /home/dev/archetype-lang/mlw ' + inputFsPath;
+		const config = vscode.workspace.getConfiguration('archetype');
+		const pathWhy3Lib: string = config.get('archetypeWhy3Lib');
+		let cmd = 'pkill why3ide; why3 ide -L ' + pathWhy3Lib + ' ' + inputFsPath;
 		let cp = require('child_process');
 		cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
 			if (_err) {
