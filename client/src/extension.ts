@@ -67,14 +67,32 @@ export function activate(context: vscode.ExtensionContext) {
 		let inputFsPath = fsPath.replace(/arl$/, "ligo");
 		let outputFsPath = fsPath.replace(/arl$/, "tz");
 		let cmd = 'ligo compile-contract ' + inputFsPath + ' main > ' + outputFsPath;
-		let cp3 = require('child_process');
-		cp3.exec(cmd, (_err: string, stdout: string, stderr: string) => {
+		let cp = require('child_process');
+		cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
 			if (_err) {
 				vscode.window.showErrorMessage(stderr);
 				return;
 			};
 			let outputUri = vscode.Uri.file(outputFsPath);
 			vscode.window.showTextDocument(outputUri);
+		});
+	}
+
+	let openWhy3Ide = function (editor: vscode.TextEditor) {
+		if (editor.document.languageId !== 'archetype') {
+			vscode.window.showErrorMessage('This command is for arl files only!');
+			return;
+		}
+		let cp0 = require('child_process');
+		let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
+		let inputFsPath = fsPath.replace(/arl$/, "mlw");
+		let cmd = 'pkill why3ide; why3 ide -L /home/dev/archetype-lang/mlw ' + inputFsPath;
+		let cp = require('child_process');
+		cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
+			if (_err) {
+				vscode.window.showErrorMessage(stderr);
+				return;
+			};
 		});
 	}
 
@@ -99,6 +117,11 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerTextEditorCommand('archetype.genTzLigo', editor => {
 		genDocument(editor, "ligo", "ligo", "openFile");
 		genDocumentTzLigo(editor);
+	}));
+
+	context.subscriptions.push(vscode.commands.registerTextEditorCommand('archetype.verifyWhy3', editor => {
+		genDocument(editor, "whyml", "mlw", "openFile");
+		openWhy3Ide(editor);
 	}));
 
 	// The server is implemented in node
