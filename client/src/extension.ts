@@ -32,7 +32,8 @@ export function activate(context: vscode.ExtensionContext) {
 			let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
 			let outputFsPath = fsPath.replace(/arl$/, fileExtension);
 			let cp = require('child_process');
-			cp.exec('archetype -t ' + target + ' ' + fsPath + ' > ' + outputFsPath, (_err: string, stdout: string, stderr: string) => {
+			let cmd = 'archetype -t ' + target + ' ' + fsPath + ' > ' + outputFsPath;
+			cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
 				if (_err) {
 					vscode.window.showErrorMessage(stderr);
 					return;
@@ -57,6 +58,26 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	};
 
+	let genDocumentTzLigo = function (editor: vscode.TextEditor) {
+		if (editor.document.languageId !== 'archetype') {
+			vscode.window.showErrorMessage('This command is for arl files only!');
+			return;
+		}
+		let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
+		let inputFsPath = fsPath.replace(/arl$/, "ligo");
+		let outputFsPath = fsPath.replace(/arl$/, "tz");
+		let cmd = 'ligo compile-contract ' + inputFsPath + ' main > ' + outputFsPath;
+		let cp3 = require('child_process');
+		cp3.exec(cmd, (_err: string, stdout: string, stderr: string) => {
+			if (_err) {
+				vscode.window.showErrorMessage(stderr);
+				return;
+			};
+			let outputUri = vscode.Uri.file(outputFsPath);
+			vscode.window.showTextDocument(outputUri);
+		});
+	}
+
 	let targets = [
 		// { cmd: "genMarkdown", target: "markdown", ext: "md", action: "showPreviewToSide" },
 		{ cmd: "genMarkdown", target: "markdown", ext: "md", action: "openFile" },
@@ -74,6 +95,11 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 		context.subscriptions.push(genTarget);
 	});
+
+	context.subscriptions.push(vscode.commands.registerTextEditorCommand('archetype.genTzLigo', editor => {
+		genDocument(editor, "ligo", "ligo", "openFile");
+		genDocumentTzLigo(editor);
+	}));
 
 	// The server is implemented in node
 	let serverModule = context.asAbsolutePath(

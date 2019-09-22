@@ -114,6 +114,10 @@
 				"title": "Archetype: Generate LIGO"
 			},
 			{
+				"command": "archetype.genTzLigo",
+				"title": "Archetype: Generate Michelson via LIGO"
+			},
+			{
 				"command": "archetype.genSmartPy",
 				"title": "Archetype: Generate SmartPy"
 			},
