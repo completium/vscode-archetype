@@ -102,8 +102,6 @@ export function activate(context: vscode.ExtensionContext) {
 	let targets = [
 		// { cmd: "genMarkdown", target: "markdown", ext: "md", action: "showPreviewToSide" },
 		{ cmd: "genMarkdown", target: "markdown", ext: "md", action: "openFile" },
-		{ cmd: "genLiquidityUrl", target: "liquidity_url", ext: "url", action: "openUrl" },
-		{ cmd: "genLiquidity", target: "liquidity", ext: "liq", action: "openFile" },
 		{ cmd: "genLigo", target: "ligo", ext: "ligo", action: "openFile" },
 		{ cmd: "genSmartPy", target: "smartpy", ext: "py", action: "openFile" },
 		{ cmd: "genOCaml", target: "ocaml", ext: "ml", action: "openFile" },

@@ -24,7 +24,7 @@
 		"type": "git",
 		"url": "https://github.com/edukera/vscode-archetype"
 	},
-	"version": "0.3.0",
+	"version": "0.6.0",
 	"engines": {
 		"vscode": "^1.34.0"
 	},
@@ -111,14 +111,6 @@
 					"light": "images/cc.svg",
 					"dark": "images/cc.svg"
 				}
-			},
-			{
-				"command": "archetype.genLiquidityUrl",
-				"title": "Archetype: Generate Liquidity and open in TryLiquidity"
-			},
-			{
-				"command": "archetype.genLiquidity",
-				"title": "Archetype: Generate Liquidity"
 			},
 			{
 				"command": "archetype.genLigo",
