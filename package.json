@@ -53,6 +53,16 @@
 					"type": "string",
 					"default": "$OPAM_SWITCH_PREFIX/share/archetype/mlw",
 					"description": "Path to Why3 library for archetype verification."
+				},
+				"archetype.archetypeExtensionsPath": {
+					"type": "string",
+					"default": "$OPAM_SWITCH_PREFIX/share/archetype/extensions",
+					"description": "Path to archetype extensions."
+				},
+				"archetype.archetypeContractsPath": {
+					"type": "string",
+					"default": "$OPAM_SWITCH_PREFIX/share/archetype/contracts",
+					"description": "Path to archetype contracts."
 				}
 			}
 		},
