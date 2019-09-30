@@ -14,10 +14,24 @@ import {
 	TransportKind
 } from 'vscode-languageclient';
 
+import { AaaNodeProvider, Aaa } from './archetype';
+
 let client: LanguageClient;
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log("Archetype extension is active");
+
+	// Samples of `window.registerTreeDataProvider`
+	const nodeAaaProvider = new AaaNodeProvider(vscode.workspace.workspaceFolders[0].uri.toString());
+	vscode.window.registerTreeDataProvider('aaa', nodeAaaProvider);
+	vscode.commands.registerCommand('aaa.refreshEntry', () => nodeAaaProvider.refresh());
+	vscode.commands.registerCommand('extension.openPackageOnNpm', moduleName => vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`)));
+	vscode.commands.registerCommand('aaa.addEntry', () => vscode.window.showInformationMessage(`Successfully called add entry.`));
+	vscode.commands.registerCommand('aaa.editEntry', (node: Aaa) => vscode.window.showInformationMessage(`Successfully called edit entry on ${node.label}.`));
+	vscode.commands.registerCommand('aaa.deleteEntry', (node: Aaa) => {
+		return vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`);
+	});
+
 	let disposable = vscode.commands.registerCommand('archetype.compile', () => {
 		vscode.window.showInformationMessage('Hello World 3!');
 	});

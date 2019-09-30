@@ -24,7 +24,7 @@
 		"type": "git",
 		"url": "https://github.com/edukera/vscode-archetype"
 	},
-	"version": "0.8.0",
+	"version": "0.9.0",
 	"engines": {
 		"vscode": "^1.34.0"
 	},
@@ -34,6 +34,7 @@
 	],
 	"activationEvents": [
 		"onLanguage:plaintext",
+		"onView:archetype",
 		"onCommand:archetype.compile",
 		"onCommand:archetype.genMarkdown",
 		"onCommand:archetype.genLiquidityUrl",
@@ -145,6 +146,30 @@
 			{
 				"command": "archetype.verifyWhy3",
 				"title": "Archetype: Verify with Why3"
+			},
+			{
+				"command": "archetype.refreshEntry",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "archetype.addEntry",
+				"title": "Add"
+			},
+			{
+				"command": "archetype.editEntry",
+				"title": "Edit",
+				"icon": {
+					"light": "resources/light/edit.svg",
+					"dark": "resources/dark/edit.svg"
+				}
+			},
+			{
+				"command": "archetype.deleteEntry",
+				"title": "Delete"
 			}
 		],
 		"keybindings": [
@@ -163,12 +188,45 @@
 			}
 		]
 	},
-	"menus": {
-		"editor/title": [
+	"viewsContainers": {
+		"activitybar": [
 			{
-				"when": "resourceLangId != 2archetype",
-				"command": "archetype.genMarkdown",
+				"id": "archetype",
+				"title": "Archetype",
+				"icon": "images/archetype-activitybar.svg"
+			}
+		]
+	},
+	"views": {
+		"aaa": [
+			{
+				"id": "aaa",
+				"name": "AAA"
+			}
+		],
+		"explorer": []
+	},
+	"menus": {
+		"view/title": [
+			{
+				"command": "aaa.refreshEntry",
+				"when": "view == aaa",
 				"group": "navigation"
+			},
+			{
+				"command": "aaa.addEntry",
+				"when": "view == aaa"
+			}
+		],
+		"view/item/context": [
+			{
+				"command": "aaa.editEntry",
+				"when": "view == aaa && viewItem == dependency",
+				"group": "inline"
+			},
+			{
+				"command": "aaa.deleteEntry",
+				"when": "view == aaa && viewItem == dependency"
 			}
 		]
 	},
@@ -184,7 +242,6 @@
 		"vscode": "^1.1.34",
 		"tslint": "^5.16.0",
 		"typescript": "^3.4.5",
-		"tar": ">=4.4.2",
-		"fstream": ">=1.0.12"
+		"tar": ">=4.4.2"
 	}
 }
