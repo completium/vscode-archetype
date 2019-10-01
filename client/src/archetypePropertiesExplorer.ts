@@ -64,6 +64,6 @@ export class ArchetypeItem extends vscode.TreeItem {
 		dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
 	};
 
-	contextValue = 'archetype';
+	contextValue = 'archetypeItem';
 
 }

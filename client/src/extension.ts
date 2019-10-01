@@ -14,12 +14,20 @@ import {
 	TransportKind
 } from 'vscode-languageclient';
 
-import { ArchetypeNodeProvider, ArchetypeItem } from './archetype';
+import { ArchetypeNodeProvider, ArchetypeItem } from './archetypePropertiesExplorer';
 
 let client: LanguageClient;
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log("Archetype extension is active");
+
+	const nodeArchetypePropertieExplorerProvider = new ArchetypeNodeProvider(vscode.workspace.rootPath);
+	context.subscriptions.push(vscode.window.registerTreeDataProvider('archetypePropertiesExplorer', nodeArchetypePropertieExplorerProvider));
+
+	// context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.refreshEntry', () => nodeArchetypePropertieExplorerProvider.refresh()));
+	// context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.addEntry', () => vscode.window.showInformationMessage(`Successfully called add entry.`)));
+	// context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.editEntry', (node: ArchetypeItem) => vscode.window.showInformationMessage(`Successfully called edit entry on ${node.label}.`)));
+	// context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.deleteEntry', (node: ArchetypeItem) => vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`)));
 
 	let genDocument = function (editor: vscode.TextEditor, target: string, fileExtension: string, action: string) {
 		if (editor.document.languageId !== 'archetype') {

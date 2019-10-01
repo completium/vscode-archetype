@@ -34,7 +34,7 @@
 	],
 	"activationEvents": [
 		"onLanguage:plaintext",
-		"onView:archetype",
+		"onView:archetypePropertiesExplorer",
 		"onCommand:archetype.genMarkdown",
 		"onCommand:archetype.genLiquidityUrl",
 		"onCommand:archetype.genLiquidity",
@@ -110,6 +110,30 @@
 			}
 		],
 		"commands": [
+			{
+				"command": "archetypePropertiesExplorer.refreshEntry",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "archetypePropertiesExplorer.addEntry",
+				"title": "Add"
+			},
+			{
+				"command": "archetypePropertiesExplorer.editEntry",
+				"title": "Edit",
+				"icon": {
+					"light": "resources/light/edit.svg",
+					"dark": "resources/dark/edit.svg"
+				}
+			},
+			{
+				"command": "archetypePropertiesExplorer.deleteEntry",
+				"title": "Delete"
+			},
 			{
 				"command": "archetype.compile",
 				"title": "Archetype: Compile contract"
@@ -190,9 +214,41 @@
 	"viewsContainers": {
 		"activitybar": [
 			{
-				"id": "archetype",
+				"id": "archetype-properties-explorer",
 				"title": "Archetype",
 				"icon": "images/archetype-activitybar.svg"
+			}
+		]
+	},
+	"views": {
+		"archetype-properties-explorer": [
+			{
+				"id": "archetypePropertiesExplorer",
+				"name": "Archetype Properties Explorer"
+			}
+		]
+	},
+	"menus": {
+		"view/title": [
+			{
+				"command": "archetypePropertiesExplorer.refreshEntry",
+				"when": "view == archetypePropertiesExplorer",
+				"group": "navigation"
+			},
+			{
+				"command": "archetypePropertiesExplorer.addEntry",
+				"when": "view == archetypePropertiesExplorer"
+			}
+		],
+		"view/item/context": [
+			{
+				"command": "archetypePropertiesExplorer.editEntry",
+				"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
+				"group": "inline"
+			},
+			{
+				"command": "archetypePropertiesExplorer.deleteEntry",
+				"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem"
 			}
 		]
 	},
