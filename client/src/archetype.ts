@@ -2,10 +2,10 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-export class AaaNodeProvider implements vscode.TreeDataProvider<Aaa> {
+export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeItem> {
 
-	private _onDidChangeTreeData: vscode.EventEmitter<Aaa | undefined> = new vscode.EventEmitter<Aaa | undefined>();
-	readonly onDidChangeTreeData: vscode.Event<Aaa | undefined> = this._onDidChangeTreeData.event;
+	private _onDidChangeTreeData: vscode.EventEmitter<ArchetypeItem | undefined> = new vscode.EventEmitter<ArchetypeItem | undefined>();
+	readonly onDidChangeTreeData: vscode.Event<ArchetypeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(private workspaceRoot: string) {
 	}
@@ -14,18 +14,18 @@ export class AaaNodeProvider implements vscode.TreeDataProvider<Aaa> {
 		this._onDidChangeTreeData.fire();
 	}
 
-	getTreeItem(element: Aaa): vscode.TreeItem {
+	getTreeItem(element: ArchetypeItem): vscode.TreeItem {
 		return element;
 	}
 
-	getChildren(element?: Aaa): Thenable<Aaa[]> {
+	getChildren(element?: ArchetypeItem): Thenable<ArchetypeItem[]> {
 		return Promise.resolve([]);
 	}
 
 	/**
 	 * Given the path to package.json, read all its dependencies and devDependencies.
 	 */
-	private getDepsInPackageJson(packageJsonPath: string): Aaa[] {
+	private getDepsInPackageJson(packageJsonPath: string): ArchetypeItem[] {
 		return [];
 	}
 
@@ -40,7 +40,7 @@ export class AaaNodeProvider implements vscode.TreeDataProvider<Aaa> {
 	}
 }
 
-export class Aaa extends vscode.TreeItem {
+export class ArchetypeItem extends vscode.TreeItem {
 
 	constructor(
 		public readonly label: string,

@@ -35,7 +35,6 @@
 	"activationEvents": [
 		"onLanguage:plaintext",
 		"onView:archetype",
-		"onCommand:archetype.compile",
 		"onCommand:archetype.genMarkdown",
 		"onCommand:archetype.genLiquidityUrl",
 		"onCommand:archetype.genLiquidity",
@@ -194,39 +193,6 @@
 				"id": "archetype",
 				"title": "Archetype",
 				"icon": "images/archetype-activitybar.svg"
-			}
-		]
-	},
-	"views": {
-		"aaa": [
-			{
-				"id": "aaa",
-				"name": "AAA"
-			}
-		],
-		"explorer": []
-	},
-	"menus": {
-		"view/title": [
-			{
-				"command": "aaa.refreshEntry",
-				"when": "view == aaa",
-				"group": "navigation"
-			},
-			{
-				"command": "aaa.addEntry",
-				"when": "view == aaa"
-			}
-		],
-		"view/item/context": [
-			{
-				"command": "aaa.editEntry",
-				"when": "view == aaa && viewItem == dependency",
-				"group": "inline"
-			},
-			{
-				"command": "aaa.deleteEntry",
-				"when": "view == aaa && viewItem == dependency"
 			}
 		]
 	},
