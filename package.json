@@ -195,6 +195,47 @@
 				"title": "Delete"
 			}
 		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "archetype-properties-explorer",
+					"title": "Archetype",
+					"icon": "images/archetype-activitybar.svg"
+				}
+			]
+		},
+		"views": {
+			"archetype-properties-explorer": [
+				{
+					"id": "archetypePropertiesExplorer",
+					"name": "Archetype Properties Explorer"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "archetypePropertiesExplorer.refreshEntry",
+					"when": "view == archetypePropertiesExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "archetypePropertiesExplorer.addEntry",
+					"when": "view == archetypePropertiesExplorer"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "archetypePropertiesExplorer.editEntry",
+					"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
+					"group": "inline"
+				},
+				{
+					"command": "archetypePropertiesExplorer.deleteEntry",
+					"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem"
+				}
+			]
+		},
 		"keybindings": [
 			{
 				"command": "archetype.compile",
@@ -208,47 +249,6 @@
 				"id": "archetype",
 				"label": "archetype",
 				"path": "./themes/archetype-icon-theme.json"
-			}
-		]
-	},
-	"viewsContainers": {
-		"activitybar": [
-			{
-				"id": "archetype-properties-explorer",
-				"title": "Archetype",
-				"icon": "images/archetype-activitybar.svg"
-			}
-		]
-	},
-	"views": {
-		"archetype-properties-explorer": [
-			{
-				"id": "archetypePropertiesExplorer",
-				"name": "Archetype Properties Explorer"
-			}
-		]
-	},
-	"menus": {
-		"view/title": [
-			{
-				"command": "archetypePropertiesExplorer.refreshEntry",
-				"when": "view == archetypePropertiesExplorer",
-				"group": "navigation"
-			},
-			{
-				"command": "archetypePropertiesExplorer.addEntry",
-				"when": "view == archetypePropertiesExplorer"
-			}
-		],
-		"view/item/context": [
-			{
-				"command": "archetypePropertiesExplorer.editEntry",
-				"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
-				"group": "inline"
-			},
-			{
-				"command": "archetypePropertiesExplorer.deleteEntry",
-				"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem"
 			}
 		]
 	},
