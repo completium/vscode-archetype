@@ -9,7 +9,7 @@ Archetype is a domain-specific language (DSL) to develop smart contracts on the 
 ##  Quick start
 ### Install archetype compiler
 
-#### via opam (coming soon)
+#### via opam
 ```$ opam install archetype```
 
 #### via git
@@ -37,6 +37,6 @@ with this repository
 - [ ] Hover Information
 - [ ] Formatting
 - [ ] Auto-Completion
-- [ ] Outline
+- [X] Outline
 - [ ] Linter
 - [ ] Debug

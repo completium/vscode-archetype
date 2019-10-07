@@ -83,7 +83,7 @@
 					".arl",
 					".arlx"
 				],
-				"configuration": "./language-configuration.json"
+				"configuration": "./archetype-language-configuration.json"
 			},
 			{
 				"id": "michelson",
@@ -114,8 +114,8 @@
 				"command": "archetypePropertiesExplorer.refreshEntry",
 				"title": "Refresh",
 				"icon": {
-					"light": "images/light/refresh.svg",
-					"dark": "images/dark/refresh.svg"
+					"light": "images/refresh_light.svg",
+					"dark": "images/refresh_dark.svg"
 				}
 			},
 			{
