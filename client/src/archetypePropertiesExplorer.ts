@@ -13,13 +13,22 @@ export class ArchetypePropertiesExplorer {
 
 export function clickProperty(p: Property, extensionPath: string) {
 	// console.log("log: " + p.id);
+	const range = new vscode.Range(
+		p.location.start.line,
+		p.location.start.col,
+		p.location.end.line,
+		p.location.end.col);
+
 	vscode.window.activeTextEditor.revealRange(
-		new vscode.Range(
-			p.location.start.line,
-			p.location.start.col,
-			p.location.end.line,
-			p.location.end.col),
+		range,
 		vscode.TextEditorRevealType.Default);
+	const decoration = vscode.window.createTextEditorDecorationType(
+		{
+			light: { backgroundColor: "black" },
+			dark: { backgroundColor: "white" }
+		});
+
+	vscode.window.activeTextEditor.setDecorations(decoration, [range]);
 
 	const panel = vscode.window.createWebviewPanel("", "Formula: " + p.id, vscode.ViewColumn.Two,
 		{
