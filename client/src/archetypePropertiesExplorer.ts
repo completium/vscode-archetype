@@ -1,18 +1,17 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import * as path from 'path';
 
 export class ArchetypePropertiesExplorer {
 	constructor(context: vscode.ExtensionContext) {
-		const nodeArchetypePropertieExplorerProvider = new ArchetypeNodeProvider();
+		const nodeArchetypePropertieExplorerProvider = new ArchetypeNodeProvider(context);
 		context.subscriptions.push(vscode.window.registerTreeDataProvider('archetypePropertiesExplorer', nodeArchetypePropertieExplorerProvider));
 
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.refreshEntry', () => nodeArchetypePropertieExplorerProvider.refresh()));
-		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property) => clickProperty(p)));
+		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => clickProperty(p, e)));
 	}
 }
 
-export function clickProperty(p: Property) {
+export function clickProperty(p: Property, extensionPath: string) {
 	// console.log("log: " + p.id);
 	vscode.window.activeTextEditor.revealRange(
 		new vscode.Range(
@@ -22,17 +21,75 @@ export function clickProperty(p: Property) {
 			p.location.end.col),
 		vscode.TextEditorRevealType.Default);
 
-	const panel = vscode.window.createWebviewPanel("", "Formula: " + p.id, vscode.ViewColumn.Two);
-	panel.webview.html = `<!DOCTYPE html>
+	const panel = vscode.window.createWebviewPanel("", "Formula: " + p.id, vscode.ViewColumn.Two,
+		{
+			// Enable javascript in the webview
+			enableScripts: true,
+
+			// And restrict the webview to only loading content from our extension's `media` directory.
+			localResourceRoots: [vscode.Uri.file(path.join(extensionPath, 'resources'))]
+		});
+	const webview = panel.webview;
+
+	let invs =
+		p.invariants.length == 0 ? "" : `<p>Invariants</p><p> </p>`
+
+	const scriptPathOnDisk = vscode.Uri.file(
+		path.join(extensionPath, 'resources', 'script_ape.js')
+	);
+
+
+	// And the uri we use to load this script in the webview
+	const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
+
+	// Use a nonce to whitelist which scripts can be run
+	const nonce = getNonce();
+
+	webview.html = `<!DOCTYPE html>
             <html lang="en">
             <head>
-              <title>${p.id}</title>
+                <meta charset="UTF-8">
+
+                <!--
+                Use a content security policy to only allow loading images from https or from our extension directory,
+                and only allow scripts that have a specific nonce.
+                -->
+                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
+
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Formula ${p.id}</title>
             </head>
             <body>
-							<p>Formula ${p.id}</p>
+							<h2>Formula ${p.id}</h2>
 							<p>${p.formula}</p>
+							<button id="verify_button">Verify</button>
+							<script nonce="${nonce}" src="${scriptUri}"></script>
             </body>
             </html>`;
+
+	webview.onDidReceiveMessage(
+		message => {
+			console.log("onDidReceiveMessage");
+			switch (message.command) {
+				case 'alert':
+					vscode.window.showInformationMessage(message.text);
+					return;
+			}
+		},
+		null,
+		[]
+	);
+
+}
+
+
+function getNonce() {
+	let text = '';
+	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	for (let i = 0; i < 32; i++) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
 }
 
 interface Position {
@@ -46,10 +103,16 @@ interface Location {
 	end: Position;
 }
 
+interface Invariant {
+	label: string;
+	formulas: string[];
+}
+
 interface Property {
 	kind: string[];
 	id: string;
 	formula: string;
+	invariants: Invariant[];
 	location: Location;
 }
 
@@ -65,7 +128,8 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 	private _onDidChangeTreeData: vscode.EventEmitter<ArchetypeItem | undefined> = new vscode.EventEmitter<ArchetypeItem | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<ArchetypeItem | undefined> = this._onDidChangeTreeData.event;
 
-	constructor() {
+	constructor(
+		public readonly context: vscode.ExtensionContext) {
 	}
 
 	refresh(): void {
@@ -110,7 +174,7 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 						for (var i = 0; i < res.obj.length; ++i) {
 							var lObj = res.obj[i];
 
-							var property = mk_property(lObj);
+							var property = mk_property(lObj, this.context.extensionPath);
 							array.push(property);
 						}
 					} else {
@@ -126,18 +190,12 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 	}
 }
 
-function mk_property(property: Property): ArchetypeItem {
-	return new ArchetypeItem(property, {
-		command: 'archetypePropertiesExplorer.process',
-		title: '',
-		arguments: [property]
-	});
-}
 
 export class ArchetypeItem extends vscode.TreeItem {
 
 	constructor(
 		public readonly property: Property,
+		public readonly _extensionPath: string,
 		public readonly command: vscode.Command
 	) {
 		super(property.id, vscode.TreeItemCollapsibleState.None);
@@ -148,10 +206,19 @@ export class ArchetypeItem extends vscode.TreeItem {
 	}
 
 	iconPath = {
-		light: path.join(__filename, '..', '..', 'images', 'formula_light.svg'),
-		dark: path.join(__filename, '..', '..', 'images', 'formula_dark.svg')
+		light: path.join(this._extensionPath, 'images', 'formula_light.svg'),
+		dark: path.join(this._extensionPath, 'images', 'formula_dark.svg')
 	};
 
 	contextValue = 'archetypeItem';
 
+}
+
+function mk_property(property: Property, extensionPath: string): ArchetypeItem {
+
+	return new ArchetypeItem(property, extensionPath, {
+		command: 'archetypePropertiesExplorer.process',
+		title: '',
+		arguments: [property, extensionPath]
+	});
 }
