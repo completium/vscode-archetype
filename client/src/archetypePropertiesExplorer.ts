@@ -2,59 +2,66 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 
 export class ArchetypePropertiesExplorer {
+
+	private decoration: vscode.TextEditorDecorationType;
+
 	constructor(context: vscode.ExtensionContext) {
 		const nodeArchetypePropertieExplorerProvider = new ArchetypeNodeProvider(context);
 		context.subscriptions.push(vscode.window.registerTreeDataProvider('archetypePropertiesExplorer', nodeArchetypePropertieExplorerProvider));
 
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.refreshEntry', () => nodeArchetypePropertieExplorerProvider.refresh()));
-		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => clickProperty(p, e)));
+		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => this.clickProperty(p, e)));
 	}
-}
 
-export function clickProperty(p: Property, extensionPath: string) {
-	// console.log("log: " + p.id);
-	const range = new vscode.Range(
-		p.location.start.line,
-		p.location.start.col,
-		p.location.end.line,
-		p.location.end.col);
+	private clickProperty(p: Property, extensionPath: string) {
+		// console.log("log: " + p.id);
+		const range = new vscode.Range(
+			p.location.start.line,
+			p.location.start.col,
+			p.location.end.line,
+			p.location.end.col);
 
-	vscode.window.activeTextEditor.revealRange(
-		range,
-		vscode.TextEditorRevealType.Default);
-	const decoration = vscode.window.createTextEditorDecorationType(
-		{
-			light: { backgroundColor: "black" },
-			dark: { backgroundColor: "white" }
-		});
+		vscode.window.activeTextEditor.revealRange(
+			range,
+			vscode.TextEditorRevealType.Default);
 
-	vscode.window.activeTextEditor.setDecorations(decoration, [range]);
+		if (this.decoration) {
+			this.decoration.dispose();
+		}
 
-	const panel = vscode.window.createWebviewPanel("", "Formula: " + p.id, vscode.ViewColumn.Two,
-		{
-			// Enable javascript in the webview
-			enableScripts: true,
+		this.decoration = vscode.window.createTextEditorDecorationType(
+			{
+				light: { backgroundColor: "black" },
+				dark: { backgroundColor: "white" }
+			});
 
-			// And restrict the webview to only loading content from our extension's `media` directory.
-			localResourceRoots: [vscode.Uri.file(path.join(extensionPath, 'resources'))]
-		});
-	const webview = panel.webview;
+		vscode.window.activeTextEditor.setDecorations(this.decoration, [range]);
 
-	let invs =
-		p.invariants.length == 0 ? "" : `<p>Invariants</p><p> </p>`
+		const panel = vscode.window.createWebviewPanel("", "Formula: " + p.id, vscode.ViewColumn.Two,
+			{
+				// Enable javascript in the webview
+				enableScripts: true,
 
-	const scriptPathOnDisk = vscode.Uri.file(
-		path.join(extensionPath, 'resources', 'script_ape.js')
-	);
+				// And restrict the webview to only loading content from our extension's `media` directory.
+				localResourceRoots: [vscode.Uri.file(path.join(extensionPath, 'resources'))]
+			});
+		const webview = panel.webview;
+
+		let invs =
+			p.invariants.length == 0 ? "" : `<p>Invariants</p><p> </p>`
+
+		const scriptPathOnDisk = vscode.Uri.file(
+			path.join(extensionPath, 'resources', 'script_ape.js')
+		);
 
 
-	// And the uri we use to load this script in the webview
-	const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
+		// And the uri we use to load this script in the webview
+		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
 
-	// Use a nonce to whitelist which scripts can be run
-	const nonce = getNonce();
+		// Use a nonce to whitelist which scripts can be run
+		const nonce = getNonce();
 
-	webview.html = `<!DOCTYPE html>
+		webview.html = `<!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
@@ -76,21 +83,22 @@ export function clickProperty(p: Property, extensionPath: string) {
             </body>
             </html>`;
 
-	webview.onDidReceiveMessage(
-		message => {
-			console.log("onDidReceiveMessage");
-			switch (message.command) {
-				case 'alert':
-					vscode.window.showInformationMessage(message.text);
-					return;
-			}
-		},
-		null,
-		[]
-	);
+		webview.onDidReceiveMessage(
+			message => {
+				console.log("onDidReceiveMessage");
+				switch (message.command) {
+					case 'alert':
+						vscode.window.showInformationMessage(message.text);
+						return;
+				}
+			},
+			null,
+			[]
+		);
+
+	}
 
 }
-
 
 function getNonce() {
 	let text = '';
