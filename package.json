@@ -119,6 +119,14 @@
 				}
 			},
 			{
+				"command": "archetypePropertiesExplorer.verify",
+				"title": "Verify",
+				"icon": {
+					"light": "images/refresh_light.svg",
+					"dark": "images/refresh_dark.svg"
+				}
+			},
+			{
 				"command": "archetype.compile",
 				"title": "Archetype: Compile contract"
 			},
@@ -176,7 +184,7 @@
 			"archetype-properties-explorer": [
 				{
 					"id": "archetypePropertiesExplorer",
-					"name": "Archetype Properties Explorer"
+					"name": "Archetype Properties"
 				}
 			]
 		},
@@ -188,7 +196,13 @@
 					"group": "navigation"
 				}
 			],
-			"view/item/context": []
+			"view/item/context": [
+				{
+					"command": "archetypePropertiesExplorer.verify",
+					"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
+					"group": "inline"
+				}
+			]
 		},
 		"keybindings": [
 			{

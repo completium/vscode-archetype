@@ -10,7 +10,12 @@ export class ArchetypePropertiesExplorer {
 		context.subscriptions.push(vscode.window.registerTreeDataProvider('archetypePropertiesExplorer', nodeArchetypePropertieExplorerProvider));
 
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.refreshEntry', () => nodeArchetypePropertieExplorerProvider.refresh()));
-		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => this.clickProperty(p, e)));
+		// context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => this.clickProperty(p, e)));
+		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.verify', () => this.clickVerify()));
+	}
+
+	private clickVerify() {
+		vscode.window.showInformationMessage("verify");
 	}
 
 	private clickProperty(p: Property, extensionPath: string) {
@@ -78,7 +83,7 @@ export class ArchetypePropertiesExplorer {
                 <title>Formula ${p.id}</title>
             </head>
             <body>
-							<h2>Formula ${p.id}</h2>
+							<h2>Archetype property ${p.id}</h2>
 							<p>${p.formula}</p>
 							<button id="verify_button">Verify</button>
 							<script nonce="${nonce}" src="${scriptUri}"></script>
@@ -214,8 +219,8 @@ export class ArchetypeItem extends vscode.TreeItem {
 
 	constructor(
 		public readonly property: Property,
-		public readonly _extensionPath: string,
-		public readonly command: vscode.Command
+		public readonly _extensionPath: string
+		// public readonly command: vscode.Command
 	) {
 		super(property.id, vscode.TreeItemCollapsibleState.None);
 		this.description = property.formula;
@@ -236,9 +241,11 @@ export class ArchetypeItem extends vscode.TreeItem {
 
 function mk_property(property: Property, extensionPath: string): ArchetypeItem {
 
-	return new ArchetypeItem(property, extensionPath, {
-		command: 'archetypePropertiesExplorer.process',
-		title: '',
-		arguments: [property, extensionPath]
-	});
+	return new ArchetypeItem(property, extensionPath,
+		//  {
+		// 	command: 'archetypePropertiesExplorer.process',
+		// 	title: '',
+		// 	arguments: [property, extensionPath]
+		// }
+	);
 }
