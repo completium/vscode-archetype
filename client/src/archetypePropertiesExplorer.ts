@@ -7,11 +7,15 @@ export class ArchetypePropertiesExplorer {
 
 	constructor(context: vscode.ExtensionContext) {
 		const nodeArchetypePropertieExplorerProvider = new ArchetypeNodeProvider(context);
+
 		context.subscriptions.push(vscode.window.registerTreeDataProvider('archetypePropertiesExplorer', nodeArchetypePropertieExplorerProvider));
 
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.refreshEntry', () => nodeArchetypePropertieExplorerProvider.refresh()));
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => this.clickProperty(p, e)));
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.verify', () => this.clickVerify()));
+
+		vscode.window.onDidChangeVisibleTextEditors(() => nodeArchetypePropertieExplorerProvider.doRefresh());
+		// vscode.workspace.onDidChangeConfiguration(e => console.log(e));
 	}
 
 	private clickVerify() {
@@ -38,7 +42,7 @@ export class ArchetypePropertiesExplorer {
 
 		this.decoration = vscode.window.createTextEditorDecorationType(
 			{
-				light: { backgroundColor: "black" },
+				light: { backgroundColor: "rgba(16, 207, 201, 0.3)" },
 				dark: { backgroundColor: "rgba(16, 207, 201, 0.3)" }
 			});
 
@@ -159,19 +163,29 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 	refresh(): void {
 		// console.log("refresh");
 		if (vscode.window.activeTextEditor.document.languageId == "archetype") {
+			this.doRefresh();
+		} else {
+			vscode.window.showErrorMessage("Not an archetype file.");
+		}
+	}
+
+	doRefresh(): void {
+		if (vscode.window.activeTextEditor.document.languageId == "archetype") {
 			let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
 			let cmd = 'archetype --service get_properties ' + fsPath;
 			let cp = require('child_process');
 			cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
 				if (_err) {
 					vscode.window.showErrorMessage(stderr);
-					return;
-				};
-				res = JSON.parse(stdout);
+					res = undefined;
+				} else {
+					res = JSON.parse(stdout);
+				}
 				this._onDidChangeTreeData.fire();
 			});
 		} else {
-			vscode.window.showErrorMessage("Not an archetype file.");
+			res = undefined;
+			this._onDidChangeTreeData.fire();
 		}
 	}
 

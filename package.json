@@ -122,8 +122,8 @@
 				"command": "archetypePropertiesExplorer.verify",
 				"title": "Verify",
 				"icon": {
-					"light": "images/refresh_light.svg",
-					"dark": "images/refresh_dark.svg"
+					"light": "images/shield_light.svg",
+					"dark": "images/shield_dark.svg"
 				}
 			},
 			{
@@ -184,7 +184,7 @@
 			"archetype-properties-explorer": [
 				{
 					"id": "archetypePropertiesExplorer",
-					"name": "Archetype Properties"
+					"name": "Properties"
 				}
 			]
 		},
