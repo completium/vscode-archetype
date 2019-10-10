@@ -17,13 +17,15 @@ export class ArchetypePropertiesExplorer {
 		// console.log("log: " + p.id);
 		const range = new vscode.Range(
 			p.location.start.line,
-			p.location.start.col,
-			p.location.end.line,
-			p.location.end.col);
+			0,
+			p.location.end.line + 1,
+			0);
 
-		vscode.window.activeTextEditor.revealRange(
-			range,
-			vscode.TextEditorRevealType.Default);
+		vscode.window.activeTextEditor.
+
+			revealRange(
+				range,
+				vscode.TextEditorRevealType.Default);
 
 		if (this.decoration) {
 			this.decoration.dispose();
@@ -32,7 +34,7 @@ export class ArchetypePropertiesExplorer {
 		this.decoration = vscode.window.createTextEditorDecorationType(
 			{
 				light: { backgroundColor: "black" },
-				dark: { backgroundColor: "white" }
+				dark: { backgroundColor: "rgba(16, 207, 201, 0.3)" }
 			});
 
 		vscode.window.activeTextEditor.setDecorations(this.decoration, [range]);
@@ -216,16 +218,17 @@ export class ArchetypeItem extends vscode.TreeItem {
 		public readonly command: vscode.Command
 	) {
 		super(property.id, vscode.TreeItemCollapsibleState.None);
+		this.description = property.formula;
 	}
 
 	get tooltip(): string {
 		return `${this.property.id}`;
 	}
 
-	iconPath = {
-		light: path.join(this._extensionPath, 'images', 'formula_light.svg'),
-		dark: path.join(this._extensionPath, 'images', 'formula_dark.svg')
-	};
+	// iconPath = {
+	// 	light: path.join(this._extensionPath, 'images', 'formula_light.svg'),
+	// 	dark: path.join(this._extensionPath, 'images', 'formula_dark.svg')
+	// };
 
 	contextValue = 'archetypeItem';
 
