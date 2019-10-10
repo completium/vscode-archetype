@@ -10,7 +10,7 @@ export class ArchetypePropertiesExplorer {
 		context.subscriptions.push(vscode.window.registerTreeDataProvider('archetypePropertiesExplorer', nodeArchetypePropertieExplorerProvider));
 
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.refreshEntry', () => nodeArchetypePropertieExplorerProvider.refresh()));
-		// context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => this.clickProperty(p, e)));
+		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => this.clickProperty(p, e)));
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.verify', () => this.clickVerify()));
 	}
 
@@ -43,7 +43,9 @@ export class ArchetypePropertiesExplorer {
 			});
 
 		vscode.window.activeTextEditor.setDecorations(this.decoration, [range]);
+	}
 
+	createWebviewPanel(p: Property, extensionPath: string) {
 		const panel = vscode.window.createWebviewPanel("", "Formula: " + p.id, vscode.ViewColumn.Two,
 			{
 				// Enable javascript in the webview
@@ -102,9 +104,7 @@ export class ArchetypePropertiesExplorer {
 			null,
 			[]
 		);
-
 	}
-
 }
 
 function getNonce() {
@@ -219,8 +219,8 @@ export class ArchetypeItem extends vscode.TreeItem {
 
 	constructor(
 		public readonly property: Property,
-		public readonly _extensionPath: string
-		// public readonly command: vscode.Command
+		public readonly _extensionPath: string,
+		public readonly command: vscode.Command
 	) {
 		super(property.id, vscode.TreeItemCollapsibleState.None);
 		this.description = property.formula;
@@ -242,10 +242,10 @@ export class ArchetypeItem extends vscode.TreeItem {
 function mk_property(property: Property, extensionPath: string): ArchetypeItem {
 
 	return new ArchetypeItem(property, extensionPath,
-		//  {
-		// 	command: 'archetypePropertiesExplorer.process',
-		// 	title: '',
-		// 	arguments: [property, extensionPath]
-		// }
+		{
+			command: 'archetypePropertiesExplorer.process',
+			title: '',
+			arguments: [property, extensionPath]
+		}
 	);
 }
