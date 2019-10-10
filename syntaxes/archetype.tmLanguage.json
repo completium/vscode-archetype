@@ -60,6 +60,9 @@
 					"include": "#declaration-states"
 				},
 				{
+					"include": "#declaration-use"
+				},
+				{
 					"include": "#declaration-asset"
 				},
 				{
@@ -106,6 +109,9 @@
 				},
 				{
 					"include": "#declaration-postcondition"
+				},
+				{
+					"include": "#declaration-doc-comment"
 				}
 			]
 		},
@@ -464,6 +470,30 @@
 							"name": "entity.name.type.postcondition.archetype"
 						}
 					}
+				}
+			]
+		},
+		"declaration-use": {
+			"patterns": [
+				{
+					"match": "\\b(use)(\\s*\\:)((\\s*[A-Za-z_]\\w*)+)\\b",
+					"captures": {
+						"1": {
+							"name": "storage.type.use.keywod"
+						},
+						"3": {
+							"name": "entity.name.type.use.label"
+						}
+					}
+				}
+			]
+		},
+		"declaration-doc-comment": {
+			"patterns": [
+				{
+					"name": "comment.block.documentation.archetype",
+					"begin": "doc\\*",
+					"end": "\\*doc"
 				}
 			]
 		},
