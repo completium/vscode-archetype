@@ -12,14 +12,39 @@ export class ArchetypePropertiesExplorer {
 
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.refreshEntry', () => nodeArchetypePropertieExplorerProvider.refresh()));
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => this.clickProperty(p, e)));
-		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.verify', () => this.clickVerify()));
+		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.verify', (item: ArchetypeItem) => this.clickVerify(item)));
 
 		vscode.window.onDidChangeVisibleTextEditors(() => nodeArchetypePropertieExplorerProvider.doRefresh());
 		// vscode.workspace.onDidChangeConfiguration(e => console.log(e));
 	}
 
-	private clickVerify() {
-		vscode.window.showInformationMessage("verify");
+	private clickVerify(item: ArchetypeItem) {
+		vscode.window.showInformationMessage("verify: " + item.property.id);
+		const id = item.property.id;
+		let tmp = '/tmp/' + id + '.mlw';
+		let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
+		let cmd = 'archetype -fp ' + item.property.id + ' -t whyml ' + fsPath + ' > ' + tmp;
+		let cp = require('child_process');
+		cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
+			if (_err) {
+				vscode.window.showErrorMessage(stderr);
+			} else {
+				this.openWhy3Ide(tmp);
+			}
+		});
+	}
+
+	private openWhy3Ide(inputFsPath: string) {
+		const config = vscode.workspace.getConfiguration('archetype');
+		const pathWhy3Lib: string = config.get('archetypeWhy3Lib');
+		let cmd = 'pkill why3ide; why3 ide -L ' + pathWhy3Lib + ' ' + inputFsPath;
+		let cp = require('child_process');
+		cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
+			if (_err) {
+				vscode.window.showErrorMessage(stderr);
+				return;
+			};
+		});
 	}
 
 	private clickProperty(p: Property, extensionPath: string) {
