@@ -122,8 +122,8 @@
 				"command": "archetypePropertiesExplorer.verify",
 				"title": "Verify",
 				"icon": {
-					"light": "images/shield_light.svg",
-					"dark": "images/shield_dark.svg"
+					"light": "images/check_light.svg",
+					"dark": "images/check_dark.svg"
 				}
 			},
 			{
