@@ -15,7 +15,7 @@ export class ArchetypePropertiesExplorer {
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.verify', (item: ArchetypeItem) => this.clickVerify(item)));
 
 		vscode.window.onDidChangeVisibleTextEditors(() => nodeArchetypePropertieExplorerProvider.doRefresh());
-		// vscode.workspace.onDidChangeConfiguration(e => console.log(e));
+		vscode.workspace.onDidSaveTextDocument(() => nodeArchetypePropertieExplorerProvider.doRefresh());
 	}
 
 	private clickVerify(item: ArchetypeItem) {
