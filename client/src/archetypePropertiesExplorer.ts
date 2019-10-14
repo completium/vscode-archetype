@@ -3,8 +3,6 @@ import * as path from 'path';
 
 export class ArchetypePropertiesExplorer {
 
-	// private decoration: vscode.TextEditorDecorationType;
-
 	constructor(context: vscode.ExtensionContext) {
 		const nodeArchetypePropertieExplorerProvider = new ArchetypeNodeProvider(context);
 
@@ -13,17 +11,21 @@ export class ArchetypePropertiesExplorer {
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.refreshEntry', () => nodeArchetypePropertieExplorerProvider.refresh()));
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => this.clickProperty(p, e)));
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.verify', (item: ArchetypeItem) => this.clickVerify(item)));
-		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.generateMlwFile', (item: ArchetypeItem) => this.generateMlwFile(item)));
+		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.generateMlwFileOne', (item: ArchetypeItem) => this.generateMlwFileOne(item)));
+		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.generateMlwFileAll', () => this.generateMlwFileAll()));
 
 		vscode.window.onDidChangeVisibleTextEditors(() => nodeArchetypePropertieExplorerProvider.doRefresh());
 		vscode.workspace.onDidSaveTextDocument(() => nodeArchetypePropertieExplorerProvider.doRefresh());
 	}
 
-	private generateMlwFileIntern(item: ArchetypeItem, f) {
-		const id = item.property.id;
-		let tmp = '/tmp/' + id + '.mlw';
+	private generateMlwFileIntern(f: { (path: string): void }, item?: ArchetypeItem) {
+		console.log(item);
 		let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
-		let cmd = 'archetype -fp ' + item.property.id + ' -t whyml ' + fsPath + ' > ' + tmp;
+		let path = fsPath.replace(/.arl$/, '');
+		let postfix = item ? '_' + item.property.id : '';
+		let tmp = path + postfix + '.mlw';
+		let fp = item ? ' -fp ' + item.property.id : '';
+		let cmd = 'archetype' + fp + ' -t whyml ' + fsPath + ' > ' + tmp;
 		let cp = require('child_process');
 		cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
 			if (_err) {
@@ -35,8 +37,7 @@ export class ArchetypePropertiesExplorer {
 	}
 
 	private clickVerify(item: ArchetypeItem) {
-		// vscode.window.showInformationMessage("verify: " + item.property.id);
-		this.generateMlwFileIntern(item, this.openWhy3Ide);
+		this.generateMlwFileIntern(this.openWhy3Ide, item);
 	}
 
 	private openFile(path: string) {
@@ -44,10 +45,13 @@ export class ArchetypePropertiesExplorer {
 		vscode.window.showTextDocument(outputUri);
 	}
 
-	private generateMlwFile(item: ArchetypeItem) {
-		this.generateMlwFileIntern(item, this.openFile);
+	private generateMlwFileOne(item: ArchetypeItem) {
+		this.generateMlwFileIntern(this.openFile, item);
 	}
 
+	private generateMlwFileAll() {
+		this.generateMlwFileIntern(this.openFile);
+	}
 
 	private openWhy3Ide(inputFsPath: string) {
 		const config = vscode.workspace.getConfiguration('archetype');

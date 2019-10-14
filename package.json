@@ -119,7 +119,15 @@
 				}
 			},
 			{
-				"command": "archetypePropertiesExplorer.generateMlwFile",
+				"command": "archetypePropertiesExplorer.generateMlwFileAll",
+				"title": "Generate mlw file",
+				"icon": {
+					"light": "images/new-file_light.svg",
+					"dark": "images/new-file_dark.svg"
+				}
+			},
+			{
+				"command": "archetypePropertiesExplorer.generateMlwFileOne",
 				"title": "Generate mlw file",
 				"icon": {
 					"light": "images/new-file_light.svg",
@@ -202,6 +210,11 @@
 					"command": "archetypePropertiesExplorer.refreshEntry",
 					"when": "view == archetypePropertiesExplorer",
 					"group": "navigation"
+				},
+				{
+					"command": "archetypePropertiesExplorer.generateMlwFileAll",
+					"when": "view == archetypePropertiesExplorer",
+					"group": "navigation"
 				}
 			],
 			"view/item/context": [
@@ -211,7 +224,7 @@
 					"group": "inline"
 				},
 				{
-					"command": "archetypePropertiesExplorer.generateMlwFile",
+					"command": "archetypePropertiesExplorer.generateMlwFileOne",
 					"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
 					"group": "inline"
 				}
