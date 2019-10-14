@@ -119,6 +119,14 @@
 				}
 			},
 			{
+				"command": "archetypePropertiesExplorer.generateMlwFile",
+				"title": "Generate mlw file",
+				"icon": {
+					"light": "images/new-file_light.svg",
+					"dark": "images/new-file_dark.svg"
+				}
+			},
+			{
 				"command": "archetypePropertiesExplorer.verify",
 				"title": "Verify",
 				"icon": {
@@ -199,6 +207,11 @@
 			"view/item/context": [
 				{
 					"command": "archetypePropertiesExplorer.verify",
+					"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
+					"group": "inline"
+				},
+				{
+					"command": "archetypePropertiesExplorer.generateMlwFile",
 					"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
 					"group": "inline"
 				}

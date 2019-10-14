@@ -3,7 +3,7 @@ import * as path from 'path';
 
 export class ArchetypePropertiesExplorer {
 
-	private decoration: vscode.TextEditorDecorationType;
+	// private decoration: vscode.TextEditorDecorationType;
 
 	constructor(context: vscode.ExtensionContext) {
 		const nodeArchetypePropertieExplorerProvider = new ArchetypeNodeProvider(context);
@@ -13,13 +13,13 @@ export class ArchetypePropertiesExplorer {
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.refreshEntry', () => nodeArchetypePropertieExplorerProvider.refresh()));
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.process', (p: Property, e: string) => this.clickProperty(p, e)));
 		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.verify', (item: ArchetypeItem) => this.clickVerify(item)));
+		context.subscriptions.push(vscode.commands.registerCommand('archetypePropertiesExplorer.generateMlwFile', (item: ArchetypeItem) => this.generateMlwFile(item)));
 
 		vscode.window.onDidChangeVisibleTextEditors(() => nodeArchetypePropertieExplorerProvider.doRefresh());
 		vscode.workspace.onDidSaveTextDocument(() => nodeArchetypePropertieExplorerProvider.doRefresh());
 	}
 
-	private clickVerify(item: ArchetypeItem) {
-		vscode.window.showInformationMessage("verify: " + item.property.id);
+	private generateMlwFileIntern(item: ArchetypeItem, f) {
 		const id = item.property.id;
 		let tmp = '/tmp/' + id + '.mlw';
 		let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
@@ -29,10 +29,25 @@ export class ArchetypePropertiesExplorer {
 			if (_err) {
 				vscode.window.showErrorMessage(stderr);
 			} else {
-				this.openWhy3Ide(tmp);
+				f(tmp);
 			}
 		});
 	}
+
+	private clickVerify(item: ArchetypeItem) {
+		// vscode.window.showInformationMessage("verify: " + item.property.id);
+		this.generateMlwFileIntern(item, this.openWhy3Ide);
+	}
+
+	private openFile(path: string) {
+		let outputUri = vscode.Uri.file(path);
+		vscode.window.showTextDocument(outputUri);
+	}
+
+	private generateMlwFile(item: ArchetypeItem) {
+		this.generateMlwFileIntern(item, this.openFile);
+	}
+
 
 	private openWhy3Ide(inputFsPath: string) {
 		const config = vscode.workspace.getConfiguration('archetype');
@@ -61,17 +76,17 @@ export class ArchetypePropertiesExplorer {
 				range,
 				vscode.TextEditorRevealType.Default);
 
-		if (this.decoration) {
-			this.decoration.dispose();
-		}
+		// if (this.decoration) {
+		// 	this.decoration.dispose();
+		// }
 
-		this.decoration = vscode.window.createTextEditorDecorationType(
-			{
-				light: { backgroundColor: "rgba(16, 207, 201, 0.3)" },
-				dark: { backgroundColor: "rgba(16, 207, 201, 0.3)" }
-			});
+		// this.decoration = vscode.window.createTextEditorDecorationType(
+		// 	{
+		// 		light: { backgroundColor: "rgba(16, 207, 201, 0.3)" },
+		// 		dark: { backgroundColor: "rgba(16, 207, 201, 0.3)" }
+		// 	});
 
-		vscode.window.activeTextEditor.setDecorations(this.decoration, [range]);
+		// vscode.window.activeTextEditor.setDecorations(this.decoration, [range]);
 	}
 
 	createWebviewPanel(p: Property, extensionPath: string) {
