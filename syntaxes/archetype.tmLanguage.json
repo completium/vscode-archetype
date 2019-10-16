@@ -756,6 +756,17 @@
 					}
 				},
 				{
+					"match": "\\b(var)(\\s+([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.var.archetype"
+						},
+						"3": {
+							"name": "variable.other.definition.archetype"
+						}
+					}
+				},
+				{
 					"match": "\\b(match)(.)+(with)\\b",
 					"captures": {
 						"1": {
