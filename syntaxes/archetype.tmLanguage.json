@@ -32,13 +32,21 @@
 	],
 	"repository": {
 		"comment": {
-			"name": "comment.language.archetype",
-			"begin": "\\(\\*",
-			"end": "\\*\\)",
 			"patterns": [
 				{
-					"name": "constant.character.escape.archetype",
-					"match": "wordPattern"
+					"begin": "\\(\\*",
+					"end": "\\*\\)",
+					"name": "comment.block.slash.language.archetype"
+				},
+				{
+					"begin": "/\\*",
+					"end": "\\*/",
+					"name": "comment.block.parenthese.language.archetype"
+				},
+				{
+					"begin": "//",
+					"end": "\\n",
+					"name": "comment.line.slash.language.archetype"
 				}
 			]
 		},
