@@ -6,6 +6,9 @@
 			"include": "#comment"
 		},
 		{
+			"include": "#control0"
+		},
+		{
 			"include": "#declarations"
 		},
 		{
@@ -47,6 +50,21 @@
 					"begin": "//",
 					"end": "\\n",
 					"name": "comment.line.slash.language.archetype"
+				}
+			]
+		},
+		"control0": {
+			"patterns": [
+				{
+					"match": "\\b(for)(\\s+\\:\\s+([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.for.archetype"
+						},
+						"2": {
+							"name": "entity.other.attribute-name.for_label.archetype"
+						}
+					}
 				}
 			]
 		},
@@ -782,17 +800,6 @@
 						},
 						"3": {
 							"name": "keyword.control.with.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(for)(\\s+\\:\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.for.archetype"
-						},
-						"2": {
-							"name": "entity.name.type.for_label.archetype"
 						}
 					}
 				},
