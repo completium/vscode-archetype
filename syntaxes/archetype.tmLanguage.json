@@ -562,7 +562,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|requires|effects|none|any|transfer|mem|idem|before|added|removed|toiterate|iterated|after|fixed|default|type)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|requires|effects|none|any|transfer|mem|idem|before|at|added|removed|toiterate|iterated|after|fixed|default|type)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
@@ -665,10 +665,6 @@
 							"name": "entity.name.to.archetype"
 						}
 					}
-				},
-				{
-					"match": "\\b(at)\\b",
-					"name": "markup.heading.at.archetype"
 				},
 				{
 					"match": "\\b(on)(\\s+([A-Za-z_]\\w*))\\b",
