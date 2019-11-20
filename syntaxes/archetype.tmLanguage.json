@@ -758,6 +758,10 @@
 					}
 				},
 				{
+					"match": "\\b(shadow)\\b",
+					"name": "markup.heading.shadow.archetype"
+				},
+				{
 					"match": "\\b(initialized(\\s+)by)\\b",
 					"name": "markup.heading.initializedby.archetype"
 				},
