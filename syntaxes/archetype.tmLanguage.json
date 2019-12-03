@@ -850,6 +850,10 @@
 					"name": "constant.language.currency.mtz.archetype"
 				},
 				{
+					"match": "\\b(\\d+(\\.\\d+)?utz)\\b",
+					"name": "constant.language.currency.utz.archetype"
+				},
+				{
 					"match": "\\b(\\d+\\.\\d+)\\b",
 					"name": "constant.numeric.rational.decimal.archetype"
 				},
