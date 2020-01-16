@@ -39,6 +39,7 @@
 		"onCommand:archetype.genLiquidityUrl",
 		"onCommand:archetype.genLiquidity",
 		"onCommand:archetype.genLigo",
+		"onCommand:archetype.genLigoStorage",
 		"onCommand:archetype.genSmartPy",
 		"onCommand:archetype.genOCaml",
 		"onCommand:archetype.genWhyml"
@@ -145,6 +146,10 @@
 			{
 				"command": "archetype.genTzLigo",
 				"title": "Archetype: Generate Michelson via LIGO"
+			},
+			{
+				"command": "archetype.genTzLigoStorage",
+				"title": "Archetype: Generate Michelson Storage via LIGO"
 			},
 			{
 				"command": "archetype.genSmartPy",
