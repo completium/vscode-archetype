@@ -562,7 +562,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|requires|effects|none|any|transfer|mem|idem|before|at|added|removed|toiterate|iterated|after|fixed|default|type)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|effects|none|any|transfer|mem|idem|before|at|added|removed|toiterate|iterated|after|fixed|default|type)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
@@ -574,7 +574,7 @@
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
-					"match": "\\b(nth|clear|select|removeif|sort|count|sum|max|min|enqueue|dequeue|push|pop|add|addifnotexist|remove|get|contains|update|mem|subsetof|head|tail)\\b",
+					"match": "\\b(nth|clear|select|removeif|sort|count|sum|max|min|add|remove|get|contains|update|mem|head|tail)\\b",
 					"name": "support.function.asset_function.archetype"
 				}
 			]
