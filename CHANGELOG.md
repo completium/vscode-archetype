@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Removed
  - Remove Michelson language support
+ - Add command : Generate Michelson Storage via LIGO
 
 ## [0.13.0] - 2019-10-24
 ### Changed
