@@ -819,7 +819,7 @@
 					"name": "entity.name.type.label.archetype"
 				},
 				{
-					"match": "\\b(if|then|else|in|break|otherwise|transfer|require|failif|to|from|end|return|do|done?)\\b",
+					"match": "\\b(if|then|else|in|break|otherwise|transfer|call|require|failif|to|from|end|return|do|done?)\\b",
 					"name": "keyword.control.flow.archetype"
 				}
 			]
