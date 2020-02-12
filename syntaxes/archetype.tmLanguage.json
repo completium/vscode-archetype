@@ -149,6 +149,9 @@
 				},
 				{
 					"include": "#declaration-doc-comment"
+				},
+   			{
+					"include": "#declaration-label"
 				}
 			]
 		},
@@ -534,6 +537,21 @@
 				}
 			]
 		},
+    "declaration-label": {
+			"patterns": [
+				{
+					"match": "\\b(label)(\\s*)((\\s*[A-Za-z_]\\w*)+)\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.label.archetype"
+						},
+						"3": {
+							"name": "entity.name.label.label"
+						}
+					}
+				}
+			]
+		},
 		"type": {
 			"patterns": [
 				{
@@ -562,7 +580,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|effects|none|any|transfer|mem|idem|before|at|added|removed|toiterate|iterated|after|fixed|default|type)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|effects|none|any|transfer|idem|before|at|added|removed|toiterate|iterated|after|fixed|default|type)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
@@ -574,7 +592,7 @@
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
-					"match": "\\b(nth|clear|select|removeif|sort|count|sum|max|min|add|remove|get|contains|update|addupdate|mem|head|tail)\\b",
+					"match": "\\b(nth|clear|select|removeif|sort|count|sum|max|min|add|remove|get|contains|update|addupdate|head|tail|subsetof|isempty)\\b",
 					"name": "support.function.asset_function.archetype"
 				}
 			]
@@ -782,12 +800,15 @@
 		"control": {
 			"patterns": [
 				{
-					"match": "\\b(let)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(let)(\\s+some)?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "keyword.control.let.archetype"
 						},
-						"3": {
+						"2": {
+							"name": "keyword.control.some.archetype"
+						},
+						"4": {
 							"name": "variable.other.definition.archetype"
 						}
 					}
