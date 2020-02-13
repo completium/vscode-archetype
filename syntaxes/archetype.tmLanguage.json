@@ -592,7 +592,7 @@
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
-					"match": "\\b(nth|clear|select|removeif|sort|count|sum|max|min|add|remove|get|contains|update|addupdate|head|tail|subsetof|isempty|optget|optnth|optmax|optmin|opthead|opttail)\\b",
+					"match": "\\b(nth|clear|select|removeif|sort|count|sum|max|min|add|remove|get|contains|update|addupdate|head|tail|subsetof|isempty)\\b",
 					"name": "support.function.asset_function.archetype"
 				}
 			]
