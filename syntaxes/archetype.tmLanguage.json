@@ -149,6 +149,9 @@
 				},
 				{
 					"include": "#declaration-doc-comment"
+				},
+   			{
+					"include": "#declaration-label"
 				}
 			]
 		},
@@ -265,7 +268,7 @@
 					}
 				},
 				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(([A-Za-z_]\\w*)|bool|int|rational|date|duration|string|address|role|mtez|key|(([A-Za-z_]\\w*)\\s+(partition|collection|subset)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?",
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(([A-Za-z_]\\w*)|bool|int|rational|date|duration|string|address|role|mtez|key|(([A-Za-z_]\\w*)\\s+(partition|collection|subset|option|list)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?",
 					"captures": {
 						"1": {
 							"name": "entity.other.attribute-name.field.name"
@@ -534,6 +537,21 @@
 				}
 			]
 		},
+    "declaration-label": {
+			"patterns": [
+				{
+					"match": "\\b(label)(\\s*)((\\s*[A-Za-z_]\\w*)+)\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.label.archetype"
+						},
+						"3": {
+							"name": "entity.name.label.label"
+						}
+					}
+				}
+			]
+		},
 		"type": {
 			"patterns": [
 				{
@@ -544,7 +562,7 @@
 		"type-primitive": {
 			"patterns": [
 				{
-					"match": "\\b(bool|int|rational|date|duration|string|address|role|tez|key)\\b",
+					"match": "\\b(bool|int|rational|date|duration|string|address|role|tez|key|bytes)\\b",
 					"name": "storage.type.primitive.archetype"
 				}
 			]
@@ -562,7 +580,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|effects|none|any|transfer|mem|idem|before|at|added|removed|toiterate|iterated|after|fixed|default|type)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|effects|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
@@ -574,7 +592,7 @@
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
-					"match": "\\b(nth|clear|select|removeif|sort|count|sum|max|min|add|remove|get|contains|update|mem|head|tail)\\b",
+					"match": "\\b(nth|clear|select|removeif|sort|count|sum|add|remove|get|contains|update|addupdate|head|tail|subsetof|isempty|min|max|abs|concat|slice|length|isnone|issome|getopt)\\b",
 					"name": "support.function.asset_function.archetype"
 				}
 			]
@@ -782,12 +800,15 @@
 		"control": {
 			"patterns": [
 				{
-					"match": "\\b(let)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(let)(\\s+some)?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "keyword.control.let.archetype"
 						},
-						"3": {
+						"2": {
+							"name": "keyword.control.some.archetype"
+						},
+						"4": {
 							"name": "variable.other.definition.archetype"
 						}
 					}
@@ -819,7 +840,7 @@
 					"name": "entity.name.type.label.archetype"
 				},
 				{
-					"match": "\\b(if|then|else|in|break|otherwise|transfer|require|failif|to|from|end|return|do|done?)\\b",
+					"match": "\\b(if|then|else|in|break|otherwise|transfer|call|require|failif|to|from|end|return|do|done?)\\b",
 					"name": "keyword.control.flow.archetype"
 				}
 			]
@@ -857,6 +878,10 @@
 					"match": "\\b(\\d+\\.\\d+)\\b",
 					"name": "constant.numeric.rational.decimal.archetype"
 				},
+								{
+					"match": "\\d+%",
+					"name": "constant.numeric.rational.percent.archetype"
+				},
 				{
 					"match": "\\b\\d+d\\b",
 					"name": "constant.language.duration.archetype"
@@ -864,6 +889,10 @@
 				{
 					"match": "@(\\w+)",
 					"name": "constant.language.address.archetype"
+				},
+				{
+					"match": "0x([0-9a-fA-F]+)",
+					"name": "constant.language.bytes.archetype"
 				},
 				{
 					"match": "\\b([\\+-]?\\d{4}(?!\\d{2}\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?\\b",
