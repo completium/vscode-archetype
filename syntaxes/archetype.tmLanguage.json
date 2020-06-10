@@ -103,7 +103,7 @@
 					"include": "#declaration-asset"
 				},
 				{
-					"include": "#declaration-action"
+					"include": "#declaration-entry"
 				},
 				{
 					"include": "#declaration-transition"
@@ -283,19 +283,19 @@
 				}
 			]
 		},
-		"declaration-action": {
+		"declaration-entry": {
 			"patterns": [
 				{
-					"match": "\\b(action)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(entry)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "markup.heading.action.archetype"
+							"name": "markup.heading.entry.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.action.archetype"
+							"name": "entity.name.type.entry.archetype"
 						}
 					}
 				}
@@ -600,27 +600,11 @@
 		"operator": {
 			"patterns": [
 				{
-					"match": "\\bmay\\s+be\\s+performed\\s+only\\s+by\\s+action\\b",
-					"name": "keyword.operator.logic.specific"
-				},
-				{
-					"match": "\\bmay\\s+be\\s+performed\\s+only\\s+by\\s+role\\b",
-					"name": "keyword.operator.logic.specific"
-				},
-				{
-					"match": "\\bmay\\s+be\\s+performed\\s+by\\s+action\\b",
-					"name": "keyword.operator.logic.specific"
-				},
-				{
-					"match": "\\bmay\\s+be\\s+performed\\s+by\\s+role\\b",
-					"name": "keyword.operator.logic.specific"
-				},
-				{
-					"match": "\\b(only_by_role|only_in_action|only_by_role_in_action|not_by_role|not_in_action|not_by_role_in_action|transferred_by|transferred_to|no_storage_fail)\\b",
+					"match": "\\b(only_by_role|only_in_entry|only_by_role_in_entry|not_by_role|not_in_entry|not_by_role_in_entry|transferred_by|transferred_to|no_storage_fail)\\b",
 					"name": "keyword.control.security.archetype"
 				},
 				{
-					"match": "\\b(anyaction|noaction|anychange|nochange)\\b",
+					"match": "\\b(anyentry|noentry|anychange|nochange)\\b",
 					"name": "constant.language.security.archetype"
 				},
 				{
