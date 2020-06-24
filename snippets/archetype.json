@@ -2,81 +2,54 @@
   "Asset": {
     "prefix": "asset",
     "body": [
-      "asset ${1:ident} identified by ${2:id} = {",
-      "\t${2:id} : int",
+      "asset ${1:ident} identified by id {",
+      "\tid : int",
+      "} with {",
+      "\ta1: true;",
+      "} initialized by {",
+      "\t{ 0 }",
       "}"
     ],
     "description": "Asset"
-  },
-  "Enum": {
-    "prefix": "enum",
-    "body": [
-      "enum ${1:ident} =",
-      "\t| $0"
-    ],
-    "description": "Enum"
   },
   "States": {
     "prefix": "states",
     "body": [
       "states =",
-      "\t| Created initial",
-      "\t| Aborted",
-      "\t| Confirmed",
-      "\t| Canceled",
-      "\t| Completed"
+      "  | Created initial",
+      "  | Aborted",
+      "  | Confirmed",
+      "  | Canceled",
+      "  | Completed"
     ],
     "description": "States"
   },
-  "Variable": {
-    "prefix": "var",
+  "Entry_Transentry": {
+    "prefix": "entry",
     "body": [
-      "variable ${0:ident} ${1:type} = ${2:value}"
-    ],
-    "description": "States"
-  },
-  "Constant": {
-    "prefix": "cst",
-    "body": [
-      "constant ${0:ident} ${1:type} = ${2:value}"
-    ],
-    "description": "States"
-  },
-  "Action_Transaction_with_verification": {
-    "prefix": "action",
-    "body": [
-      "action ${1:ident} = {",
-      "\tcalled by ${2:role}",
-      "\tverification {",
-      "\t\tspecification {",
-      "\t\t\ts1 : true",
-      "\t\t}",
+      "entry ${1:ident} () {",
+      "\tspecification {",
+      "\t\ts1 : true;",
       "\t}",
+      "\tcalled by ${2:role}",
       "\teffect {",
-      "\t\t${0:instructions}",
+      "\t\t()",
       "\t}",
       "}"
     ],
-    "description": "Action transaction"
+    "description": "Entry transaction"
   },
-  "Action_Transaction": {
-    "prefix": "action",
+  "Transition_Transentry": {
+    "prefix": "transition",
     "body": [
-      "action ${1:ident} = {",
-      "\tcalled by ${2:role}",
-      "\teffect {",
-      "\t\t${0:instructions}",
-      "\t}",
-      "}"
-    ],
-    "description": "Action transaction"
-  },
-  "Transition_Transaction": {
-    "prefix": "trans",
-    "body": [
-      "transition ${1:ident} from ${2:source} = {",
-      "\tcalled by ${4:role}",
+      "transition ${1:ident} () {",
+      "\tcalled by ${5:role}",
+      "\tfrom ${2:source}",
       "\tto ${3:target}",
+      "\twhen { true }",
+      "\twith effect {",
+      "\t\t()",
+      "\t}",
       "}"
     ],
     "description": "Transition transaction"
