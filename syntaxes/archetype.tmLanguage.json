@@ -592,7 +592,7 @@
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
-					"match": "\\b(nth|clear|removeall|select|removeif|sort|count|sum|add|remove|get|contains|update|addupdate|head|tail|subsetof|isempty|min|max|abs|concat|slice|length|isnone|issome|getopt|ceil|floor)\\b",
+					"match": "\\b(nth|clear|removeall|select|removeif|sort|count|sum|add|remove|contains|update|addupdate|head|tail|subsetof|isempty|min|max|abs|concat|slice|length|isnone|issome|getopt|ceil|floor)\\b",
 					"name": "support.function.asset_function.archetype"
 				}
 			]
