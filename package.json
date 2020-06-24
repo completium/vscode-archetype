@@ -24,7 +24,7 @@
 		"type": "git",
 		"url": "https://github.com/edukera/vscode-archetype"
 	},
-	"version": "0.23.0",
+	"version": "0.24.0",
 	"engines": {
 		"vscode": "^1.38.0"
 	},
