@@ -867,7 +867,7 @@
 					"name": "constant.numeric.rational.percent.archetype"
 				},
 				{
-					"match": "\\b\\d+[wdhms]\\b",
+					"match": "\\b(\\d+[wdhms])+\\b",
 					"name": "constant.language.duration.archetype"
 				},
 				{
