@@ -609,7 +609,7 @@
 				},
 				{
 					"match": "(and|or|not|\\->)",
-					"name": "keyword.operator.logic.archetype"
+					"name": "keyword.control.logic.archetype"
 				},
 				{
 					"match": "(=|<>|>=|>|<|<=)",
