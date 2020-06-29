@@ -268,7 +268,7 @@
 					}
 				},
 				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(([A-Za-z_]\\w*)|bool|int|rational|date|duration|string|address|role|mtez|key|chain_id|(([A-Za-z_]\\w*)\\s+(partition|collection|aggregate|option|list)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(([A-Za-z_]\\w*)|bool|int|rational|date|duration|string|address|role|mtez|key|bytes|chain_id|(([A-Za-z_]\\w*)\\s+(partition|collection|aggregate|option|list)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
 					"captures": {
 						"1": {
 							"name": "entity.other.attribute-name.field.name"
@@ -562,7 +562,7 @@
 		"type-primitive": {
 			"patterns": [
 				{
-					"match": "\\b(bool|int|rational|date|duration|string|address|role|tez|key|bytes)\\b",
+					"match": "\\b(bool|int|rational|date|duration|string|address|role|tez|key|bytes|chain_id)\\b",
 					"name": "storage.type.primitive.archetype"
 				}
 			]
