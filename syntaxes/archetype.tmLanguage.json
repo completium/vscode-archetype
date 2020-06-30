@@ -103,6 +103,9 @@
 					"include": "#declaration-asset"
 				},
 				{
+					"include": "#declaration-record"
+				},
+				{
 					"include": "#declaration-entry"
 				},
 				{
@@ -264,6 +267,38 @@
 						},
 						"4": {
 							"name": "entity.name.type.type.asset.archetype"
+						}
+					}
+				},
+				{
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(([A-Za-z_]\\w*)|bool|int|rational|date|duration|string|address|role|mtez|key|bytes|chain_id|(([A-Za-z_]\\w*)\\s+(partition|collection|aggregate|option|list)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
+					"captures": {
+						"1": {
+							"name": "entity.other.attribute-name.field.name"
+						},
+						"2": {
+							"name": "markup.underline.extension.archetype"
+						},
+						"4": {
+							"name": "storage.type.asset.type"
+						}
+					}
+				}
+			]
+		},
+		"declaration-record": {
+			"patterns": [
+				{
+					"match": "\\b(record)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.underline.record.archetype"
+						},
+						"2": {
+							"name": "markup.underline.extension.archetype"
+						},
+						"4": {
+							"name": "entity.name.type.type.record.archetype"
 						}
 					}
 				},
