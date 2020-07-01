@@ -643,7 +643,7 @@
 					"name": "constant.language.security.archetype"
 				},
 				{
-					"match": "(and|or|not|\\->)",
+					"match": "\\b(and|or|not)\\b|(\\->)",
 					"name": "keyword.control.logic.archetype"
 				},
 				{
