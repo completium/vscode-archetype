@@ -1,121 +1,252 @@
 {
-    "name": "archetype",
-    "displayName": "Archetype language support for Visual Studio Code",
-    "keywords": [
-        "archetype",
-        "tezos",
-        "blockchain",
-        "compiler",
-        "smart-contract",
-        "formal-verification"
-    ],
-    "description": "Archetype is a smart contract development solution dedicated to contract quality insurance.",
-    "publisher": "edukera",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/edukera/vscode-archetype/issues"
-    },
-    "icon": "images/icon.png",
-    "galleryBanner": {
-        "color": "#243564",
-        "theme": "dark"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/edukera/vscode-archetype"
-    },
-    "version": "0.0.1",
-    "engines": {
-        "vscode": "^1.34.0"
-    },
-    "categories": [
-        "Programming Languages",
-        "Snippets"
-    ],
-    "activationEvents": [
-        "onCommand:archetype.compile",
-        "onCommand:archetype.genMarkdown" 
-    ],
-    "main": "./out/extension.js",
-    "contributes": {
-        "snippets": [
-            {
-                "language": "archetype",
-                "path": "./snippets/archetype.json"
-            }
-        ],
-        "languages": [
-            {
-                "id": "archetype",
-                "aliases": [
-                    "archetype",
-                    "archetype"
-                ],
-                "extensions": [
-                    "arl",
-                    "arlx"
-                ],
-                "configuration": "./language-configuration.json"
-            }
-        ],
-        "grammars": [
-            {
-                "language": "archetype",
-                "scopeName": "source.archetype",
-                "path": "./syntaxes/archetype.tmLanguage.json"
-            }
-        ],
-        "commands": [
-            {
-                "command": "archetype.compile",
-                "title": "Archetype: Compile contract"
-            },
-            {
-                "command": "archetype.genMarkdown",
-                "title": "Archetype: Generate markdown",
-                "icon": {
-                    "light": "images/cc.svg",
-                    "dark": "images/cc.svg"
-                }
-            }
-        ],
-        "keybindings": [
-            {
-                "command": "archetype.compile",
-                "key": "f5",
-                "mac": "f5",
-                "when": "editorTextFocus && editorLangId == 'archetype'"
-            }
-        ],
-        "iconThemes": [
-            {
-                "id": "archetype",
-                "label": "archetype",
-                "path": "./themes/archetype-icon-theme.json"
-            }
-        ]
-    },
-    "menus": {
-        "editor/title": [
-            {
-                "when": "resourceLangId != 2archetype",
-                "command": "archetype.genMarkdown",
-                "group": "navigation"
-            }
-        ]
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc  -p ./",
-        "lint": "tslint -p ./",
-        "watch": "tsc -watch -p ./"
-    },
-    "devDependencies": {
-        "@types/node": "^10.14.7",
-        "@types/vscode": "^1.34.0",
-        "tslint": "^5.16.0",
-        "typescript": "^3.4.5",
-        "tar": ">=4.2.2",
-        "fstream": ">=1.0.12"
-    }
+	"name": "archetype",
+	"displayName": "Archetype language support for Visual Studio Code",
+	"keywords": [
+		"archetype",
+		"tezos",
+		"blockchain",
+		"compiler",
+		"smart-contract",
+		"formal-verification"
+	],
+	"description": "DSL to develop smart contracts on the Tezos blockchain.",
+	"publisher": "edukera",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/edukera/vscode-archetype/issues"
+	},
+	"icon": "images/icon.png",
+	"galleryBanner": {
+		"color": "#243564",
+		"theme": "dark"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/edukera/vscode-archetype"
+	},
+	"version": "0.29.0",
+	"engines": {
+		"vscode": "^1.38.0"
+	},
+	"categories": [
+		"Programming Languages",
+		"Snippets"
+	],
+	"activationEvents": [
+		"onLanguage:plaintext",
+		"onView:archetypePropertiesExplorer",
+		"onCommand:archetype.genMarkdown",
+		"onCommand:archetype.genLiquidityUrl",
+		"onCommand:archetype.genLiquidity",
+		"onCommand:archetype.genLigo",
+		"onCommand:archetype.genLigoStorage",
+		"onCommand:archetype.genSmartPy",
+		"onCommand:archetype.genOCaml",
+		"onCommand:archetype.genWhyml"
+	],
+	"main": "./client/out/extension.js",
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Archetype configuration",
+			"properties": {
+				"archetype.archetypeWhy3Lib": {
+					"type": "string",
+					"default": "$OPAM_SWITCH_PREFIX/share/archetype/mlw",
+					"description": "Path to Why3 library for archetype verification."
+				},
+				"archetype.archetypeExtensionsPath": {
+					"type": "string",
+					"default": "$OPAM_SWITCH_PREFIX/share/archetype/extensions",
+					"description": "Path to archetype extensions."
+				},
+				"archetype.archetypeContractsPath": {
+					"type": "string",
+					"default": "$OPAM_SWITCH_PREFIX/share/archetype/contracts",
+					"description": "Path to archetype contracts."
+				}
+			}
+		},
+		"snippets": [
+			{
+				"language": "archetype",
+				"path": "./snippets/archetype.json"
+			}
+		],
+		"languages": [
+			{
+				"id": "archetype",
+				"aliases": [
+					"archetype",
+					"archetype"
+				],
+				"extensions": [
+					".arl",
+					".arlx"
+				],
+				"configuration": "./archetype-language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "archetype",
+				"scopeName": "source.archetype",
+				"path": "./syntaxes/archetype.tmLanguage.json"
+			}
+		],
+		"commands": [
+			{
+				"command": "archetypePropertiesExplorer.refreshEntry",
+				"title": "Refresh",
+				"icon": {
+					"light": "images/refresh_light.svg",
+					"dark": "images/refresh_dark.svg"
+				}
+			},
+			{
+				"command": "archetypePropertiesExplorer.generateMlwFileAll",
+				"title": "Generate mlw file",
+				"icon": {
+					"light": "images/new-file_light.svg",
+					"dark": "images/new-file_dark.svg"
+				}
+			},
+			{
+				"command": "archetypePropertiesExplorer.generateMlwFileOne",
+				"title": "Generate mlw file",
+				"icon": {
+					"light": "images/new-file_light.svg",
+					"dark": "images/new-file_dark.svg"
+				}
+			},
+			{
+				"command": "archetypePropertiesExplorer.verify",
+				"title": "Verify",
+				"icon": {
+					"light": "images/check_light.svg",
+					"dark": "images/check_dark.svg"
+				}
+			},
+			{
+				"command": "archetype.compile",
+				"title": "Archetype: Compile contract"
+			},
+			{
+				"command": "archetype.genMarkdown",
+				"title": "Archetype: Generate Markdown",
+				"icon": {
+					"light": "images/cc.svg",
+					"dark": "images/cc.svg"
+				}
+			},
+			{
+				"command": "archetype.genLigo",
+				"title": "Archetype: Generate LIGO"
+			},
+			{
+				"command": "archetype.genTzLigo",
+				"title": "Archetype: Generate Michelson via LIGO"
+			},
+			{
+				"command": "archetype.genTzLigoStorage",
+				"title": "Archetype: Generate Michelson Storage via LIGO"
+			},
+			{
+				"command": "archetype.genSmartPy",
+				"title": "Archetype: Generate SmartPy"
+			},
+			{
+				"command": "archetype.genOCaml",
+				"title": "Archetype: Generate OCaml"
+			},
+			{
+				"command": "archetype.genWhyml",
+				"title": "Archetype: Generate Whyml"
+			},
+			{
+				"command": "archetype.verifyWhy3",
+				"title": "Archetype: Verify with Why3"
+			},
+			{
+				"command": "archetype.refreshEntry",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			}
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "archetype-properties-explorer",
+					"title": "Archetype",
+					"icon": "images/archetype-activitybar.svg"
+				}
+			]
+		},
+		"views": {
+			"archetype-properties-explorer": [
+				{
+					"id": "archetypePropertiesExplorer",
+					"name": "Properties"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "archetypePropertiesExplorer.refreshEntry",
+					"when": "view == archetypePropertiesExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "archetypePropertiesExplorer.generateMlwFileAll",
+					"when": "view == archetypePropertiesExplorer",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "archetypePropertiesExplorer.verify",
+					"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
+					"group": "inline"
+				},
+				{
+					"command": "archetypePropertiesExplorer.generateMlwFileOne",
+					"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
+					"group": "inline"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "archetype.compile",
+				"key": "f5",
+				"mac": "f5",
+				"when": "editorTextFocus && editorLangId == 'archetype'"
+			}
+		],
+		"iconThemes": [
+			{
+				"id": "archetype",
+				"label": "archetype",
+				"path": "./themes/archetype-icon-theme.json"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -b",
+		"watch": "tsc -b -w",
+		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+		"test": "sh ./scripts/e2e.sh"
+	},
+	"devDependencies": {
+		"@types/mocha": "^5.2.0",
+		"@types/vscode": "^1.38.0",
+		"tslint": "^5.16.0",
+		"typescript": "^3.4.5",
+		"tar": ">=4.4.2"
+	}
 }

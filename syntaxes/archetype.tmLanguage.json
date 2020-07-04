@@ -6,6 +6,9 @@
 			"include": "#comment"
 		},
 		{
+			"include": "#control0"
+		},
+		{
 			"include": "#declarations"
 		},
 		{
@@ -32,13 +35,47 @@
 	],
 	"repository": {
 		"comment": {
-			"name": "comment.language.archetype",
-			"begin": "\\(\\*",
-			"end": "\\*\\)",
 			"patterns": [
 				{
-					"name": "constant.character.escape.archetype",
-					"match": "wordPattern"
+					"begin": "\\(\\*",
+					"end": "\\*\\)",
+					"name": "comment.block.slash.language.archetype"
+				},
+				{
+					"begin": "/\\*",
+					"end": "\\*/",
+					"name": "comment.block.parenthese.language.archetype"
+				},
+				{
+					"begin": "//",
+					"end": "\\n",
+					"name": "comment.line.slash.language.archetype"
+				}
+			]
+		},
+		"control0": {
+			"patterns": [
+				{
+					"match": "\\b(for)(\\s*\\:\\s*([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.for.archetype"
+						},
+						"2": {
+							"name": "entity.other.attribute-name.for_label.archetype"
+						}
+					}
+				},
+				{
+					"match": "\\b(iter)(\\s*\\:\\s*([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.iter.archetype"
+						},
+						"2": {
+							"name": "entity.other.attribute-name.iter_label.archetype"
+						}
+					}
 				}
 			]
 		},
@@ -60,10 +97,16 @@
 					"include": "#declaration-states"
 				},
 				{
+					"include": "#declaration-use"
+				},
+				{
 					"include": "#declaration-asset"
 				},
 				{
-					"include": "#declaration-action"
+					"include": "#declaration-record"
+				},
+				{
+					"include": "#declaration-entry"
 				},
 				{
 					"include": "#declaration-transition"
@@ -81,7 +124,10 @@
 					"include": "#declaration-function"
 				},
 				{
-					"include": "#declaration-verification"
+					"include": "#declaration-specification"
+				},
+				{
+					"include": "#declaration-security"
 				},
 				{
 					"include": "#declaration-predicate"
@@ -90,7 +136,7 @@
 					"include": "#declaration-definition"
 				},
 				{
-					"include": "#declaration-axiom"
+					"include": "#declaration-lemma"
 				},
 				{
 					"include": "#declaration-theorem"
@@ -102,17 +148,23 @@
 					"include": "#declaration-assert"
 				},
 				{
-					"include": "#declaration-specification"
+					"include": "#declaration-postcondition"
+				},
+				{
+					"include": "#declaration-doc-comment"
+				},
+   			{
+					"include": "#declaration-label"
 				}
 			]
 		},
 		"declaration-archetype": {
 			"patterns": [
 				{
-					"match": "\\b(archetype)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(archetype)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.archetype.archetype"
+							"name": "markup.heading.archetype.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
@@ -127,10 +179,10 @@
 		"declaration-variable": {
 			"patterns": [
 				{
-					"match": "\\b(variable|constant)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(variable|constant)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.variable.archetype"
+							"name": "keyword.control.variable.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
@@ -145,10 +197,10 @@
 		"declaration-instance": {
 			"patterns": [
 				{
-					"match": "\\b(instance)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))(\\s+of)(\\s+([A-Za-z_]\\w*))\\b",
+					"match": "\\b(instance)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))(\\s+of)\\s+(([A-Za-z_]\\w*))\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.instance.archetype"
+							"name": "keyword.control.instance.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
@@ -157,7 +209,7 @@
 							"name": "entity.name.type.instance.archetype"
 						},
 						"6": {
-							"name": "storage.type.of.archetype"
+							"name": "keyword.control.of.archetype"
 						},
 						"7": {
 							"name": "entity.name.contract.archetype"
@@ -172,7 +224,7 @@
 					"match": "\\b(enum)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.enum.archetype"
+							"name": "keyword.control.enum.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
@@ -190,7 +242,7 @@
 					"match": "\\b(states)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.states.archetype"
+							"name": "keyword.control.states.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
@@ -205,24 +257,24 @@
 		"declaration-asset": {
 			"patterns": [
 				{
-					"match": "\\b(asset)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(asset)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.asset.archetype"
+							"name": "keyword.control.underline.asset.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.asset.archetype"
+							"name": "entity.name.type.type.asset.archetype"
 						}
 					}
 				},
 				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*([A-Za-z_]\\w*)+(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(([A-Za-z_]\\w*)|bool|int|rational|date|duration|string|address|role|mtez|key|bytes|chain_id|(([A-Za-z_]\\w*)\\s+(partition|collection|aggregate|option|list)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
 					"captures": {
 						"1": {
-							"name": "entity.name.asset.name"
+							"name": "entity.other.attribute-name.field.name"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
@@ -234,19 +286,51 @@
 				}
 			]
 		},
-		"declaration-action": {
+		"declaration-record": {
 			"patterns": [
 				{
-					"match": "\\b(action)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(record)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.action.archetype"
+							"name": "keyword.control.underline.record.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.action.archetype"
+							"name": "entity.name.type.type.record.archetype"
+						}
+					}
+				},
+				{
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(([A-Za-z_]\\w*)|bool|int|rational|date|duration|string|address|role|mtez|key|bytes|chain_id|(([A-Za-z_]\\w*)\\s+(partition|collection|aggregate|option|list)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
+					"captures": {
+						"1": {
+							"name": "entity.other.attribute-name.field.name"
+						},
+						"2": {
+							"name": "markup.underline.extension.archetype"
+						},
+						"4": {
+							"name": "storage.type.asset.type"
+						}
+					}
+				}
+			]
+		},
+		"declaration-entry": {
+			"patterns": [
+				{
+					"match": "\\b(entry)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "markup.heading.entry.archetype"
+						},
+						"2": {
+							"name": "markup.underline.extension.archetype"
+						},
+						"4": {
+							"name": "entity.name.type.entry.archetype"
 						}
 					}
 				}
@@ -255,16 +339,16 @@
 		"declaration-transition": {
 			"patterns": [
 				{
-					"match": "\\b(transition)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(transition)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.transition.archetype"
+							"name": "markup.heading.transition.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.transition.archetype"
+							"name": "entity.name.type.type.transition.archetype"
 						}
 					}
 				}
@@ -273,16 +357,16 @@
 		"declaration-contract": {
 			"patterns": [
 				{
-					"match": "\\b(contract)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(contract)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.contract.archetype"
+							"name": "keyword.control.contract.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.contract.archetype"
+							"name": "entity.name.type.type.contract.archetype"
 						}
 					}
 				}
@@ -305,7 +389,7 @@
 		"declaration-function": {
 			"patterns": [
 				{
-					"match": "\\b(function)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(function)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.function.archetype"
@@ -314,7 +398,7 @@
 							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
-							"name": "entity.name.type.function.archetype"
+							"name": "entity.name.type.type.function.archetype"
 						}
 					}
 				},
@@ -325,7 +409,7 @@
 							"name": "entity.name.argument.name"
 						},
 						"2": {
-							"name": "markup.underline.extension.archetype"
+							"name": "entity.name.type.extension.archetype"
 						},
 						"4": {
 							"name": "storage.type.argument.type"
@@ -334,11 +418,19 @@
 				}
 			]
 		},
-		"declaration-verification": {
+		"declaration-specification": {
 			"patterns": [
 				{
-					"match": "\\b(verification)(\\[\\%(.)+\\%\\])?\\b",
-					"name": "storage.type.verification.archetype"
+					"match": "\\b(specification)(\\[\\%(.)+\\%\\])?\\b",
+					"name": "markup.heading.specification.archetype"
+				}
+			]
+		},
+		"declaration-security": {
+			"patterns": [
+				{
+					"match": "\\b(security)(\\[\\%(.)+\\%\\])?\\b",
+					"name": "markup.heading.security.archetype"
 				}
 			]
 		},
@@ -348,7 +440,7 @@
 					"match": "\\b(predicate)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.predicate.archetype"
+							"name": "markup.heading.predicate.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.predicate.archetype"
@@ -363,7 +455,7 @@
 					"match": "\\b(definition)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.definition.archetype"
+							"name": "markup.heading.definition.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.definition.archetype"
@@ -372,16 +464,16 @@
 				}
 			]
 		},
-		"declaration-axiom": {
+		"declaration-lemma": {
 			"patterns": [
 				{
-					"match": "\\b(axiom)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(lemma)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.axiom.archetype"
+							"name": "markup.heading.lemma.archetype"
 						},
 						"3": {
-							"name": "entity.name.type.axiom.archetype"
+							"name": "entity.name.type.lemma.archetype"
 						}
 					}
 				}
@@ -393,7 +485,7 @@
 					"match": "\\b(theorem)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.theorem.archetype"
+							"name": "markup.heading.theorem.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.theorem.archetype"
@@ -405,13 +497,13 @@
 		"declaration-invariant": {
 			"patterns": [
 				{
-					"match": "\\b(invariants)\\s+(for)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(invariant)\\s+(for)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.invariants.archetype"
+							"name": "storage.type.invariant.archetype"
 						},
 						"2": {
-							"name": "storage.type.invariants.archetype"
+							"name": "storage.type.invariant.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.invariant.archetype"
@@ -423,10 +515,10 @@
 		"declaration-assert": {
 			"patterns": [
 				{
-					"match": "\\b(assert)(\\s+([A-Za-z_]\\w*))(\\s+(at))(\\s+([A-Za-z_]\\w*))\\b",
+					"match": "\\b(assert)(\\s+([A-Za-z_]\\w*))\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.assert.archetype"
+							"name": "keyword.control.assert.archetype"
 						},
 						"3": {
 							"name": "entity.name.type.assert.archetype"
@@ -441,16 +533,55 @@
 				}
 			]
 		},
-		"declaration-specification": {
+		"declaration-postcondition": {
 			"patterns": [
 				{
-					"match": "\\b(specification)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(postcondition)(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.specification.archetype"
+							"name": "keyword.control.postcondition.archetype"
 						},
 						"3": {
-							"name": "entity.name.type.specification.archetype"
+							"name": "entity.name.type.postcondition.archetype"
+						}
+					}
+				}
+			]
+		},
+		"declaration-use": {
+			"patterns": [
+				{
+					"match": "\\b(use)(\\s*\\:)((\\s*[A-Za-z_]\\w*)+)\\b",
+					"captures": {
+						"1": {
+							"name": "storage.type.use.keywod"
+						},
+						"3": {
+							"name": "entity.name.type.use.label"
+						}
+					}
+				}
+			]
+		},
+		"declaration-doc-comment": {
+			"patterns": [
+				{
+					"name": "comment.block.documentation.archetype",
+					"begin": "doc\\*",
+					"end": "\\*doc"
+				}
+			]
+		},
+    "declaration-label": {
+			"patterns": [
+				{
+					"match": "\\b(label)(\\s*)((\\s*[A-Za-z_]\\w*)+)\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.label.archetype"
+						},
+						"3": {
+							"name": "entity.name.label.label"
 						}
 					}
 				}
@@ -466,8 +597,8 @@
 		"type-primitive": {
 			"patterns": [
 				{
-					"match": "\\b(bool|nat|int|uint|rational|date|duration|string|address|role|tez|mtez|object|key)\\b",
-					"name": "support.type.primitive.archetype"
+					"match": "\\b(bool|nat|int|rational|date|duration|string|address|role|tez|key|bytes|chain_id)\\b",
+					"name": "storage.type.primitive.archetype"
 				}
 			]
 		},
@@ -484,7 +615,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(state|now|transferred|caller|balance|requires|effects|none|any|transfer|mem|idem|before|after|fixed|subset|default|type)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|effects|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
@@ -496,7 +627,7 @@
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
-					"match": "\\b(nth|clear|select|removeif|sort|count|sum|max|min|enqueue|dequeue|push|pop|add|addifnotexist|remove|get|contains|update|mem)\\b",
+					"match": "\\b(nth|clear|removeall|select|removeif|sort|count|sum|add|remove|contains|update|addupdate|head|tail|subsetof|isempty|min|max|abs|concat|slice|length|isnone|issome|getopt|ceil|floor)\\b",
 					"name": "support.function.asset_function.archetype"
 				}
 			]
@@ -504,24 +635,16 @@
 		"operator": {
 			"patterns": [
 				{
-					"match": "\\bmay\\s+be\\s+performed\\s+only\\s+by\\s+action\\b",
-					"name": "keyword.operator.logic.specific"
+					"match": "\\b(only_by_role|only_in_entry|only_by_role_in_entry|not_by_role|not_in_entry|not_by_role_in_entry|transferred_by|transferred_to|no_storage_fail)\\b",
+					"name": "keyword.control.security.archetype"
 				},
 				{
-					"match": "\\bmay\\s+be\\s+performed\\s+only\\s+by\\s+role\\b",
-					"name": "keyword.operator.logic.specific"
+					"match": "\\b(anyentry|noentry|anychange|nochange)\\b",
+					"name": "constant.language.security.archetype"
 				},
 				{
-					"match": "\\bmay\\s+be\\s+performed\\s+by\\s+action\\b",
-					"name": "keyword.operator.logic.specific"
-				},
-				{
-					"match": "\\bmay\\s+be\\s+performed\\s+by\\s+role\\b",
-					"name": "keyword.operator.logic.specific"
-				},
-				{
-					"match": "(and|or|not|\\->)",
-					"name": "keyword.operator.logic.archetype"
+					"match": "\\b(and|or|not)\\b|(\\->)",
+					"name": "keyword.control.logic.archetype"
 				},
 				{
 					"match": "(=|<>|>=|>|<|<=)",
@@ -581,10 +704,6 @@
 					}
 				},
 				{
-					"match": "\\b(at)\\b",
-					"name": "markup.heading.at.archetype"
-				},
-				{
 					"match": "\\b(on)(\\s+([A-Za-z_]\\w*))\\b",
 					"captures": {
 						"1": {
@@ -599,7 +718,18 @@
 					"match": "\\b(identified(\\s+)by)(\\s+([A-Za-z_]\\w*))\\b",
 					"captures": {
 						"1": {
-							"name": "markup.heading.identifiedby.archetype"
+							"name": "keyword.control.identifiedby.archetype"
+						},
+						"2": {
+							"name": "entity.name.id.archetype"
+						}
+					}
+				},
+				{
+					"match": "\\b(sorted(\\s+)by)(\\s+([A-Za-z_]\\w*))\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.sortedby.archetype"
 						},
 						"2": {
 							"name": "entity.name.id.archetype"
@@ -626,7 +756,19 @@
 					"name": "markup.heading.accepttransfer.archetype"
 				},
 				{
-					"match": "\\b(require|when)\\b",
+					"match": "(refuse)(\\s+)(transfer)",
+					"name": "markup.heading.refusetransfer.archetype"
+				},
+				{
+					"match": "\\b(when)\\b",
+					"captures": {
+						"1": {
+							"name": "markup.heading.when.archetype"
+						}
+					}
+				},
+				{
+					"match": "(require)\\s+\\{",
 					"captures": {
 						"1": {
 							"name": "markup.heading.require.archetype"
@@ -634,15 +776,27 @@
 					}
 				},
 				{
-					"match": "\\b(label)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "(failif)\\s+\\{",
 					"captures": {
 						"1": {
-							"name": "markup.heading.label.archetype"
-						},
-						"3": {
-							"name": "entity.name.type.label.archetype"
+							"name": "markup.heading.failif.archetype"
 						}
 					}
+				},
+				{
+					"match": "\\b(assert)(\\s+([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "markup.heading.assert.archetype"
+						},
+						"3": {
+							"name": "entity.name.type.assert.archetype"
+						}
+					}
+				},
+				{
+					"match": "\\b(shadow)\\b",
+					"name": "markup.heading.shadow.archetype"
 				},
 				{
 					"match": "\\b(initialized(\\s+)by)\\b",
@@ -658,17 +812,31 @@
 				},
 				{
 					"match": "\\b(initial)\\b",
-					"name": "markup.heading.initial.archetype"
+					"name": "keyword.control.initial.archetype"
 				}
 			]
 		},
 		"control": {
 			"patterns": [
 				{
-					"match": "\\b(let)(\\s+([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(let)(\\s+some)?(\\s+([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "keyword.control.let.archetype"
+						},
+						"2": {
+							"name": "keyword.control.some.archetype"
+						},
+						"4": {
+							"name": "variable.other.definition.archetype"
+						}
+					}
+				},
+				{
+					"match": "\\b(var)(\\s+([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.var.archetype"
 						},
 						"3": {
 							"name": "variable.other.definition.archetype"
@@ -687,11 +855,11 @@
 					}
 				},
 				{
-					"match": "(([A-Za-z0-9_]\\w*)\\s+\\:\\s+)",
-					"name": "markup.bold.label.archetype"
+					"match": "(([A-Za-z0-9_]\\w*)\\s*\\:\\s+)",
+					"name": "entity.name.type.label.archetype"
 				},
 				{
-					"match": "\\b(if|then|else|for|in|break|otherwise|transfer|require|failif|to|end|return?)\\b",
+					"match": "\\b(if|then|else|in|break|otherwise|transfer|call|require|failif|to|from|end|return|do|done?)\\b",
 					"name": "keyword.control.flow.archetype"
 				}
 			]
@@ -715,19 +883,35 @@
 				},
 				{
 					"match": "\\b(\\d+(\\.\\d+)?tz)\\b",
-					"name": "constant.language.currency.archetype"
+					"name": "constant.language.currency.tz.archetype"
+				},
+				{
+					"match": "\\b(\\d+(\\.\\d+)?mtz)\\b",
+					"name": "constant.language.currency.mtz.archetype"
+				},
+				{
+					"match": "\\b(\\d+(\\.\\d+)?utz)\\b",
+					"name": "constant.language.currency.utz.archetype"
 				},
 				{
 					"match": "\\b(\\d+\\.\\d+)\\b",
 					"name": "constant.numeric.rational.decimal.archetype"
 				},
+								{
+					"match": "\\d+%",
+					"name": "constant.numeric.rational.percent.archetype"
+				},
 				{
-					"match": "\\b\\d+d\\b",
+					"match": "\\b(\\d+[wdhms])+\\b",
 					"name": "constant.language.duration.archetype"
 				},
 				{
 					"match": "@(\\w+)",
 					"name": "constant.language.address.archetype"
+				},
+				{
+					"match": "0x([0-9a-fA-F]+)",
+					"name": "constant.language.bytes.archetype"
 				},
 				{
 					"match": "\\b([\\+-]?\\d{4}(?!\\d{2}\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?\\b",
