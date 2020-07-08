@@ -112,7 +112,7 @@
 					"include": "#declaration-transition"
 				},
 				{
-					"include": "#declaration-contract"
+					"include": "#declaration-entries"
 				},
 				{
 					"include": "#declaration-extension"
@@ -153,7 +153,7 @@
 				{
 					"include": "#declaration-doc-comment"
 				},
-   			{
+				{
 					"include": "#declaration-label"
 				}
 			]
@@ -271,7 +271,7 @@
 					}
 				},
 				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(([A-Za-z_]\\w*)|bool|int|rational|date|duration|string|address|role|mtez|key|bytes|chain_id|(([A-Za-z_]\\w*)\\s+(partition|collection|aggregate|option|list)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:;",
 					"captures": {
 						"1": {
 							"name": "entity.other.attribute-name.field.name"
@@ -303,7 +303,7 @@
 					}
 				},
 				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(([A-Za-z_]\\w*)|bool|int|rational|date|duration|string|address|role|mtez|key|bytes|chain_id|(([A-Za-z_]\\w*)\\s+(partition|collection|aggregate|option|list)))(\\s*\\=\\s*([A-Za-z0-9_]\\w*)+)?;",
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:;",
 					"captures": {
 						"1": {
 							"name": "entity.other.attribute-name.field.name"
@@ -354,19 +354,16 @@
 				}
 			]
 		},
-		"declaration-contract": {
+		"declaration-entries": {
 			"patterns": [
 				{
-					"match": "\\b(contract)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(entries)(\\[\\%(.)+\\%\\])?\\b",
 					"captures": {
 						"1": {
-							"name": "keyword.control.contract.archetype"
+							"name": "markup.heading.entries.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.type.contract.archetype"
 						}
 					}
 				}
@@ -572,7 +569,7 @@
 				}
 			]
 		},
-    "declaration-label": {
+		"declaration-label": {
 			"patterns": [
 				{
 					"match": "\\b(label)(\\s*)((\\s*[A-Za-z_]\\w*)+)\\b",
@@ -591,6 +588,9 @@
 			"patterns": [
 				{
 					"include": "#type-primitive"
+				},
+				{
+					"include": "#type-composite"
 				}
 			]
 		},
@@ -599,6 +599,35 @@
 				{
 					"match": "\\b(bool|nat|int|rational|date|duration|string|address|role|tez|key|bytes|chain_id)\\b",
 					"name": "storage.type.primitive.archetype"
+				}
+			]
+		},
+		"type-composite": {
+			"patterns": [
+				{
+					"match": "\\b(set|list|map|pkey|aggregate|partition)\\b",
+					"name": "storage.type.composite.archetype"
+				}
+			]
+		},
+		"type-composite_gen": {
+			"patterns": [
+				{
+					"begin": "<",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.bracket.angle.archetype"
+						}
+					},
+					"end": ">",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.bracket.angle.archetype"
+						}
+					},
+					"pattern": {
+						"include": "#type"
+					}
 				}
 			]
 		},
@@ -615,7 +644,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|effects|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
@@ -897,7 +926,7 @@
 					"match": "\\b(\\d+\\.\\d+)\\b",
 					"name": "constant.numeric.rational.decimal.archetype"
 				},
-								{
+				{
 					"match": "\\d+%",
 					"name": "constant.numeric.rational.percent.archetype"
 				},
