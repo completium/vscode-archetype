@@ -722,6 +722,20 @@
 					}
 				},
 				{
+					"match": "\\b(to)(\\s+entry)(\\s+([A-Za-z_]\\w*))\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.to.archetype"
+						},
+						"2": {
+							"name": "keyword.control.entry.archetype"
+						},
+						"4": {
+							"name": "entity.name.to.archetype"
+						}
+					}
+				},
+				{
 					"match": "\\b(to)(\\s+([A-Za-z_]\\w*))\\b",
 					"captures": {
 						"1": {
