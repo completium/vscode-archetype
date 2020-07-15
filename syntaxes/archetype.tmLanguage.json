@@ -662,6 +662,10 @@
 					"name": "support.function.asset_function.archetype"
 				},
 				{
+					"match": "\\b(union|inter|diff|isempty|empty|singleton)\\b",
+					"name": "support.function.asset_function.archetype"
+				},
+				{
 					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|getopt|floor|ceil|pack|unpack)\\b",
 					"name": "support.function.builtin_function.archetype"
 				},
