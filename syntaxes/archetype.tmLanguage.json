@@ -663,7 +663,7 @@
 				},
 				{
 					"match": "\\b(union|inter|diff|isempty|empty|singleton)\\b",
-					"name": "support.function.asset_function.archetype"
+					"name": "support.function.asset_formula_function.archetype"
 				},
 				{
 					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|getopt|floor|ceil|pack|unpack)\\b",
