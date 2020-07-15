@@ -182,7 +182,7 @@
 					"match": "\\b(variable|constant)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "keyword.control.variable.archetype"
+							"name": "markup.heading.variable.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
@@ -597,7 +597,7 @@
 		"type-primitive": {
 			"patterns": [
 				{
-					"match": "\\b(bool|nat|int|rational|date|duration|string|address|role|tez|key|bytes|chain_id)\\b",
+					"match": "\\b(bool|nat|int|rational|date|duration|string|address|role|tez|key|bytes|chain_id|unit)\\b",
 					"name": "storage.type.primitive.archetype"
 				}
 			]
@@ -605,7 +605,7 @@
 		"type-composite": {
 			"patterns": [
 				{
-					"match": "\\b(set|list|map|pkey|aggregate|partition)\\b",
+					"match": "\\b(set|list|map|option|pkey|entrysig|aggregate|partition)\\b",
 					"name": "storage.type.composite.archetype"
 				}
 			]
@@ -625,9 +625,11 @@
 							"name": "punctuation.bracket.angle.archetype"
 						}
 					},
-					"pattern": {
-						"include": "#type"
-					}
+					"patterns": [
+						{
+							"include": "#type"
+						}
+					]
 				}
 			]
 		},
@@ -656,8 +658,24 @@
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
-					"match": "\\b(nth|clear|removeall|select|removeif|sort|count|sum|add|remove|contains|update|addupdate|head|tail|subsetof|isempty|min|max|abs|concat|slice|length|isnone|issome|getopt|ceil|floor)\\b",
+					"match": "\\b(select|sort|contains|nth|count|sum|head|tail)\\b",
 					"name": "support.function.asset_function.archetype"
+				},
+				{
+					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|getopt|floor|ceil|pack|unpack)\\b",
+					"name": "support.function.builtin_function.archetype"
+				},
+				{
+					"match": "\\b(prepend)\\b",
+					"name": "support.function.list_function.archetype"
+				},
+				{
+					"match": "\\b(set_add|set_remove|set_contains|set_length)\\b",
+					"name": "support.function.set_function.archetype"
+				},
+				{
+					"match": "\\b(map_put|map_remove|map_getopt|map_contains|map_length)\\b",
+					"name": "support.function.map_function.archetype"
 				}
 			]
 		},
