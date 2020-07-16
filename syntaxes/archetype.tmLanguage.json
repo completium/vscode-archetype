@@ -597,7 +597,7 @@
 		"type-primitive": {
 			"patterns": [
 				{
-					"match": "\\b(bool|nat|int|rational|date|duration|string|address|role|tez|key|bytes|chain_id|unit)\\b",
+					"match": "\\b(bool|nat|int|rational|date|duration|string|address|role|tez|key|bytes|chain_id|unit|operation)\\b",
 					"name": "storage.type.primitive.archetype"
 				}
 			]
@@ -646,7 +646,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid|operations)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
@@ -656,6 +656,10 @@
 				{
 					"match": "\\b(fail)\\b",
 					"name": "keyword.control.exceptions.archetype"
+				},
+  			{
+					"match": "\\b(add|remove|removeall|removeif|update|addupdate|clear)\\b",
+					"name": "support.function.asset_method_effect.archetype"
 				},
 				{
 					"match": "\\b(select|sort|contains|nth|count|sum|head|tail)\\b",
@@ -670,7 +674,7 @@
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
-					"match": "\\b(entrypoint)\\b",
+					"match": "\\b(entrypoint|mktransaction)\\b",
 					"name": "support.function.utils_function.archetype"
 				},
 				{
