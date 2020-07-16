@@ -670,6 +670,10 @@
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
+					"match": "\\b(entrypoint)\\b",
+					"name": "support.function.utils_function.archetype"
+				},
+				{
 					"match": "\\b(prepend)\\b",
 					"name": "support.function.list_function.archetype"
 				},
