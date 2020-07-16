@@ -674,7 +674,7 @@
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
-					"match": "\\b(entrypoint|mktransaction)\\b",
+					"match": "\\b(entrypoint|mkoperation)\\b",
 					"name": "support.function.utils_function.archetype"
 				},
 				{
