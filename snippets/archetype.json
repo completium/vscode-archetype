@@ -3,7 +3,7 @@
     "prefix": "asset",
     "body": [
       "asset ${1:ident} identified by id {",
-      "\tid : int",
+      "\tid : int;",
       "} with {",
       "\ta1: true;",
       "} initialized by {",
@@ -31,7 +31,7 @@
       "\tspecification {",
       "\t\ts1 : true;",
       "\t}",
-      "\tcalled by ${2:role}",
+      "\tcalled by any",
       "\teffect {",
       "\t\t()",
       "\t}",
@@ -43,7 +43,7 @@
     "prefix": "transition",
     "body": [
       "transition ${1:ident} () {",
-      "\tcalled by ${5:role}",
+      "\tcalled by any",
       "\tfrom ${2:source}",
       "\tto ${3:target}",
       "\twhen { true }",
