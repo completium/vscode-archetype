@@ -605,7 +605,7 @@
 		"type-composite": {
 			"patterns": [
 				{
-					"match": "\\b(set|list|map|option|pkey|entrysig|aggregate|partition)\\b",
+					"match": "\\b(set|list|map|option|pkey|entrysig|aggregate|partition|view)\\b",
 					"name": "storage.type.composite.archetype"
 				}
 			]
@@ -646,7 +646,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid|operations)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid|operations|selfaddress)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
