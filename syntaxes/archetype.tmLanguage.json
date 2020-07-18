@@ -594,6 +594,19 @@
 				}
 			]
 		},
+  	"type-with-ident": {
+			"patterns": [
+				{
+					"include": "#type-ident"
+				},
+				{
+					"include": "#type-primitive"
+				},
+				{
+					"include": "#type-composite"
+				}
+			]
+		},
 		"type-primitive": {
 			"patterns": [
 				{
@@ -602,21 +615,24 @@
 				}
 			]
 		},
-		"type-composite": {
+		"type-ident": {
 			"patterns": [
 				{
-					"match": "\\b(set|list|map|option|pkey|entrysig|aggregate|partition|view)\\b",
-					"name": "storage.type.composite.archetype"
+					"match": "(\\w)+",
+					"name": "entity.name.type.archetype"
 				}
 			]
 		},
-		"type-composite_gen": {
+		"type-composite": {
 			"patterns": [
 				{
-					"begin": "<",
+					"begin": "(set|list|map|option|pkey|entrysig|aggregate|partition|view)\\s*(<)",
 					"beginCaptures": {
 						"0": {
 							"name": "punctuation.bracket.angle.archetype"
+						},
+						"1": {
+							"name": "storage.type.composite.archetype"
 						}
 					},
 					"end": ">",
@@ -628,6 +644,9 @@
 					"patterns": [
 						{
 							"include": "#type"
+						},
+						{
+							"include": "#type-ident"
 						}
 					]
 				}
@@ -657,7 +676,7 @@
 					"match": "\\b(fail)\\b",
 					"name": "keyword.control.exceptions.archetype"
 				},
-  			{
+				{
 					"match": "\\b(add|remove|removeall|removeif|update|addupdate|clear)\\b",
 					"name": "support.function.asset_method_effect.archetype"
 				},
