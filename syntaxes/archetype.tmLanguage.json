@@ -389,7 +389,7 @@
 					"match": "\\b(function)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
-							"name": "storage.type.function.archetype"
+							"name": "markup.heading.function.archetype"
 						},
 						"2": {
 							"name": "markup.underline.extension.archetype"
