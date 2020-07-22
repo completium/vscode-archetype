@@ -1010,8 +1010,12 @@
 					"name": "constant.language.date.archetype"
 				},
 				{
+					"match": "\\d+i",
+					"name": "constant.numeric.int.archetype"
+				},
+				{
 					"match": "\\b\\d+\\b",
-					"name": "constant.numeric.number.archetype"
+					"name": "constant.numeric.nat.archetype"
 				},
 				{
 					"match": "\\b(true|false)\\b",
