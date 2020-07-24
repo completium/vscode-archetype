@@ -689,7 +689,7 @@
 					"name": "support.function.asset_formula_function.archetype"
 				},
 				{
-					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|getopt|floor|ceil|pack|unpack)\\b",
+					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|floor|ceil|pack|unpack)\\b",
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
