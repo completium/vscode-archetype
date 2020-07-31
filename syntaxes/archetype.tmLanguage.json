@@ -665,7 +665,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid|operations|selfaddress)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid|operations|self|selfaddress)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
