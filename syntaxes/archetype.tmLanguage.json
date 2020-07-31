@@ -112,9 +112,6 @@
 					"include": "#declaration-transition"
 				},
 				{
-					"include": "#declaration-entries"
-				},
-				{
 					"include": "#declaration-extension"
 				},
 				{
@@ -349,21 +346,6 @@
 						},
 						"4": {
 							"name": "entity.name.type.type.transition.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-entries": {
-			"patterns": [
-				{
-					"match": "\\b(entries)(\\[\\%(.)+\\%\\])?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.entries.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
 						}
 					}
 				}
