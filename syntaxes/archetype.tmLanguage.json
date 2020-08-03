@@ -1000,11 +1000,11 @@
 					"name": "constant.numeric.nat.archetype"
 				},
 				{
-					"match": "\\b\\d\\d?\\d?(_\\d\\d\\d)i\\b",
+					"match": "\\b\\d\\d?\\d?(_\\d\\d\\d)+i\\b",
 					"name": "constant.numeric.int.archetype"
 				},
 				{
-					"match": "\\b\\d\\d?\\d?(_\\d\\d\\d)\\b",
+					"match": "\\b\\d\\d?\\d?(_\\d\\d\\d)+\\b",
 					"name": "constant.numeric.nat.archetype"
 				},
 				{
