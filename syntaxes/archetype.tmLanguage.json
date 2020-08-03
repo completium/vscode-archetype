@@ -318,7 +318,7 @@
 		"declaration-entry": {
 			"patterns": [
 				{
-					"match": "\\b(entry)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(entry)(\\[\\%(.)+\\%\\])?\\s+((\\%?[A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "markup.heading.entry.archetype"
