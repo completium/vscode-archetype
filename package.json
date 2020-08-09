@@ -50,6 +50,11 @@
 			"type": "object",
 			"title": "Archetype configuration",
 			"properties": {
+				"archetype.archetypeCallerAddress": {
+					"type": "string",
+					"default": "tz1LLJ3nxbpGGMLmjzcp9sTMYui87tycG6nG",
+					"description": "Address for caller value."
+				},
 				"archetype.archetypeWhy3Lib": {
 					"type": "string",
 					"default": "$OPAM_SWITCH_PREFIX/share/archetype/mlw",
