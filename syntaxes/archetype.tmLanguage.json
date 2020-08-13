@@ -76,6 +76,17 @@
 							"name": "entity.other.attribute-name.iter_label.archetype"
 						}
 					}
+				},
+				{
+					"match": "\\b(while)(\\s*\\:\\s*([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.while.archetype"
+						},
+						"2": {
+							"name": "entity.other.attribute-name.while_label.archetype"
+						}
+					}
 				}
 			]
 		},
