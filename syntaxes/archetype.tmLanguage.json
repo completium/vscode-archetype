@@ -701,7 +701,7 @@
 					"name": "support.function.asset_function.archetype"
 				},
 				{
-					"match": "\\b(union|inter|diff|isempty|empty|singleton)\\b",
+					"match": "\\b(union|inter|diff|isempty|subsetof|empty|singleton)\\b",
 					"name": "support.function.asset_formula_function.archetype"
 				},
 				{
