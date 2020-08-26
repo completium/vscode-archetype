@@ -713,7 +713,7 @@
 					"name": "support.function.utils_function.archetype"
 				},
 				{
-					"match": "\\b(prepend)\\b",
+					"match": "\\b(prepend|list_head_tail)\\b",
 					"name": "support.function.list_function.archetype"
 				},
 				{
