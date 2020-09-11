@@ -149,12 +149,12 @@
 				"title": "Archetype: Generate LIGO"
 			},
 			{
-				"command": "archetype.genTzLigo",
-				"title": "Archetype: Generate Michelson via LIGO"
+				"command": "archetype.genTz",
+				"title": "Archetype: Generate Michelson"
 			},
 			{
-				"command": "archetype.genTzLigoStorage",
-				"title": "Archetype: Generate Michelson Storage via LIGO"
+				"command": "archetype.genTzStorage",
+				"title": "Archetype: Generate Michelson Storage"
 			},
 			{
 				"command": "archetype.genSmartPy",

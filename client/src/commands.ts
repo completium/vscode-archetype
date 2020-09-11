@@ -39,57 +39,6 @@ export function registerCommands(context: vscode.ExtensionContext) {
 		}
 	};
 
-	let genDocumentTzLigo = function (editor: vscode.TextEditor) {
-		if (editor.document.languageId !== 'archetype') {
-			vscode.window.showErrorMessage('This command is for arl files only!');
-			return;
-		}
-		let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
-		let inputFsPath = fsPath.replace(/arl$/, "ligo");
-		let outputFsPath = fsPath.replace(/arl$/, "tz");
-		let cmd = 'ligo compile-contract ' + inputFsPath + ' main > ' + outputFsPath;
-		let cp = require('child_process');
-		cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
-			if (_err) {
-				vscode.window.showErrorMessage(stderr);
-				return;
-			};
-			let outputUri = vscode.Uri.file(outputFsPath);
-			vscode.window.showTextDocument(outputUri);
-		});
-	}
-
-	let genDocumentTzLigoStorage = function (editor: vscode.TextEditor) {
-		if (editor.document.languageId !== 'archetype') {
-			vscode.window.showErrorMessage('This command is for arl files only!');
-			return;
-		}
-		let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
-		let sPath = fsPath.replace(/arl$/, "storage.ligo");
-		let cmd0 = 'cat ' + sPath;
-		let cp0 = require('child_process');
-		cp0.exec(cmd0, (_err: string, stdout: string, stderr: string) => {
-			if (_err) {
-				vscode.window.showErrorMessage(stderr);
-				return;
-			};
-			let storage = stdout;
-			let inputFsPath = fsPath.replace(/arl$/, "ligo");
-			let outputFsPath = fsPath.replace(/arl$/, "storage.tz");
-			let cmd = 'ligo compile-storage ' + inputFsPath + ' main \'' + storage + '\' > ' + outputFsPath;
-			let cp = require('child_process');
-			cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
-				if (_err) {
-					vscode.window.showErrorMessage(stderr);
-					return;
-				};
-				let outputUri = vscode.Uri.file(outputFsPath);
-				vscode.window.showTextDocument(outputUri);
-			});
-		});
-	}
-
-
 	let openWhy3Ide = function (editor: vscode.TextEditor) {
 		if (editor.document.languageId !== 'archetype') {
 			vscode.window.showErrorMessage('This command is for arl files only!');
@@ -112,6 +61,8 @@ export function registerCommands(context: vscode.ExtensionContext) {
 
 	let targets = [
 		// { cmd: "genMarkdown", target: "markdown", ext: "md", action: "showPreviewToSide" },
+		{ cmd: "genTz", target: "michelson", ext: "tz", action: "openFile" },
+		{ cmd: "genTzStorage", target: "michelson-storage", ext: "storage.tz", action: "openFile" },
 		{ cmd: "genMarkdown", target: "markdown", ext: "md", action: "openFile" },
 		{ cmd: "genLigo", target: "ligo", ext: "ligo", action: "openFile" },
 		{ cmd: "genSmartPy", target: "smartpy", ext: "py", action: "openFile" },
@@ -125,17 +76,6 @@ export function registerCommands(context: vscode.ExtensionContext) {
 		});
 		context.subscriptions.push(genTarget);
 	});
-
-	context.subscriptions.push(vscode.commands.registerTextEditorCommand('archetype.genTzLigo', editor => {
-		genDocument(editor, "ligo", "ligo", "openFile");
-		genDocumentTzLigo(editor);
-	}));
-
-	context.subscriptions.push(vscode.commands.registerTextEditorCommand('archetype.genTzLigoStorage', editor => {
-		genDocument(editor, "ligo", "ligo", "openFile");
-		genDocument(editor, "ligo-storage", "storage.ligo", "openFile");
-		genDocumentTzLigoStorage(editor);
-	}));
 
 	context.subscriptions.push(vscode.commands.registerTextEditorCommand('archetype.verifyWhy3', editor => {
 		genDocument(editor, "whyml", "mlw", "openFile");
