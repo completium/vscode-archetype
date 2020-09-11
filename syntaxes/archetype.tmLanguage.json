@@ -6,6 +6,9 @@
 			"include": "#comment"
 		},
 		{
+			"include": "#extra"
+		},
+		{
 			"include": "#control0"
 		},
 		{
@@ -53,6 +56,14 @@
 				}
 			]
 		},
+   	"extra": {
+			"patterns": [
+				{
+					"match": "%([A-Za-z_]+)",
+					"name": "entity.other.ident.archetype"
+				}
+			]
+  	},
 		"control0": {
 			"patterns": [
 				{
