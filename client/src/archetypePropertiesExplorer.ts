@@ -24,8 +24,10 @@ export class ArchetypePropertiesExplorer {
 		let path = fsPath.replace(/.arl$/, '');
 		let postfix = item ? '_' + item.property.id : '';
 		let tmp = path + postfix + '.mlw';
+		const config = vscode.workspace.getConfiguration('archetype');
+		const caller: string = config.get('archetypeCallerAddress');
 		let fp = item ? ' -fp ' + item.property.id : '';
-		let cmd = 'archetype' + fp + ' -t whyml ' + fsPath + ' > ' + tmp;
+		let cmd = 'archetype' + ' --set-caller-init=' + caller + fp + ' -t whyml ' + fsPath + ' > ' + tmp;
 		let cp = require('child_process');
 		cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
 			if (_err) {
