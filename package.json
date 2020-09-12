@@ -222,6 +222,12 @@
 				"key": "f5",
 				"mac": "f5",
 				"when": "editorTextFocus && editorLangId == 'archetype'"
+			},
+			{
+				"command": "archetype.verifyWhy3",
+				"key": "f6",
+				"mac": "f6",
+				"when": "editorTextFocus && editorLangId == 'archetype'"
 			}
 		],
 		"iconThemes": [
