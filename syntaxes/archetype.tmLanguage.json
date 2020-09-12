@@ -653,7 +653,7 @@
 		"type-composite": {
 			"patterns": [
 				{
-					"begin": "(set|list|map|option|pkey|entrysig|aggregate|partition|view)\\s*(<)",
+					"begin": "(set|list|map|option|pkey|contract|aggregate|partition|view)\\s*(<)",
 					"beginCaptures": {
 						"0": {
 							"name": "punctuation.bracket.angle.archetype"
