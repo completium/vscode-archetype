@@ -406,6 +406,20 @@
 						}
 					}
 				},
+			  {
+					"match": "\\b(getter)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "markup.heading.getter.archetype"
+						},
+						"2": {
+							"name": "markup.underline.extension.archetype"
+						},
+						"4": {
+							"name": "entity.name.type.type.getter.archetype"
+						}
+					}
+				},
 				{
 					"match": "\\(([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(\\s+([A-Za-z_]\\w*))\\)",
 					"captures": {
