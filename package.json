@@ -161,10 +161,6 @@
 				"title": "Archetype: Generate SmartPy"
 			},
 			{
-				"command": "archetype.genOCaml",
-				"title": "Archetype: Generate OCaml"
-			},
-			{
 				"command": "archetype.genWhyml",
 				"title": "Archetype: Generate Whyml"
 			},

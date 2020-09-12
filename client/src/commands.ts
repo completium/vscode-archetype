@@ -66,7 +66,6 @@ export function registerCommands(context: vscode.ExtensionContext) {
 		{ cmd: "genMarkdown", target: "markdown", ext: "md", action: "openFile" },
 		{ cmd: "genLigo", target: "ligo", ext: "ligo", action: "openFile" },
 		{ cmd: "genSmartPy", target: "smartpy", ext: "py", action: "openFile" },
-		{ cmd: "genOCaml", target: "ocaml", ext: "ml", action: "openFile" },
 		{ cmd: "genWhyml", target: "whyml", ext: "mlw", action: "openFile" }
 	];
 
