@@ -133,10 +133,6 @@
 				}
 			},
 			{
-				"command": "archetype.compile",
-				"title": "Archetype: Compile contract"
-			},
-			{
 				"command": "archetype.genMarkdown",
 				"title": "Archetype: Generate Markdown",
 				"icon": {
