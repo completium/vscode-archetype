@@ -56,14 +56,14 @@
 				}
 			]
 		},
-   	"extra": {
+		"extra": {
 			"patterns": [
 				{
 					"match": "%([A-Za-z_]+)",
 					"name": "entity.other.ident.archetype"
 				}
 			]
-  	},
+		},
 		"control0": {
 			"patterns": [
 				{
@@ -406,7 +406,7 @@
 						}
 					}
 				},
-			  {
+				{
 					"match": "\\b(getter)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
@@ -574,7 +574,7 @@
 				}
 			]
 		},
-	  "declaration-fails": {
+		"declaration-fails": {
 			"patterns": [
 				{
 					"match": "\\b(fails)\\b",
@@ -667,7 +667,7 @@
 		"type-composite": {
 			"patterns": [
 				{
-					"begin": "(set|list|map|option|pkey|contract|aggregate|partition|view)\\s*(<)",
+					"begin": "(set|list|map|or|option|pkey|contract|aggregate|partition|view)\\s*(<)",
 					"beginCaptures": {
 						"0": {
 							"name": "punctuation.bracket.angle.archetype"
@@ -706,7 +706,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid|operations|self|selfaddress)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|left|right|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid|operations|self|selfaddress)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
@@ -977,6 +977,39 @@
 					}
 				},
 				{
+					"match": "\\b(match_option)(.)+(with)\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.matchoption.archetype"
+						},
+						"3": {
+							"name": "keyword.control.with.archetype"
+						}
+					}
+				},
+				{
+					"match": "\\b(match_or)(.)+(with)\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.matchor.archetype"
+						},
+						"3": {
+							"name": "keyword.control.with.archetype"
+						}
+					}
+				},
+				{
+					"match": "\\b(match_list)(.)+(with)\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.matchlist.archetype"
+						},
+						"3": {
+							"name": "keyword.control.with.archetype"
+						}
+					}
+				},
+				{
 					"match": "\\b(match)(.)+(with)\\b",
 					"captures": {
 						"1": {
@@ -1014,7 +1047,7 @@
 					"name": "entity.name.type.label.archetype"
 				},
 				{
-					"match": "\\b(if|then|else|in|otherwise|transfer|call|dorequire|dofailif|to|from|end|return|do|done?)\\b",
+					"match": "\\b(if|then|else|in|otherwise|transfer|call|dorequire|dofailif|to|from|begin|end|return|do|done?)\\b",
 					"name": "keyword.control.flow.archetype"
 				}
 			]
