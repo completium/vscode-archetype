@@ -1010,6 +1010,17 @@
 					}
 				},
 				{
+					"match": "\\b(match_fold_left)(.)+(with)\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.matchfoldleft.archetype"
+						},
+						"3": {
+							"name": "keyword.control.with.archetype"
+						}
+					}
+				},
+				{
 					"match": "\\b(match)(.)+(with)\\b",
 					"captures": {
 						"1": {
