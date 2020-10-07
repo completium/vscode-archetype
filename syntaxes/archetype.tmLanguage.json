@@ -738,7 +738,7 @@
 					"name": "support.function.utils_function.archetype"
 				},
 				{
-					"match": "\\b(prepend|head_tail|reverse)\\b",
+					"match": "\\b(prepend|head_tail|reverse|map)\\b",
 					"name": "support.function.list_function.archetype"
 				},
 				{
@@ -1010,10 +1010,10 @@
 					}
 				},
 				{
-					"match": "\\b(match_fold_left)(.)+(with)\\b",
+					"match": "\\b(match_loop_left)(.)+(with)\\b",
 					"captures": {
 						"1": {
-							"name": "keyword.control.matchfoldleft.archetype"
+							"name": "keyword.control.matchloopleft.archetype"
 						},
 						"3": {
 							"name": "keyword.control.with.archetype"
