@@ -667,7 +667,7 @@
 		"type-composite": {
 			"patterns": [
 				{
-					"begin": "(set|list|map|or|option|pkey|contract|aggregate|partition|view)\\s*(<)",
+					"begin": "(set|list|map|or|lambda|option|pkey|contract|aggregate|partition|view)\\s*(<)",
 					"beginCaptures": {
 						"0": {
 							"name": "punctuation.bracket.angle.archetype"
@@ -730,11 +730,11 @@
 					"name": "support.function.asset_formula_function.archetype"
 				},
 				{
-					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|floor|ceil|to_string|pack|unpack)\\b",
+					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|floor|ceil|to_string|pack|unpack|lambda)\\b",
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
-					"match": "\\b(entrypoint|mkoperation)\\b",
+					"match": "\\b(entrypoint|mkoperation|loop_left)\\b",
 					"name": "support.function.utils_function.archetype"
 				},
 				{
@@ -744,6 +744,10 @@
 				{
 					"match": "\\b(add|remove|contains|length)\\b",
 					"name": "support.function.set_function.archetype"
+				},
+				{
+					"match": "\\b(exec_lambda|apply_lambda)\\b",
+					"name": "support.function.lambda_function.archetype"
 				},
 				{
 					"match": "\\b(put|remove|getopt|contains|length)\\b",
@@ -1003,17 +1007,6 @@
 					"captures": {
 						"1": {
 							"name": "keyword.control.matchlist.archetype"
-						},
-						"3": {
-							"name": "keyword.control.with.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(match_loop_left)(.)+(with)\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.matchloopleft.archetype"
 						},
 						"3": {
 							"name": "keyword.control.with.archetype"
