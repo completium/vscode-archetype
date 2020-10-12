@@ -110,6 +110,9 @@
 					"include": "#declaration-variable"
 				},
 				{
+					"include": "#declaration-type"
+				},
+				{
 					"include": "#declaration-instance"
 				},
 				{
@@ -211,6 +214,18 @@
 						},
 						"4": {
 							"name": "entity.name.type.variable.archetype"
+						}
+					}
+				}
+			]
+		},
+		"declaration-type": {
+			"patterns": [
+				{
+					"match": "\\b(type)\\b",
+					"captures": {
+						"1": {
+							"name": "markup.heading.type.archetype"
 						}
 					}
 				}
@@ -667,7 +682,7 @@
 		"type-composite": {
 			"patterns": [
 				{
-					"begin": "(set|list|map|or|lambda|option|pkey|contract|aggregate|partition|view)\\s*(<)",
+					"begin": "(set|list|map|big_map|or|lambda|option|pkey|contract|aggregate|partition|view)\\s*(<)",
 					"beginCaptures": {
 						"0": {
 							"name": "punctuation.bracket.angle.archetype"
@@ -706,7 +721,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|left|right|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|type|chainid|operations|self|selfaddress)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|left|right|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|chainid|operations|self|selfaddress)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
