@@ -1066,7 +1066,7 @@
 					"name": "entity.name.type.label.archetype"
 				},
 				{
-					"match": "\\b(if|then|else|in|otherwise|transfer|call|dorequire|dofailif|to|from|begin|end|return|do|done?)\\b",
+					"match": "\\b(if|then|else|in|otherwise|transfer|call|dorequire|dofailif|to|from|as|begin|end|return|do|done?)\\b",
 					"name": "keyword.control.flow.archetype"
 				}
 			]
