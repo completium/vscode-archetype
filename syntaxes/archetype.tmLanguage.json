@@ -204,7 +204,7 @@
 		"declaration-variable": {
 			"patterns": [
 				{
-					"match": "\\b(variable|constant|parameter)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(variable|constant)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "markup.heading.variable.archetype"
