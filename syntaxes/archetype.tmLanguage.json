@@ -666,7 +666,7 @@
 		"type-primitive": {
 			"patterns": [
 				{
-					"match": "\\b(bool|nat|int|rational|date|duration|string|address|role|tez|key|bytes|chain_id|unit|operation)\\b",
+					"match": "\\b(bool|nat|int|rational|date|duration|string|address|role|tez|key|bytes|chain_id|unit|operation|sapling_state|sapling_transaction|bls12_381_fr|bls12_381_g1|bls12_381_g2|never)\\b",
 					"name": "storage.type.primitive.archetype"
 				}
 			]
@@ -682,7 +682,7 @@
 		"type-composite": {
 			"patterns": [
 				{
-					"begin": "(set|list|map|big_map|or|lambda|option|pkey|contract|aggregate|partition|view)\\s*(<)",
+					"begin": "(set|list|map|big_map|or|lambda|option|pkey|contract|aggregate|partition|view|ticket)\\s*(<)",
 					"beginCaptures": {
 						"0": {
 							"name": "punctuation.bracket.angle.archetype"
@@ -767,6 +767,10 @@
 				{
 					"match": "\\b(put|remove|getopt|contains|length)\\b",
 					"name": "support.function.map_function.archetype"
+				},
+				{
+					"match": "\\b(create_ticket|read_ticket|split_ticket|join_tickets)\\b",
+					"name": "support.function.ticket.archetype"
 				}
 			]
 		},
