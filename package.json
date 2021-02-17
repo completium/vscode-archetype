@@ -36,12 +36,7 @@
 		"onLanguage:plaintext",
 		"onView:archetypePropertiesExplorer",
 		"onCommand:archetype.genMarkdown",
-		"onCommand:archetype.genLiquidityUrl",
-		"onCommand:archetype.genLiquidity",
-		"onCommand:archetype.genLigo",
-		"onCommand:archetype.genLigoStorage",
-		"onCommand:archetype.genSmartPy",
-		"onCommand:archetype.genOCaml",
+		"onCommand:archetype.genJavascript",
 		"onCommand:archetype.genWhyml"
 	],
 	"main": "./client/out/extension.js",
@@ -141,10 +136,6 @@
 				}
 			},
 			{
-				"command": "archetype.genLigo",
-				"title": "Archetype: Generate LIGO"
-			},
-			{
 				"command": "archetype.genTz",
 				"title": "Archetype: Generate Michelson"
 			},
@@ -153,8 +144,8 @@
 				"title": "Archetype: Generate Michelson Storage"
 			},
 			{
-				"command": "archetype.genSmartPy",
-				"title": "Archetype: Generate SmartPy"
+				"command": "archetype.genJavascript",
+				"title": "Archetype: Generate Javascript"
 			},
 			{
 				"command": "archetype.genWhyml",

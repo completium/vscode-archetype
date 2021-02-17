@@ -63,9 +63,8 @@ export function registerCommands(context: vscode.ExtensionContext) {
 		// { cmd: "genMarkdown", target: "markdown", ext: "md", action: "showPreviewToSide" },
 		{ cmd: "genTz", target: "michelson", ext: "tz", action: "openFile" },
 		{ cmd: "genTzStorage", target: "michelson-storage", ext: "storage.tz", action: "openFile" },
+		{ cmd: "genJavascript", target: "javascript", ext: "js", action: "openFile" },
 		{ cmd: "genMarkdown", target: "markdown", ext: "md", action: "openFile" },
-		{ cmd: "genLigo", target: "ligo", ext: "ligo", action: "openFile" },
-		{ cmd: "genSmartPy", target: "smartpy", ext: "py", action: "openFile" },
 		{ cmd: "genWhyml", target: "whyml", ext: "mlw", action: "openFile" }
 	];
 
