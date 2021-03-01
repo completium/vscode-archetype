@@ -1147,6 +1147,10 @@
 				{
 					"match": "\\b(true|false)\\b",
 					"name": "constant.language.bool.archetype"
+				},
+				{
+					"match": "\\bUnit\\b",
+					"name": "constant.language.unit.archetype"
 				}
 			]
 		}
