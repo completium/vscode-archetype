@@ -59,6 +59,29 @@ export function registerCommands(context: vscode.ExtensionContext) {
 		});
 	}
 
+	let decompile = function (editor: vscode.TextEditor) {
+		if (editor.document.languageId !== 'michelson') {
+			vscode.window.showErrorMessage('This command is for tz files only!');
+			return;
+		}
+		if (vscode.window.activeTextEditor != undefined) {
+			let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
+			let outputFsPath = fsPath.replace(/tz$/, "d.arl");
+			let cp = require('child_process');
+  		const config = vscode.workspace.getConfiguration('archetype');
+  		const caller: string = config.get('archetypeCallerAddress');
+			let cmd = 'archetype -d ' + fsPath + ' > ' + outputFsPath;
+			cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
+				if (_err) {
+					vscode.window.showErrorMessage(stderr);
+					return;
+				}
+				let outputUri = vscode.Uri.file(outputFsPath);
+  			vscode.window.showTextDocument(outputUri);
+			});
+		}
+	};
+
 	let targets = [
 		// { cmd: "genMarkdown", target: "markdown", ext: "md", action: "showPreviewToSide" },
 		{ cmd: "genTz", target: "michelson", ext: "tz", action: "openFile" },
@@ -78,5 +101,9 @@ export function registerCommands(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerTextEditorCommand('archetype.verifyWhy3', editor => {
 		genDocument(editor, "whyml", "mlw", "openFile");
 		openWhy3Ide(editor);
+	}));
+
+	context.subscriptions.push(vscode.commands.registerTextEditorCommand('archetype.decompile', editor => {
+		decompile(editor);
 	}));
 }

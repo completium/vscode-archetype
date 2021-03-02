@@ -85,6 +85,16 @@
 					".arlx"
 				],
 				"configuration": "./archetype-language-configuration.json"
+			},
+			{
+				"id": "michelson",
+				"aliases": [
+					"michelson",
+					"michelson"
+				],
+				"extensions": [
+					".tz"
+				]
 			}
 		],
 		"grammars": [
@@ -162,6 +172,10 @@
 					"light": "resources/light/refresh.svg",
 					"dark": "resources/dark/refresh.svg"
 				}
+			},
+			{
+				"command": "archetype.decompile",
+				"title": "Archetype: Decompile"
 			}
 		],
 		"viewsContainers": {
