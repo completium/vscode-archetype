@@ -908,6 +908,17 @@
 					}
 				},
 				{
+					"match": "((state)(\\s*)(is))\\s*(\\[\\%\\w+\\%\\])?",
+					"captures": {
+						"1": {
+							"name": "markup.heading.state_is.archetype"
+						},
+						"5": {
+							"name": "markup.underline.extension.archetype"
+						}
+					}
+				},
+				{
 					"match": "(accept)(\\s+)(transfer)",
 					"name": "markup.heading.accepttransfer.archetype"
 				},
