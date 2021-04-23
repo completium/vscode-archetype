@@ -745,7 +745,7 @@
 					"name": "support.function.asset_formula_function.archetype"
 				},
 				{
-					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|floor|ceil|to_string|pack|unpack|lambda)\\b",
+					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|floor|ceil|to_string|pack|unpack|lambda|set_delegate)\\b",
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
