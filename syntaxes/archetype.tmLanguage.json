@@ -666,7 +666,7 @@
 		"type-primitive": {
 			"patterns": [
 				{
-					"match": "\\b(bool|nat|int|rational|date|duration|string|address|role|tez|key|bytes|chain_id|unit|operation|sapling_state|sapling_transaction|bls12_381_fr|bls12_381_g1|bls12_381_g2|never)\\b",
+					"match": "\\b(bool|nat|int|rational|date|duration|string|address|role|tez|key|key_hash|bytes|chain_id|unit|operation|sapling_state|sapling_transaction|bls12_381_fr|bls12_381_g1|bls12_381_g2|never)\\b",
 					"name": "storage.type.primitive.archetype"
 				}
 			]
@@ -721,7 +721,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|some|left|right|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|chainid|operations|self|selfaddress)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|some|left|right|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|chainid|operations|self|selfaddress|total_voting_power)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
@@ -745,7 +745,7 @@
 					"name": "support.function.asset_formula_function.archetype"
 				},
 				{
-					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|floor|ceil|to_string|pack|unpack|lambda|set_delegate|implicit_account)\\b",
+					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|floor|ceil|to_string|pack|unpack|hash_key|lambda|set_delegate|implicit_account|voting_power)\\b",
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
@@ -1129,6 +1129,10 @@
 				},
 				{
 					"match": "@(\\w+)",
+					"name": "constant.language.address.archetype"
+				},
+				{
+					"match": "\\b((tz(1|2|3))|KT1)[0-9a-zA-Z]{33}\\b",
 					"name": "constant.language.address.archetype"
 				},
 				{
