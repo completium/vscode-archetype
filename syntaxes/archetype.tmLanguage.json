@@ -784,6 +784,10 @@
 					"match": "\\b(anyentry|noentry|anychange|nochange)\\b",
 					"name": "constant.language.security.archetype"
 				},
+   			{
+					"match": "\\bresult\\b",
+					"name": "constant.language.formula.archetype"
+				},
 				{
 					"match": "\\b(and|or|xor|not)\\b|(\\->)",
 					"name": "keyword.control.logic.archetype"
