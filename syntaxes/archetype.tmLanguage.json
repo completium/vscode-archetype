@@ -784,7 +784,7 @@
 					"match": "\\b(anyentry|noentry|anychange|nochange)\\b",
 					"name": "constant.language.security.archetype"
 				},
-   			{
+				{
 					"match": "\\bresult\\b",
 					"name": "constant.language.formula.archetype"
 				},
@@ -916,6 +916,17 @@
 					"captures": {
 						"1": {
 							"name": "markup.heading.state_is.archetype"
+						},
+						"5": {
+							"name": "markup.underline.extension.archetype"
+						}
+					}
+				},
+				{
+					"match": "((with)(\\s*)(metadata))",
+					"captures": {
+						"1": {
+							"name": "markup.heading.with_metadata.archetype"
 						},
 						"5": {
 							"name": "markup.underline.extension.archetype"
