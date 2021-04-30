@@ -45,6 +45,11 @@
 			"type": "object",
 			"title": "Archetype configuration",
 			"properties": {
+				"archetype.archetypeBin": {
+					"type": "string",
+					"default": "archetype",
+					"description": "Path of archetype binary."
+				},
 				"archetype.archetypeCallerAddress": {
 					"type": "string",
 					"default": "tz1LLJ3nxbpGGMLmjzcp9sTMYui87tycG6nG",
@@ -54,16 +59,6 @@
 					"type": "string",
 					"default": "$OPAM_SWITCH_PREFIX/share/archetype/mlw",
 					"description": "Path to Why3 library for archetype verification."
-				},
-				"archetype.archetypeExtensionsPath": {
-					"type": "string",
-					"default": "$OPAM_SWITCH_PREFIX/share/archetype/extensions",
-					"description": "Path to archetype extensions."
-				},
-				"archetype.archetypeContractsPath": {
-					"type": "string",
-					"default": "$OPAM_SWITCH_PREFIX/share/archetype/contracts",
-					"description": "Path to archetype contracts."
 				}
 			}
 		},

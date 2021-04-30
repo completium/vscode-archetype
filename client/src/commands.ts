@@ -12,8 +12,9 @@ export function registerCommands(context: vscode.ExtensionContext) {
 			let outputFsPath = fsPath.replace(/arl$/, fileExtension);
 			let cp = require('child_process');
   		const config = vscode.workspace.getConfiguration('archetype');
+			const archetype_bin = config.get('archetypeBin');
   		const caller: string = config.get('archetypeCallerAddress');
-			let cmd = 'archetype ' + '--set-caller-init=' + caller + ' -t ' + target + ' ' + fsPath + ' > ' + outputFsPath;
+			let cmd = archetype_bin + ' ' + '--set-caller-init=' + caller + ' -t ' + target + ' ' + fsPath + ' > ' + outputFsPath;
 			cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
 				if (_err) {
 					vscode.window.showErrorMessage(stderr);
