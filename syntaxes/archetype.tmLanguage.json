@@ -912,6 +912,17 @@
 					}
 				},
 				{
+					"match": "((sourced)(\\s*)(by))\\s*(\\[\\%\\w+\\%\\])?",
+					"captures": {
+						"1": {
+							"name": "markup.heading.sourcedby.archetype"
+						},
+						"5": {
+							"name": "markup.underline.extension.archetype"
+						}
+					}
+				},
+				{
 					"match": "((state)(\\s*)(is))\\s*(\\[\\%\\w+\\%\\])?",
 					"captures": {
 						"1": {
