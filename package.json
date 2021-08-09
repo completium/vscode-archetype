@@ -250,7 +250,7 @@
 		"@types/vscode": "^1.38.0",
 		"tslint": "^5.16.0",
 		"typescript": "^3.4.5",
-		"tar": ">=4.4.2"
+		"tar": ">=5.0.7"
 	},
 	"dependencies": {
 		"vsce": "^1.81.1"
