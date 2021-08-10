@@ -45,6 +45,11 @@
 			"type": "object",
 			"title": "Archetype configuration",
 			"properties": {
+				"archetype.useArchetypeJsLib": {
+					"type": "boolean",
+					"default": "true",
+					"description": "Use archetype js library (true), or binary (false)."
+				},
 				"archetype.archetypeBin": {
 					"type": "string",
 					"default": "archetype",

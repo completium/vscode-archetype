@@ -8,14 +8,12 @@ export function registerCommands(context: vscode.ExtensionContext) {
 			return;
 		}
 		if (vscode.window.activeTextEditor != undefined) {
-			let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
-			let outputFsPath = fsPath.replace(/arl$/, fileExtension);
-			let cp = require('child_process');
-  		const config = vscode.workspace.getConfiguration('archetype');
-			const archetype_bin = config.get('archetypeBin');
-  		const caller: string = config.get('archetypeCallerAddress');
-			let cmd = archetype_bin + ' ' + '--set-caller-init=' + caller + ' -t ' + target + ' ' + fsPath + ' > ' + outputFsPath;
-			cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
+			const config = vscode.workspace.getConfiguration('archetype');
+			const use_archetype_js_lib: boolean = config.get('useArchetypeJsLib');
+			const caller: string = config.get('archetypeCallerAddress');
+			const fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
+			const outputFsPath = fsPath.replace(/arl$/, fileExtension);
+			let cb = (_err: string, stdout: string, stderr: string) => {
 				if (_err) {
 					vscode.window.showErrorMessage(stderr);
 					return;
@@ -36,7 +34,23 @@ export function registerCommands(context: vscode.ExtensionContext) {
 						}
 					});
 				}
-			});
+			};
+			if (use_archetype_js_lib) {
+				const settings = {
+					target: target,
+					caller: caller
+				};
+				const archetype = require('@completium/archetype');
+				const text = vscode.window.activeTextEditor.document.getText();
+				const res = archetype.compile(text, settings);
+				const fs = require("fs");
+				fs.writeFile(outputFsPath, res, 'utf8', (() => cb(null, null, null)));
+			} else {
+				let cp = require('child_process');
+				const archetype_bin = config.get('archetypeBin');
+				let cmd = archetype_bin + ' --set-caller-init=' + caller + ' -t ' + target + ' ' + fsPath + ' > ' + outputFsPath;
+				cp.exec(cmd, cb);
+			}
 		}
 	};
 
@@ -66,20 +80,35 @@ export function registerCommands(context: vscode.ExtensionContext) {
 			return;
 		}
 		if (vscode.window.activeTextEditor != undefined) {
+			const config = vscode.workspace.getConfiguration('archetype');
+			const use_archetype_js_lib: boolean = config.get('useArchetypeJsLib');
+
 			let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
 			let outputFsPath = fsPath.replace(/tz$/, "d.arl");
-			let cp = require('child_process');
-  		const config = vscode.workspace.getConfiguration('archetype');
-  		const caller: string = config.get('archetypeCallerAddress');
-			let cmd = 'archetype -d ' + fsPath + ' > ' + outputFsPath;
-			cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
-				if (_err) {
-					vscode.window.showErrorMessage(stderr);
-					return;
-				}
-				let outputUri = vscode.Uri.file(outputFsPath);
-  			vscode.window.showTextDocument(outputUri);
-			});
+
+			if (use_archetype_js_lib) {
+				const archetype = require('@completium/archetype');
+				const text = vscode.window.activeTextEditor.document.getText();
+
+				const res = archetype.decompile(text, {});
+				const fs = require("fs");
+				fs.writeFile(outputFsPath, res, 'utf8', (() => {
+					let outputUri = vscode.Uri.file(outputFsPath);
+					vscode.window.showTextDocument(outputUri);
+				}));
+			} else {
+				let cp = require('child_process');
+				const archetype_bin = config.get('archetypeBin');
+				let cmd = archetype_bin + ' -d ' + fsPath + ' > ' + outputFsPath;
+				cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
+					if (_err) {
+						vscode.window.showErrorMessage(stderr);
+						return;
+					}
+					let outputUri = vscode.Uri.file(outputFsPath);
+					vscode.window.showTextDocument(outputUri);
+				});
+			}
 		}
 	};
 
