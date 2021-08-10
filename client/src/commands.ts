@@ -36,15 +36,19 @@ export function registerCommands(context: vscode.ExtensionContext) {
 				}
 			};
 			if (use_archetype_js_lib) {
+				const text = vscode.window.activeTextEditor.document.getText();
 				const settings = {
 					target: target,
 					caller: caller
 				};
-				const archetype = require('@completium/archetype');
-				const text = vscode.window.activeTextEditor.document.getText();
-				const res = archetype.compile(text, settings);
-				const fs = require("fs");
-				fs.writeFile(outputFsPath, res, 'utf8', (() => cb(null, null, null)));
+				try {
+					const archetype = require('@completium/archetype');
+					const res = archetype.compile(text, settings);
+					const fs = require("fs");
+					fs.writeFile(outputFsPath, res, 'utf8', (() => cb(null, null, null)));
+				} catch (e) {
+					vscode.window.showErrorMessage(e);
+				}
 			} else {
 				let cp = require('child_process');
 				const archetype_bin = config.get('archetypeBin');
