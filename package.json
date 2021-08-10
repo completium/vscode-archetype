@@ -24,7 +24,7 @@
 		"type": "git",
 		"url": "https://github.com/edukera/vscode-archetype"
 	},
-	"version": "0.40.0",
+	"version": "0.39.0",
 	"engines": {
 		"vscode": "^1.38.0"
 	},
@@ -45,6 +45,11 @@
 			"type": "object",
 			"title": "Archetype configuration",
 			"properties": {
+				"archetype.useArchetypeJsLib": {
+					"type": "boolean",
+					"default": "true",
+					"description": "Use archetype js library (true), or binary (false)."
+				},
 				"archetype.archetypeBin": {
 					"type": "string",
 					"default": "archetype",
@@ -250,9 +255,10 @@
 		"@types/vscode": "^1.38.0",
 		"tslint": "^5.16.0",
 		"typescript": "^3.4.5",
-		"tar": ">=4.4.2"
+		"tar": ">=5.0.7"
 	},
 	"dependencies": {
-		"vsce": "^1.81.1"
+		"vsce": "^1.81.1",
+		"@completium/archetype": "0.0.7"
 	}
 }

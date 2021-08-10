@@ -13,11 +13,12 @@
 		"vscode": "^1.38.0"
 	},
 	"dependencies": {
-		"vscode-languageclient": "^4.1.4"
+		"vscode-languageclient": "^4.1.4",
+		"@completium/archetype": "0.0.7"
 	},
 	"devDependencies": {
 		"@types/node": "^12.7.2",
 		"@types/vscode": "^1.38.0",
-		"tar": ">=4.4.2"
+		"tar": ">=5.0.7"
 	}
 }

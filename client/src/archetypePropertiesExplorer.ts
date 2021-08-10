@@ -217,18 +217,30 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 
 	doRefresh(): void {
 		if (vscode.window.activeTextEditor.document.languageId == "archetype") {
-			let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
-			let cmd = 'archetype --service get_properties ' + fsPath;
-			let cp = require('child_process');
-			cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
-				if (_err) {
-					vscode.window.showErrorMessage(stderr);
-					res = undefined;
-				} else {
-					res = JSON.parse(stdout);
-				}
-				this._onDidChangeTreeData.fire();
-			});
+			const config = vscode.workspace.getConfiguration('archetype');
+			const use_archetype_js_lib : boolean = config.get('useArchetypeJsLib');
+			if (use_archetype_js_lib) {
+				const archetype = require('@completium/archetype');
+				let text = vscode.window.activeTextEditor.document.getText();
+  		  const json = archetype.services("get_properties", text)
+  		  res = JSON.parse(json);
+  		  this._onDidChangeTreeData.fire();
+			} else {
+				let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
+				const archetype_bin = config.get('archetypeBin');
+				let cmd = archetype_bin + ' --service get_properties ' + fsPath;
+				let cp = require('child_process');
+				cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
+					if (_err) {
+						vscode.window.showErrorMessage(stderr);
+						res = undefined;
+					} else {
+						res = JSON.parse(stdout);
+					}
+					this._onDidChangeTreeData.fire();
+				});
+			}
+
 		} else {
 			res = undefined;
 			this._onDidChangeTreeData.fire();
@@ -286,9 +298,9 @@ export class ArchetypeItem extends vscode.TreeItem {
 		this.description = property.formula;
 	}
 
-	get tooltip(): string {
-		return `${this.property.id}`;
-	}
+	// get tooltip(): string {
+	// 	return `${this.property.id}`;
+	// }
 
 	// iconPath = {
 	// 	light: path.join(this._extensionPath, 'images', 'formula_light.svg'),

@@ -23,6 +23,7 @@ import {
 	SymbolKind
 } from 'vscode-languageserver';
 const { spawn } = require('child_process');
+const archetype = require("@completium/archetype");
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -78,26 +79,26 @@ connection.onInitialized(() => {
 });
 
 // The example settings
-interface ExampleSettings {
-	maxNumberOfProblems: number;
+interface LSPSettings {
+	useArchetypeJsLib : boolean;
 }
 
 // The global settings, used when the `workspace/configuration` request is not supported by the client.
 // Please note that this is not the case when using this server with the client provided in this example
 // but could happen with other clients.
-const defaultSettings: ExampleSettings = { maxNumberOfProblems: 1000 };
-let globalSettings: ExampleSettings = defaultSettings;
+const defaultSettings: LSPSettings = { useArchetypeJsLib: true };
+let globalSettings: LSPSettings = defaultSettings;
 
 // Cache the settings of all open documents
-let documentSettings: Map<string, Thenable<ExampleSettings>> = new Map();
+let documentSettings: Map<string, Thenable<LSPSettings>> = new Map();
 
 connection.onDidChangeConfiguration(change => {
 	if (hasConfigurationCapability) {
 		// Reset all cached document settings
 		documentSettings.clear();
 	} else {
-		globalSettings = <ExampleSettings>(
-			(change.settings.languageServerExample || defaultSettings)
+		globalSettings = <LSPSettings>(
+			(change.settings.archetype || defaultSettings)
 		);
 	}
 
@@ -105,18 +106,18 @@ connection.onDidChangeConfiguration(change => {
 	documents.all().forEach(validateTextDocument);
 });
 
-function getDocumentSettings(resource: string): Thenable<ExampleSettings> {
-	if (!hasConfigurationCapability) {
-		return Promise.resolve(globalSettings);
-	}
-	let result = documentSettings.get(resource);
-	if (!result) {
-		result = connection.workspace.getConfiguration({
+function getDocumentSettings(resource: string): Thenable<LSPSettings> {
+	// if (!hasConfigurationCapability) {
+	// 	return Promise.resolve(globalSettings);
+	// }
+	// let result = documentSettings.get(resource);
+	// if (!result) {
+		let result = connection.workspace.getConfiguration({
 			scopeUri: resource,
-			section: 'languageServerExample'
+			section: 'archetype'
 		});
-		documentSettings.set(resource, result);
-	}
+	// 	documentSettings.set(resource, result);
+	// }
 	return result;
 }
 
@@ -240,36 +241,48 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	let text = textDocument.getText();
 
-	const { spawn } = require('child_process');
-	const child = spawn('archetype', ['-lsp', 'errors']);
+	if (settings.useArchetypeJsLib) {
+		const res = await archetype.lsp("errors", text);
+		validateProcessing(textDocument, res);
+	} else {
+		const { spawn } = require('child_process');
+		const child = spawn('archetype', ['-lsp', 'errors']);
 
-	child.stdin.setEncoding('utf8')
-	child.stdin.write(text);
-	child.stdin.end();
+		child.stdin.setEncoding('utf8')
+		child.stdin.write(text);
+		child.stdin.end();
 
-	child.stdout.on('data', (chunk) => {
-		validateProcessing(textDocument, chunk);
-	});
+		child.stdout.on('data', (chunk) => {
+			validateProcessing(textDocument, chunk);
+		});
+	}
 }
 
 
 let symbols: SymbolInformation[] = [];
 
 async function updateSymbols(textDocument: TextDocument): Promise<void> {
+  // In this simple example we get the settings for every validate run.
+	let settings = await getDocumentSettings(textDocument.uri);
+
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	let text = textDocument.getText();
 
-	const { spawn } = require('child_process');
-	const child = spawn('archetype', ['-lsp', 'outline']);
+	if (settings.useArchetypeJsLib) {
+		const res = await archetype.lsp("outline", text);
+		updateSymbolsProcessing(textDocument, res);
+	} else {
+		const { spawn } = require('child_process');
+		const child = spawn('archetype', ['-lsp', 'outline']);
 
-	child.stdin.setEncoding('utf8')
-	child.stdin.write(text);
-	child.stdin.end();
+		child.stdin.setEncoding('utf8')
+		child.stdin.write(text);
+		child.stdin.end();
 
-	child.stdout.on('data', (chunk) => {
-		updateSymbolsProcessing(textDocument, chunk);
-	});
-
+		child.stdout.on('data', (chunk) => {
+			updateSymbolsProcessing(textDocument, chunk);
+		});
+	}
 }
 
 
