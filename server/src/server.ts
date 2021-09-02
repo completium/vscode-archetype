@@ -246,7 +246,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		validateProcessing(textDocument, res);
 	} else {
 		const { spawn } = require('child_process');
-		const child = spawn('archetype', ['-lsp', 'errors']);
+		const child = spawn(settings.archetypeBin, ['-lsp', 'errors']);
 
 		child.stdin.setEncoding('utf8')
 		child.stdin.write(text);
