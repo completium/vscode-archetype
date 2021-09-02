@@ -81,12 +81,13 @@ connection.onInitialized(() => {
 // The example settings
 interface LSPSettings {
 	useArchetypeJsLib : boolean;
+	archetypeBin: string;
 }
 
 // The global settings, used when the `workspace/configuration` request is not supported by the client.
 // Please note that this is not the case when using this server with the client provided in this example
 // but could happen with other clients.
-const defaultSettings: LSPSettings = { useArchetypeJsLib: true };
+const defaultSettings: LSPSettings = { useArchetypeJsLib: true, archetypeBin: "archetype" };
 let globalSettings: LSPSettings = defaultSettings;
 
 // Cache the settings of all open documents
@@ -273,7 +274,7 @@ async function updateSymbols(textDocument: TextDocument): Promise<void> {
 		updateSymbolsProcessing(textDocument, res);
 	} else {
 		const { spawn } = require('child_process');
-		const child = spawn('archetype', ['-lsp', 'outline']);
+		const child = spawn(settings.archetypeBin, ['-lsp', 'outline']);
 
 		child.stdin.setEncoding('utf8')
 		child.stdin.write(text);
