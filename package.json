@@ -253,12 +253,12 @@
 	"devDependencies": {
 		"@types/mocha": "^5.2.0",
 		"@types/vscode": "^1.38.0",
+		"tar": "^6.1.11",
 		"tslint": "^5.16.0",
-		"typescript": "^3.4.5",
-		"tar": ">=5.0.7"
+		"typescript": "^3.4.5"
 	},
 	"dependencies": {
-		"vsce": "^1.81.1",
-		"@completium/archetype": "0.1.1"
+		"@completium/archetype": "0.3.0",
+		"vsce": "^1.97.0"
 	}
 }
