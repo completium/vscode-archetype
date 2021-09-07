@@ -19,6 +19,6 @@
 	"devDependencies": {
 		"@types/node": "^12.7.2",
 		"@types/vscode": "^1.38.0",
-		"tar": ">=5.0.7"
+		"tar": ">=5.0.10"
 	}
 }
