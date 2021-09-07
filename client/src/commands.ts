@@ -36,14 +36,14 @@ export function registerCommands(context: vscode.ExtensionContext) {
 				}
 			};
 			if (use_archetype_js_lib) {
-				const text = vscode.window.activeTextEditor.document.getText();
+				const path = vscode.window.activeTextEditor.document.uri.path;
 				const settings = {
 					target: target,
 					caller: caller
 				};
 				try {
 					const archetype = require('@completium/archetype');
-					const res = archetype.compile(text, settings);
+					const res = archetype.compile(path, settings);
 					const fs = require("fs");
 					fs.writeFile(outputFsPath, res, 'utf8', (() => cb(null, null, null)));
 				} catch (e) {

@@ -258,7 +258,7 @@
 		"typescript": "^3.4.5"
 	},
 	"dependencies": {
-		"@completium/archetype": "0.3.0",
+		"@completium/archetype": "0.3.1",
 		"vsce": "^1.97.0"
 	}
 }
