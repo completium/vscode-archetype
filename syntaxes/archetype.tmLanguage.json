@@ -422,7 +422,7 @@
 					}
 				},
 				{
-					"match": "\\b(getter)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
+					"match": "\\b(getter|view)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
 					"captures": {
 						"1": {
 							"name": "markup.heading.getter.archetype"
