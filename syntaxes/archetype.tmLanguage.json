@@ -682,7 +682,7 @@
 		"type-composite": {
 			"patterns": [
 				{
-					"begin": "(set|list|map|big_map|or|lambda|option|pkey|contract|aggregate|partition|view|ticket)\\s*(<)",
+					"begin": "(set|list|map|big_map|or|lambda|option|pkey|contract|aggregate|partition|ticket)\\s*(<)",
 					"beginCaptures": {
 						"0": {
 							"name": "punctuation.bracket.angle.archetype"
@@ -745,7 +745,7 @@
 					"name": "support.function.asset_formula_function.archetype"
 				},
 				{
-					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|require_some|floor|ceil|to_string|pack|unpack|hash_key|lambda|set_delegate|implicit_account|voting_power|date_from_timestamp|mutez_to_nat)\\b",
+					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|require_some|floor|ceil|to_string|pack|unpack|hash_key|lambda|set_delegate|implicit_account|voting_power|date_from_timestamp|mutez_to_nat|callview)\\b",
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
