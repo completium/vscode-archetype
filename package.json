@@ -259,6 +259,7 @@
 	},
 	"dependencies": {
 		"@completium/archetype": "0.3.4",
-		"vsce": "^1.97.0"
+		"vsce": "^1.97.0",
+ 		"nth-check": ">=2.0.1"
 	}
 }
