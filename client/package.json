@@ -14,7 +14,7 @@
 	},
 	"dependencies": {
 		"vscode-languageclient": "^4.1.4",
-		"@completium/archetype": "0.3.3"
+		"@completium/archetype": "0.3.4"
 	},
 	"devDependencies": {
 		"@types/node": "^12.7.2",
