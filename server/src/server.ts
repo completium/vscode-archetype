@@ -265,13 +265,12 @@ async function updateSymbols(textDocument: TextDocument): Promise<void> {
 
 		let content = []
 		child.stdout.on('data', (chunk) => {
-			connection.console.log(chunk.length);
 			content = content.concat(...chunk);
 		});
 		child.stdout.on('close', (code) => {
-			if (code == 0) {
-				updateSymbolsProcessing(textDocument, new Buffer(content).toString());
-			} 
+			if (code == 0 && content.length > 0) {
+				updateSymbolsProcessing(textDocument, Buffer.from(content).toString());
+			}
 		});
 	}
 }
