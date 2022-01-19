@@ -3,25 +3,8 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
-import {
-	createConnection,
-	TextDocuments,
-	TextDocument,
-	Diagnostic,
-	DiagnosticSeverity,
-	ProposedFeatures,
-	InitializeParams,
-	DidChangeConfigurationNotification,
-	CompletionItem,
-	CompletionItemKind,
-	TextDocumentPositionParams,
-	DocumentSymbolParams,
-	SymbolInformation,
-	Location,
-	Position,
-	Range,
-	SymbolKind
-} from 'vscode-languageserver';
+import { CompletionItem, CompletionItemKind, createConnection, Diagnostic, DiagnosticSeverity, DidChangeConfigurationNotification, DocumentSymbolParams, InitializeParams, Location, Position, ProposedFeatures, Range, SymbolInformation, SymbolKind, TextDocument, TextDocumentPositionParams, TextDocuments } from 'vscode-languageserver';
+
 const { spawn } = require('child_process');
 const archetype = require("@completium/archetype");
 
@@ -280,8 +263,15 @@ async function updateSymbols(textDocument: TextDocument): Promise<void> {
 		child.stdin.write(text);
 		child.stdin.end();
 
+		let content = []
 		child.stdout.on('data', (chunk) => {
-			updateSymbolsProcessing(textDocument, chunk);
+			connection.console.log(chunk.length);
+			content = content.concat(...chunk);
+		});
+		child.stdout.on('close', (code) => {
+			if (code == 0) {
+				updateSymbolsProcessing(textDocument, new Buffer(content).toString());
+			} 
 		});
 	}
 }
