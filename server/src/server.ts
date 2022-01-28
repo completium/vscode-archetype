@@ -236,8 +236,14 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		child.stdin.write(text);
 		child.stdin.end();
 
+    let content = []
 		child.stdout.on('data', (chunk) => {
-			validateProcessing(textDocument, chunk);
+			content = content.concat(...chunk);
+		});
+		child.stdout.on('close', (code) => {
+			if (code == 0 && content.length > 0) {
+				validateProcessing(textDocument, Buffer.from(content).toString());
+			}
 		});
 	}
 }
