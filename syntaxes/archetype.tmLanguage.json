@@ -131,6 +131,9 @@
 					"include": "#declaration-record"
 				},
 				{
+					"include": "#declaration-event"
+				},
+				{
 					"include": "#declaration-entry"
 				},
 				{
@@ -335,6 +338,35 @@
 							"name": "markup.underline.extension.archetype"
 						},
 						"4": {
+							"name": "entity.name.type.type.record.archetype"
+						}
+					}
+				},
+				{
+					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:;",
+					"captures": {
+						"1": {
+							"name": "entity.other.attribute-name.field.name"
+						},
+						"2": {
+							"name": "markup.underline.extension.archetype"
+						},
+						"4": {
+							"name": "storage.type.asset.type"
+						}
+					}
+				}
+			]
+		},
+		"declaration-event": {
+			"patterns": [
+				{
+					"match": "\\b(event)\\s+(([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.control.underline.event.archetype"
+						},
+						"3": {
 							"name": "entity.name.type.type.record.archetype"
 						}
 					}
@@ -745,7 +777,7 @@
 					"name": "support.function.asset_formula_function.archetype"
 				},
 				{
-					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|require_some|floor|ceil|to_string|pack|unpack|hash_key|lambda|set_delegate|implicit_account|voting_power|date_from_timestamp|mutez_to_nat|callview)\\b",
+					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|opt_get|require_some|floor|ceil|to_string|pack|unpack|hash_key|lambda|set_delegate|implicit_account|voting_power|date_from_timestamp|mutez_to_nat|callview|emit)\\b",
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
