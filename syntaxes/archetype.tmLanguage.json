@@ -698,7 +698,7 @@
 		"type-primitive": {
 			"patterns": [
 				{
-					"match": "\\b(bool|nat|int|rational|date|duration|string|address|tez|key|key_hash|bytes|chain_id|unit|operation|sapling_state|sapling_transaction|bls12_381_fr|bls12_381_g1|bls12_381_g2|never|chest|chest_key)\\b",
+					"match": "\\b(bool|nat|int|rational|date|duration|string|address|tez|key|key_hash|signature|bytes|chain_id|unit|operation|sapling_state|sapling_transaction|bls12_381_fr|bls12_381_g1|bls12_381_g2|never|chest|chest_key)\\b",
 					"name": "storage.type.primitive.archetype"
 				}
 			]
