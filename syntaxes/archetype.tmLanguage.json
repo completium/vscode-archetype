@@ -714,7 +714,7 @@
 		"type-composite": {
 			"patterns": [
 				{
-					"begin": "(set|list|map|big_map|or|lambda|option|pkey|contract|aggregate|partition|ticket)\\s*(<)",
+					"begin": "(set|list|map|big_map|or|lambda|option|pkey|contract|aggregate|partition|asset_view|ticket)\\s*(<)",
 					"beginCaptures": {
 						"0": {
 							"name": "punctuation.bracket.angle.archetype"
