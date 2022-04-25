@@ -63,7 +63,7 @@ connection.onInitialized(() => {
 
 // The example settings
 interface LSPSettings {
-	useArchetypeJsLib : boolean;
+	useArchetypeJsLib: boolean;
 	archetypeBin: string;
 }
 
@@ -96,10 +96,10 @@ function getDocumentSettings(resource: string): Thenable<LSPSettings> {
 	// }
 	// let result = documentSettings.get(resource);
 	// if (!result) {
-		let result = connection.workspace.getConfiguration({
-			scopeUri: resource,
-			section: 'archetype'
-		});
+	let result = connection.workspace.getConfiguration({
+		scopeUri: resource,
+		section: 'archetype'
+	});
 	// 	documentSettings.set(resource, result);
 	// }
 	return result;
@@ -236,7 +236,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		child.stdin.write(text);
 		child.stdin.end();
 
-    let content = []
+		let content = []
 		child.stdout.on('data', (chunk) => {
 			content = content.concat(...chunk);
 		});
@@ -252,15 +252,15 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 let symbols: SymbolInformation[] = [];
 
 async function updateSymbols(textDocument: TextDocument): Promise<void> {
-  // In this simple example we get the settings for every validate run.
+	// In this simple example we get the settings for every validate run.
 	let settings = await getDocumentSettings(textDocument.uri);
 
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	let text = textDocument.getText();
 
 	if (settings.useArchetypeJsLib) {
-		const res = await archetype.lsp("outline", text);
-		updateSymbolsProcessing(textDocument, res);
+		// const res = await archetype.lsp("outline", text);
+		// updateSymbolsProcessing(textDocument, res);
 	} else {
 		const { spawn } = require('child_process');
 		const child = spawn(settings.archetypeBin, ['-lsp', 'outline']);
