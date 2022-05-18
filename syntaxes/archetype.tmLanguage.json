@@ -714,7 +714,7 @@
 		"type-composite": {
 			"patterns": [
 				{
-					"begin": "(set|list|map|big_map|iterable_big_map|or|lambda|option|pkey|contract|aggregate|partition|asset_view|ticket)\\s*(<)",
+					"begin": "(set|list|map|big_map|iterable_big_map|or|lambda|option|pkey|contract|aggregate|partition|ticket|asset_key|asset_value|asset_view)\\s*(<)",
 					"beginCaptures": {
 						"0": {
 							"name": "punctuation.bracket.angle.archetype"
@@ -1066,6 +1066,17 @@
 					"captures": {
 						"1": {
 							"name": "keyword.control.var.archetype"
+						},
+						"3": {
+							"name": "variable.other.definition.archetype"
+						}
+					}
+				},
+				{
+					"match": "\\b(const)(\\s+([A-Za-z_]\\w*))?\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.const.var.archetype"
 						},
 						"3": {
 							"name": "variable.other.definition.archetype"
