@@ -761,11 +761,11 @@
 		"global-functions": {
 			"patterns": [
 				{
-					"match": "\\b(fail)\\b",
+					"match": "\\b(fail|fail_some)\\b",
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
-					"match": "\\b(add|remove|removeall|removeif|update|addupdate|clear)\\b",
+					"match": "\\b(add|remove|removeall|removeif|update|update_all|addupdate|clear)\\b",
 					"name": "support.function.asset_method_effect.archetype"
 				},
 				{
