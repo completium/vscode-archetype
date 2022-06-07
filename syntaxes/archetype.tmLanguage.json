@@ -777,7 +777,7 @@
 					"name": "support.function.asset_formula_function.archetype"
 				},
 				{
-					"match": "\\b(min|max|abs|concat|slice|length|is_none|is_some|int_to_nat|get_some|floor|ceil|nat_to_string|pack|unpack|key_to_key_hash|lambda|set_delegate|key_hash_to_contract|voting_power|int_to_date|mutez_to_nat|call_view|emit|sub_nat|sub_mutez|greedy_and|greedy_or)\\b",
+					"match": "\\b(min|max|abs|concat|slice|length|is_none|is_some|int_to_nat|get_some|floor|ceil|nat_to_string|pack|unpack|address_to_contract|key_to_key_hash|lambda|set_delegate|key_hash_to_contract|voting_power|int_to_date|mutez_to_nat|call_view|emit|sub_nat|sub_mutez|greedy_and|greedy_or)\\b",
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
