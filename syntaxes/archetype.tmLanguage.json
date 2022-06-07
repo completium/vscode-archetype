@@ -985,8 +985,8 @@
 					"name": "markup.heading.accepttransfer.archetype"
 				},
 				{
-					"match": "(refuse)(\\s+)(transfer)",
-					"name": "markup.heading.refusetransfer.archetype"
+					"match": "(no)(\\s+)(transfer)",
+					"name": "markup.heading.notransfer.archetype"
 				},
 				{
 					"match": "\\b(when)\\b",
@@ -1005,7 +1005,7 @@
 					}
 				},
 				{
-					"match": "(failif)\\s+\\{",
+					"match": "(fail\\s+if)\\s+\\{",
 					"captures": {
 						"1": {
 							"name": "markup.heading.failif.archetype"
