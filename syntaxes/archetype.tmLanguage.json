@@ -765,7 +765,7 @@
 					"name": "keyword.control.exceptions.archetype"
 				},
 				{
-					"match": "\\b(add|remove|removeall|removeif|update|update_all|addupdate|clear)\\b",
+					"match": "\\b(add|remove|remove_all|remove_if|remove_aggregate|update|update_all|add_update|clear)\\b",
 					"name": "support.function.asset_method_effect.archetype"
 				},
 				{
@@ -777,15 +777,15 @@
 					"name": "support.function.asset_formula_function.archetype"
 				},
 				{
-					"match": "\\b(min|max|abs|concat|slice|length|isnone|issome|isnat|to_nat|opt_get|require_some|floor|ceil|to_string|pack|unpack|hash_key|lambda|set_delegate|implicit_account|voting_power|date_from_timestamp|mutez_to_nat|call_view|emit|sub_nat|sub_mutez|greedy_and|greedy_or)\\b",
+					"match": "\\b(min|max|abs|concat|slice|length|is_none|is_some|int_to_nat|get_some|floor|ceil|nat_to_string|pack|unpack|key_to_key_hash|lambda|set_delegate|key_hash_to_contract|voting_power|int_to_date|mutez_to_nat|call_view|emit|sub_nat|sub_mutez|greedy_and|greedy_or)\\b",
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
-					"match": "\\b(blake2b|sha256|sha512|sha3|keccak|key_address|contract_to_address)\\b",
+					"match": "\\b(blake2b|sha256|sha512|sha3|keccak|key_to_address|contract_to_address)\\b",
 					"name": "support.function.crypto.archetype"
 				},
 				{
-					"match": "\\b(entrypoint|require_entrypoint|mkoperation|loop_left)\\b",
+					"match": "\\b(get_entrypoint|make_operation|loop_left)\\b",
 					"name": "support.function.utils_function.archetype"
 				},
 				{
@@ -801,7 +801,7 @@
 					"name": "support.function.lambda_function.archetype"
 				},
 				{
-					"match": "\\b(put|remove|getopt|contains|length)\\b",
+					"match": "\\b(put|remove|get|contains|length)\\b",
 					"name": "support.function.map_function.archetype"
 				},
 				{
