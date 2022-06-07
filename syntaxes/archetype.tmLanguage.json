@@ -753,7 +753,7 @@
 		"global-variables": {
 			"patterns": [
 				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|some|left|right|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|chainid|level|operations|self|selfaddress|total_voting_power)\\b",
+					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|some|left|right|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|chainid|level|operations|self|self_address|total_voting_power)\\b",
 					"name": "variable.language.global.archetype"
 				}
 			]
