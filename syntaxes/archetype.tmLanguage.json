@@ -59,7 +59,7 @@
 		"extra": {
 			"patterns": [
 				{
-					"match": "%([A-Za-z_]+)",
+					"match": "\\%([A-Za-z_]+)",
 					"name": "entity.other.ident.archetype"
 				}
 			]
