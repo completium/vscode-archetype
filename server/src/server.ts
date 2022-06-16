@@ -63,14 +63,14 @@ connection.onInitialized(() => {
 
 // The example settings
 interface LSPSettings {
-	useArchetypeJsLib: boolean;
+	archetypeMode: string;
 	archetypeBin: string;
 }
 
 // The global settings, used when the `workspace/configuration` request is not supported by the client.
 // Please note that this is not the case when using this server with the client provided in this example
 // but could happen with other clients.
-const defaultSettings: LSPSettings = { useArchetypeJsLib: true, archetypeBin: "archetype" };
+const defaultSettings: LSPSettings = { archetypeMode: 'js', archetypeBin: "archetype" };
 let globalSettings: LSPSettings = defaultSettings;
 
 // Cache the settings of all open documents
@@ -225,12 +225,14 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	let text = textDocument.getText();
 
-	if (settings.useArchetypeJsLib) {
-		const res = await archetype.lsp("errors", text);
-		validateProcessing(textDocument, res);
-	} else {
+	if (settings.archetypeMode === 'binary' || settings.archetypeMode === 'docker') {
 		const { spawn } = require('child_process');
-		const child = spawn(settings.archetypeBin, ['-lsp', 'errors']);
+
+		const bin = settings.archetypeMode === 'binary' ? settings.archetypeBin : 'docker';
+		const cwd = process.cwd();
+		const args = settings.archetypeMode === 'binary' ? ['-lsp', 'errors'] : ['run', '-i', '--rm', '-v', `${cwd}:${cwd}`, '-w', `${cwd}`, 'completium/archetype:latest', '-lsp', 'errors'];
+
+		const child = spawn(bin, args);
 
 		child.stdin.setEncoding('utf8')
 		child.stdin.write(text);
@@ -245,6 +247,9 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 				validateProcessing(textDocument, Buffer.from(content).toString());
 			}
 		});
+	} else {
+		const res = await archetype.lsp("errors", text);
+		validateProcessing(textDocument, res);
 	}
 }
 
@@ -258,10 +263,7 @@ async function updateSymbols(textDocument: TextDocument): Promise<void> {
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	let text = textDocument.getText();
 
-	if (settings.useArchetypeJsLib) {
-		// const res = await archetype.lsp("outline", text);
-		// updateSymbolsProcessing(textDocument, res);
-	} else {
+	if (settings.archetypeMode === 'binary' || settings.archetypeMode === 'docker') {
 		const { spawn } = require('child_process');
 		const child = spawn(settings.archetypeBin, ['-lsp', 'outline']);
 
@@ -278,6 +280,9 @@ async function updateSymbols(textDocument: TextDocument): Promise<void> {
 				updateSymbolsProcessing(textDocument, Buffer.from(content).toString());
 			}
 		});
+	} else {
+		// const res = await archetype.lsp("outline", text);
+		// updateSymbolsProcessing(textDocument, res);
 	}
 }
 

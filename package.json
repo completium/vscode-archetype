@@ -1,265 +1,270 @@
 {
-	"name": "archetype",
-	"displayName": "Archetype language support for Visual Studio Code",
-	"keywords": [
-		"archetype",
-		"tezos",
-		"blockchain",
-		"compiler",
-		"smart-contract",
-		"formal-verification"
-	],
-	"description": "DSL to develop smart contracts on the Tezos blockchain.",
-	"publisher": "edukera",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/edukera/vscode-archetype/issues"
-	},
-	"icon": "images/icon.png",
-	"galleryBanner": {
-		"color": "#243564",
-		"theme": "dark"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/edukera/vscode-archetype"
-	},
-	"version": "0.55.0",
-	"engines": {
-		"vscode": "^1.38.0"
-	},
-	"categories": [
-		"Programming Languages",
-		"Snippets"
-	],
-	"activationEvents": [
-		"onLanguage:plaintext",
-		"onView:archetypePropertiesExplorer",
-		"onCommand:archetype.genMarkdown",
-		"onCommand:archetype.genJavascript",
-		"onCommand:archetype.genWhyml"
-	],
-	"main": "./client/out/extension.js",
-	"contributes": {
-		"configuration": {
-			"type": "object",
-			"title": "Archetype configuration",
-			"properties": {
-				"archetype.useArchetypeJsLib": {
-					"type": "boolean",
-					"default": "true",
-					"description": "Use archetype js library (true), or binary (false)."
-				},
-				"archetype.archetypeBin": {
-					"type": "string",
-					"default": "archetype",
-					"description": "Path of archetype binary."
-				},
-				"archetype.archetypeCallerAddress": {
-					"type": "string",
-					"default": "tz1LLJ3nxbpGGMLmjzcp9sTMYui87tycG6nG",
-					"description": "Address for caller value."
-				},
-				"archetype.archetypeWhy3Lib": {
-					"type": "string",
-					"default": "$OPAM_SWITCH_PREFIX/share/archetype/mlw",
-					"description": "Path to Why3 library for archetype verification."
-				}
-			}
-		},
-		"snippets": [
-			{
-				"language": "archetype",
-				"path": "./snippets/archetype.json"
-			}
-		],
-		"languages": [
-			{
-				"id": "archetype",
-				"aliases": [
-					"archetype",
-					"archetype"
-				],
-				"extensions": [
-					".arl",
-					".arlx"
-				],
-				"configuration": "./archetype-language-configuration.json"
-			},
-			{
-				"id": "michelson",
-				"aliases": [
-					"michelson",
-					"michelson"
-				],
-				"extensions": [
-					".tz"
-				]
-			}
-		],
-		"grammars": [
-			{
-				"language": "archetype",
-				"scopeName": "source.archetype",
-				"path": "./syntaxes/archetype.tmLanguage.json"
-			}
-		],
-		"commands": [
-			{
-				"command": "archetypePropertiesExplorer.refreshEntry",
-				"title": "Refresh",
-				"icon": {
-					"light": "images/refresh_light.svg",
-					"dark": "images/refresh_dark.svg"
-				}
-			},
-			{
-				"command": "archetypePropertiesExplorer.generateMlwFileAll",
-				"title": "Generate mlw file",
-				"icon": {
-					"light": "images/new-file_light.svg",
-					"dark": "images/new-file_dark.svg"
-				}
-			},
-			{
-				"command": "archetypePropertiesExplorer.generateMlwFileOne",
-				"title": "Generate mlw file",
-				"icon": {
-					"light": "images/new-file_light.svg",
-					"dark": "images/new-file_dark.svg"
-				}
-			},
-			{
-				"command": "archetypePropertiesExplorer.verify",
-				"title": "Verify",
-				"icon": {
-					"light": "images/check_light.svg",
-					"dark": "images/check_dark.svg"
-				}
-			},
-			{
-				"command": "archetype.genMarkdown",
-				"title": "Archetype: Generate Markdown",
-				"icon": {
-					"light": "images/cc.svg",
-					"dark": "images/cc.svg"
-				}
-			},
-			{
-				"command": "archetype.genTz",
-				"title": "Archetype: Generate Michelson"
-			},
-			{
-				"command": "archetype.genTzStorage",
-				"title": "Archetype: Generate Michelson Storage"
-			},
-			{
-				"command": "archetype.genJavascript",
-				"title": "Archetype: Generate Javascript"
-			},
-			{
-				"command": "archetype.genWhyml",
-				"title": "Archetype: Generate Whyml"
-			},
-			{
-				"command": "archetype.verifyWhy3",
-				"title": "Archetype: Verify with Why3"
-			},
-			{
-				"command": "archetype.refreshEntry",
-				"title": "Refresh",
-				"icon": {
-					"light": "resources/light/refresh.svg",
-					"dark": "resources/dark/refresh.svg"
-				}
-			},
-			{
-				"command": "archetype.decompile",
-				"title": "Archetype: Decompile"
-			}
-		],
-		"viewsContainers": {
-			"activitybar": [
-				{
-					"id": "archetype-properties-explorer",
-					"title": "Archetype",
-					"icon": "images/archetype-activitybar.svg"
-				}
-			]
-		},
-		"views": {
-			"archetype-properties-explorer": [
-				{
-					"id": "archetypePropertiesExplorer",
-					"name": "Properties"
-				}
-			]
-		},
-		"menus": {
-			"view/title": [
-				{
-					"command": "archetypePropertiesExplorer.refreshEntry",
-					"when": "view == archetypePropertiesExplorer",
-					"group": "navigation"
-				},
-				{
-					"command": "archetypePropertiesExplorer.generateMlwFileAll",
-					"when": "view == archetypePropertiesExplorer",
-					"group": "navigation"
-				}
-			],
-			"view/item/context": [
-				{
-					"command": "archetypePropertiesExplorer.verify",
-					"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
-					"group": "inline"
-				},
-				{
-					"command": "archetypePropertiesExplorer.generateMlwFileOne",
-					"when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
-					"group": "inline"
-				}
-			]
-		},
-		"keybindings": [
-			{
-				"command": "archetype.genTz",
-				"key": "f5",
-				"mac": "f5",
-				"when": "editorTextFocus && editorLangId == 'archetype'"
-			},
-			{
-				"command": "archetype.verifyWhy3",
-				"key": "f6",
-				"mac": "f6",
-				"when": "editorTextFocus && editorLangId == 'archetype'"
-			}
-		],
-		"iconThemes": [
-			{
-				"id": "archetype",
-				"label": "archetype",
-				"path": "./themes/archetype-icon-theme.json"
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -b",
-		"watch": "tsc -b -w",
-		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-		"test": "sh ./scripts/e2e.sh"
-	},
-	"devDependencies": {
-		"@types/mocha": "^5.2.0",
-		"@types/vscode": "^1.38.0",
-		"tar": "^6.1.11",
-		"tslint": "^5.16.0",
-		"typescript": "^3.4.5"
-	},
-	"dependencies": {
-		"@completium/archetype": "0.3.22",
-		"nth-check": ">=2.0.1",
-		"vsce": "^2.7.0"
-	}
+  "name": "archetype",
+  "displayName": "Archetype language support for Visual Studio Code",
+  "keywords": [
+    "archetype",
+    "tezos",
+    "blockchain",
+    "compiler",
+    "smart-contract",
+    "formal-verification"
+  ],
+  "description": "DSL to develop smart contracts on the Tezos blockchain.",
+  "publisher": "edukera",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/completium/vscode-archetype/issues"
+  },
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#243564",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/completium/vscode-archetype"
+  },
+  "version": "0.55.0",
+  "engines": {
+    "vscode": "^1.38.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onLanguage:plaintext",
+    "onView:archetypePropertiesExplorer",
+    "onCommand:archetype.genMarkdown",
+    "onCommand:archetype.genJavascript",
+    "onCommand:archetype.genWhyml"
+  ],
+  "main": "./client/out/extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Archetype configuration",
+      "properties": {
+        "archetype.archetypeMode": {
+          "type": "string",
+          "default": "js",
+          "enum": [
+            "js",
+            "docker",
+            "binary"
+          ],
+          "description": "Mode: 'js', 'docker' or 'binary'."
+        },
+        "archetype.archetypeBin": {
+          "type": "string",
+          "default": "archetype",
+          "description": "Path of archetype binary."
+        },
+        "archetype.archetypeCallerAddress": {
+          "type": "string",
+          "default": "tz1LLJ3nxbpGGMLmjzcp9sTMYui87tycG6nG",
+          "description": "Address for caller value."
+        },
+        "archetype.archetypeWhy3Lib": {
+          "type": "string",
+          "default": "$OPAM_SWITCH_PREFIX/share/archetype/mlw",
+          "description": "Path to Why3 library for archetype verification."
+        }
+      }
+    },
+    "snippets": [
+      {
+        "language": "archetype",
+        "path": "./snippets/archetype.json"
+      }
+    ],
+    "languages": [
+      {
+        "id": "archetype",
+        "aliases": [
+          "archetype",
+          "archetype"
+        ],
+        "extensions": [
+          ".arl",
+          ".arlx"
+        ],
+        "configuration": "./archetype-language-configuration.json"
+      },
+      {
+        "id": "michelson",
+        "aliases": [
+          "michelson",
+          "michelson"
+        ],
+        "extensions": [
+          ".tz"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "archetype",
+        "scopeName": "source.archetype",
+        "path": "./syntaxes/archetype.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "archetypePropertiesExplorer.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "images/refresh_light.svg",
+          "dark": "images/refresh_dark.svg"
+        }
+      },
+      {
+        "command": "archetypePropertiesExplorer.generateMlwFileAll",
+        "title": "Generate mlw file",
+        "icon": {
+          "light": "images/new-file_light.svg",
+          "dark": "images/new-file_dark.svg"
+        }
+      },
+      {
+        "command": "archetypePropertiesExplorer.generateMlwFileOne",
+        "title": "Generate mlw file",
+        "icon": {
+          "light": "images/new-file_light.svg",
+          "dark": "images/new-file_dark.svg"
+        }
+      },
+      {
+        "command": "archetypePropertiesExplorer.verify",
+        "title": "Verify",
+        "icon": {
+          "light": "images/check_light.svg",
+          "dark": "images/check_dark.svg"
+        }
+      },
+      {
+        "command": "archetype.genMarkdown",
+        "title": "Archetype: Generate Markdown",
+        "icon": {
+          "light": "images/cc.svg",
+          "dark": "images/cc.svg"
+        }
+      },
+      {
+        "command": "archetype.genTz",
+        "title": "Archetype: Generate Michelson"
+      },
+      {
+        "command": "archetype.genTzStorage",
+        "title": "Archetype: Generate Michelson Storage"
+      },
+      {
+        "command": "archetype.genJavascript",
+        "title": "Archetype: Generate Javascript"
+      },
+      {
+        "command": "archetype.genWhyml",
+        "title": "Archetype: Generate Whyml"
+      },
+      {
+        "command": "archetype.verifyWhy3",
+        "title": "Archetype: Verify with Why3"
+      },
+      {
+        "command": "archetype.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command": "archetype.decompile",
+        "title": "Archetype: Decompile"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "archetype-properties-explorer",
+          "title": "Archetype",
+          "icon": "images/archetype-activitybar.svg"
+        }
+      ]
+    },
+    "views": {
+      "archetype-properties-explorer": [
+        {
+          "id": "archetypePropertiesExplorer",
+          "name": "Properties"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "archetypePropertiesExplorer.refreshEntry",
+          "when": "view == archetypePropertiesExplorer",
+          "group": "navigation"
+        },
+        {
+          "command": "archetypePropertiesExplorer.generateMlwFileAll",
+          "when": "view == archetypePropertiesExplorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "archetypePropertiesExplorer.verify",
+          "when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
+          "group": "inline"
+        },
+        {
+          "command": "archetypePropertiesExplorer.generateMlwFileOne",
+          "when": "view == archetypePropertiesExplorer && viewItem == archetypeItem",
+          "group": "inline"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "archetype.genTz",
+        "key": "f5",
+        "mac": "f5",
+        "when": "editorTextFocus && editorLangId == 'archetype'"
+      },
+      {
+        "command": "archetype.verifyWhy3",
+        "key": "f6",
+        "mac": "f6",
+        "when": "editorTextFocus && editorLangId == 'archetype'"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "archetype",
+        "label": "archetype",
+        "path": "./themes/archetype-icon-theme.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+    "test": "sh ./scripts/e2e.sh"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.0",
+    "@types/vscode": "^1.38.0",
+    "tar": "^6.1.11",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "@completium/archetype": "0.3.22",
+    "nth-check": ">=2.0.1",
+    "vsce": "^2.7.0"
+  }
 }

@@ -218,14 +218,9 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 	doRefresh(): void {
 		if (vscode.window.activeTextEditor.document.languageId == "archetype") {
 			const config = vscode.workspace.getConfiguration('archetype');
-			const use_archetype_js_lib : boolean = config.get('useArchetypeJsLib');
-			if (use_archetype_js_lib) {
-				const archetype = require('@completium/archetype');
-				let text = vscode.window.activeTextEditor.document.getText();
-  		  const json = archetype.services("get_properties", text)
-  		  res = JSON.parse(json);
-  		  this._onDidChangeTreeData.fire();
-			} else {
+			const archetypeMode: string = config.get('archetypeMode');
+
+			if (archetypeMode == 'binary') {
 				let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
 				const archetype_bin = config.get('archetypeBin');
 				let cmd = archetype_bin + ' --service get_properties ' + fsPath;
@@ -239,6 +234,12 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 					}
 					this._onDidChangeTreeData.fire();
 				});
+			} else {
+				const archetype = require('@completium/archetype');
+				let text = vscode.window.activeTextEditor.document.getText();
+				const json = archetype.services("get_properties", text)
+				res = JSON.parse(json);
+				this._onDidChangeTreeData.fire();
 			}
 
 		} else {

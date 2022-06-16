@@ -9,7 +9,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
 		}
 		if (vscode.window.activeTextEditor != undefined) {
 			const config = vscode.workspace.getConfiguration('archetype');
-			const use_archetype_js_lib: boolean = config.get('useArchetypeJsLib');
+			const archetypeMode: string = config.get('archetypeMode');
 			const caller: string = config.get('archetypeCallerAddress');
 			const fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
 			const outputFsPath = fsPath.replace(/arl$/, fileExtension);
@@ -35,7 +35,12 @@ export function registerCommands(context: vscode.ExtensionContext) {
 					});
 				}
 			};
-			if (use_archetype_js_lib) {
+			if (archetypeMode == 'binary') {
+				let cp = require('child_process');
+				const archetype_bin = config.get('archetypeBin');
+				let cmd = archetype_bin + ' --set-caller-init=' + caller + ' -t ' + target + ' ' + fsPath + ' > ' + outputFsPath;
+				cp.exec(cmd, cb);
+			} else {
 				const path = vscode.window.activeTextEditor.document.uri.path;
 				const settings = {
 					target: target,
@@ -49,11 +54,6 @@ export function registerCommands(context: vscode.ExtensionContext) {
 				} catch (e) {
 					vscode.window.showErrorMessage(e);
 				}
-			} else {
-				let cp = require('child_process');
-				const archetype_bin = config.get('archetypeBin');
-				let cmd = archetype_bin + ' --set-caller-init=' + caller + ' -t ' + target + ' ' + fsPath + ' > ' + outputFsPath;
-				cp.exec(cmd, cb);
 			}
 		}
 	};
@@ -85,22 +85,12 @@ export function registerCommands(context: vscode.ExtensionContext) {
 		}
 		if (vscode.window.activeTextEditor != undefined) {
 			const config = vscode.workspace.getConfiguration('archetype');
-			const use_archetype_js_lib: boolean = config.get('useArchetypeJsLib');
+			const archetypeMode: string = config.get('archetypeMode');
 
 			let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
 			let outputFsPath = fsPath.replace(/tz$/, "d.arl");
 
-			if (use_archetype_js_lib) {
-				const archetype = require('@completium/archetype');
-				const text = vscode.window.activeTextEditor.document.getText();
-
-				const res = archetype.decompile(text, {});
-				const fs = require("fs");
-				fs.writeFile(outputFsPath, res, 'utf8', (() => {
-					let outputUri = vscode.Uri.file(outputFsPath);
-					vscode.window.showTextDocument(outputUri);
-				}));
-			} else {
+			if (archetypeMode == 'binary') {
 				let cp = require('child_process');
 				const archetype_bin = config.get('archetypeBin');
 				let cmd = archetype_bin + ' -d ' + fsPath + ' > ' + outputFsPath;
@@ -112,6 +102,16 @@ export function registerCommands(context: vscode.ExtensionContext) {
 					let outputUri = vscode.Uri.file(outputFsPath);
 					vscode.window.showTextDocument(outputUri);
 				});
+			} else {
+				const archetype = require('@completium/archetype');
+				const text = vscode.window.activeTextEditor.document.getText();
+
+				const res = archetype.decompile(text, {});
+				const fs = require("fs");
+				fs.writeFile(outputFsPath, res, 'utf8', (() => {
+					let outputUri = vscode.Uri.file(outputFsPath);
+					vscode.window.showTextDocument(outputUri);
+				}));
 			}
 		}
 	};
