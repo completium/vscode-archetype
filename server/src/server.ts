@@ -263,8 +263,9 @@ async function updateSymbols(textDocument: TextDocument): Promise<void> {
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	let text = textDocument.getText();
 
-	if (settings.archetypeMode === 'binary' || settings.archetypeMode === 'docker') {
+	if (settings.archetypeMode === 'binary') {
 		const { spawn } = require('child_process');
+
 		const child = spawn(settings.archetypeBin, ['-lsp', 'outline']);
 
 		child.stdin.setEncoding('utf8')

@@ -220,10 +220,12 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 			const config = vscode.workspace.getConfiguration('archetype');
 			const archetypeMode: string = config.get('archetypeMode');
 
-			if (archetypeMode == 'binary') {
+			if (archetypeMode == 'binary' || archetypeMode == 'docker') {
 				let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
 				const archetype_bin = config.get('archetypeBin');
-				let cmd = archetype_bin + ' --service get_properties ' + fsPath;
+				const cwd = process.cwd();
+				const bin = archetypeMode == 'binary' ? archetype_bin : `docker run --rm -v ${cwd}:${cwd} -w ${cwd} completium/archetype:latest`;
+				let cmd = bin + ' --service get_properties ' + fsPath;
 				let cp = require('child_process');
 				cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
 					if (_err) {
