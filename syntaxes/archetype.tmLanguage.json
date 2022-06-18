@@ -781,6 +781,10 @@
 					"name": "support.function.builtin_function.archetype"
 				},
 				{
+					"match": "\\b(sapling_empty_state|sapling_verify_update)\\b",
+					"name": "support.function.sapling.archetype"
+				},
+				{
 					"match": "\\b(blake2b|sha256|sha512|sha3|keccak|key_to_address|contract_to_address)\\b",
 					"name": "support.function.crypto.archetype"
 				},
