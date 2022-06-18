@@ -1001,6 +1001,14 @@
 					}
 				},
 				{
+					"match": "(constant)\\s+\\{",
+					"captures": {
+						"1": {
+							"name": "markup.heading.constant.archetype"
+						}
+					}
+				},
+				{
 					"match": "(require)\\s+\\{",
 					"captures": {
 						"1": {
@@ -1158,7 +1166,7 @@
 					"name": "entity.name.type.label.archetype"
 				},
 				{
-					"match": "\\b(if|then|else|in|otherwise|transfer|call|do_require|do_fail_if|to|from|as|begin|end|return|do|done?)\\b",
+					"match": "\\b(if|then|else|in|is|otherwise|transfer|call|do_require|do_fail_if|to|from|as|begin|end|return|do|done?)\\b",
 					"name": "keyword.control.flow.archetype"
 				}
 			]
