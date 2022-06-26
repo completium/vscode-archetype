@@ -1,0 +1,196 @@
+# https://github.com/microsoft/TypeScript-TmLanguage/blob/master/TypeScript.YAML-tmLanguage
+---
+$schema: https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json
+name: Archetype
+scopeName: source.archetype
+fileTypes: [arl]
+
+patterns:
+- include: "#expression"
+
+repository:
+  expression:
+    patterns:
+    - include: "#declaration"
+    - include: "#operator"
+    - include: "#comment"
+    - include: "#literal"
+    - include: "#type"
+    - include: "#builtin"
+    - include: "#case"
+    - include: "#control"
+    - include: "#local"
+    - include: "#seq"
+    - include: "#section"
+    - include: "#emphasis"
+
+  operator:
+    patterns:
+    - match: <|>|<=|=|\+|\-|\*
+      name: keyword.control
+  emphasis:
+    patterns:
+    - match: \b(do_require|fail_some|do_fail_if|fail)\b
+      name: 'entity.name.tag'
+    - match: \b[A-Z][0-9A-Z_]*\b
+      name: 'entity.name.tag'
+  section:
+    patterns:
+    - match: \b(called\s+by|sourced\s+by|effect|no\s+transfer|constant|require|fail\s+if)\b
+      captures:
+        '1': { name: storage.modifier }
+  seq:
+    patterns:
+    - begin: \b(begin)\b
+      beginCaptures:
+        '1': { name: punctuation.definition.block }
+      end: \b(end)\b
+      endCaptures:
+        '1': { name: punctuation.definition.block }
+      patterns:
+      - include: "#expression"
+  local:
+    patterns:
+    - match: \b(var|const)\b
+      name: storage.type
+  control:
+    patterns:
+    - match: \b(return|if|then|else)\b
+      name: keyword.control
+    - match: \bmatch\b
+      name: keyword.control
+    - begin: \b(with)\b
+      beginCaptures:
+        '1': { name : keyword.control }
+      end: \b(end)\b
+      endCaptures:
+        '1': { name : keyword.control }
+      patterns:
+      - include: "#expression"
+    - begin: \b(do)\b
+      beginCaptures:
+        '1': { name : keyword.control }
+      end: \b(done)\b
+      endCaptures:
+        '1': { name : keyword.control }
+      patterns:
+      - include: "#expression"
+    - begin: \b(for)\b
+      beginCaptures:
+        '1': { name : keyword.control }
+      end: \b(in)\b
+      endCaptures:
+        '1': { name : keyword.control }
+      patterns:
+      - include: "#expression"
+  case:
+    patterns:
+    - match: (\|)\s+
+      name: keyword.control
+  builtin:
+    patterns:
+    - begin: \b(unpack|left|right|make_map|make_list|call_view|get_entrypoint|none)\s*(<)
+      beginCaptures:
+        '1': { name: entity.name.function }
+        '2': { name: keyword.control }
+      end: \s*(>)
+      endCaptures:
+        '1': { name: keyword.control }
+      patterns:
+      - include: '#type'
+    - name: entity.name.function
+      match: \b(abs|floor|put|keccak|pack|blake2b|key_to_address|check_signature|int_to_nat|slice|mutez_to_nat|fold|reverse|exec_lambda|apply_lambda|get_some|is_some|some|none|isempty|length|put|get|transfer|call|emit|prepend|make_operation)\b
+  declaration:
+    patterns:
+    - match: \b(archetype)\s+([a-z][a-zA-z0-9_]*)?
+      captures:
+        '1': { name: keyword.control }
+    - match: \bwith\s+metadata\b
+      name: keyword.control
+    - match: \b(constant|variable|entry|getter|view|function|asset)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
+      captures:
+        '1': { name: storage.type.function }
+    - match: \b(enum|record)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
+      captures:
+        '1': { name: storage.type.class }
+  type:
+    patterns:
+    - begin: (:)?\s*\b(option|or|list|set)\b\s*(<)
+      beginCaptures:
+        '1': { name: keyword }
+        '2': { name: support.type }
+        '3': { name: keyword }
+      end: \s?(>)
+      endCaptures:
+        '1': { name: keyword }
+      patterns:
+      - include: '#type'
+      - match: (\*)
+        captures:
+          '1': { name: keyword }
+    - match: (:)?\s*\b(unit|lambda|contract|big_map|map|int|nat|tez|string|rational|bytes|key|key_hash|address|sapling|signature|date|duration|bool|operation|aggregate|partition|asset_view|asset_key|asset_value|iterable_big_map)\b
+      captures:
+        '1': { name: keyword }
+        '2': { name: support.type }
+    - match: (\*)
+      captures:
+        '1': { name: keyword }
+    - match: (:)\s*(%?[a-zA-Z][a-zA-z0-9_]*)?
+      captures:
+        '1': { name: keyword }
+  comment:
+    patterns:
+    - name: comment.block.slash
+      begin: \(\*
+      end: \*\)
+    - name: comment.block.parenthese
+      begin: /\*
+      end: \*/
+    - name: comment.line.slash
+      begin: //
+      end: \n
+  literal:
+    patterns:
+    - name: string.quoted.double.archetype
+      begin: '"'
+      end: '"'
+      patterns:
+      - name: constant.character.escape.archetype
+        match: \\.
+    - name: constant.numeric.rational.archetype
+      match: \b(\d+ div \d+)\b
+    - name: constant.numeric.currency.tz.archetype
+      match: \b(\d+(\.\d+)?tz)\b
+    - name: constant.numeric.currency.mtz.archetype
+      match: \b(\d+(\.\d+)?mtz)\b
+    - name: constant.numeric.currency.utz.archetype
+      match: \b(\d+(\.\d+)?utz)\b
+    - name: constant.numeric.rational.decimal.archetype
+      match: \b(\d+\.\d+)\b
+    - name: constant.numeric.rational.percent.archetype
+      match: \d+%
+    - name: constant.language.duration.archetype
+      match: \b(\d+[wdhms])+\b
+    - name: constant.language.address.archetype
+      match: '@(\w+)'
+    - name: constant.language.address.archetype
+      match: \b((tz(1|2|3))|KT1)[0-9a-zA-Z]{33}\b
+    - name: constant.language.bytes.archetype
+      match: 0x([0-9a-fA-F]+)
+    - name": constant.numeric.int.archetype
+      match: \d+i
+    - name: constant.numeric.nat.archetype
+      match: \b\d+\b
+    - name: constant.numeric.int.archetype
+      match: \b\d\d?\d?(_\d\d\d)+i\b
+    - name: constant.numeric.nat.archetype
+      match: \b\d\d?\d?(_\d\d\d)+\b
+    - name: constant.language.date.archetype
+      match: \b([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\\d|2[0-3]):?([0-5]\d)?)?)?)?\b
+    - name: constant.language.bool.archetype
+      match: \b(true|false)\b
+    - name: constant.language.unit.archetype
+      match: \bUnit\b
+
+
+

@@ -1,1263 +1,423 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Archetype",
-	"patterns": [
-		{
-			"include": "#comment"
-		},
-		{
-			"include": "#extra"
-		},
-		{
-			"include": "#control0"
-		},
-		{
-			"include": "#declarations"
-		},
-		{
-			"include": "#description"
-		},
-		{
-			"include": "#type"
-		},
-		{
-			"include": "#operator"
-		},
-		{
-			"include": "#control"
-		},
-		{
-			"include": "#global"
-		},
-		{
-			"include": "#punctuation"
-		},
-		{
-			"include": "#literal"
-		}
-	],
-	"repository": {
-		"comment": {
-			"patterns": [
-				{
-					"begin": "\\(\\*",
-					"end": "\\*\\)",
-					"name": "comment.block.slash.language.archetype"
-				},
-				{
-					"begin": "/\\*",
-					"end": "\\*/",
-					"name": "comment.block.parenthese.language.archetype"
-				},
-				{
-					"begin": "//",
-					"end": "\\n",
-					"name": "comment.line.slash.language.archetype"
-				}
-			]
-		},
-		"extra": {
-			"patterns": [
-				{
-					"match": "\\%([A-Za-z_]+)",
-					"name": "entity.other.ident.archetype"
-				}
-			]
-		},
-		"control0": {
-			"patterns": [
-				{
-					"match": "\\b(for)(\\s*\\:\\s*([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.for.archetype"
-						},
-						"2": {
-							"name": "entity.other.attribute-name.for_label.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(iter)(\\s*\\:\\s*([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.iter.archetype"
-						},
-						"2": {
-							"name": "entity.other.attribute-name.iter_label.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(while)(\\s*\\:\\s*([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.while.archetype"
-						},
-						"2": {
-							"name": "entity.other.attribute-name.while_label.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declarations": {
-			"patterns": [
-				{
-					"include": "#declaration-archetype"
-				},
-				{
-					"include": "#declaration-variable"
-				},
-				{
-					"include": "#declaration-type"
-				},
-				{
-					"include": "#declaration-instance"
-				},
-				{
-					"include": "#declaration-enum"
-				},
-				{
-					"include": "#declaration-states"
-				},
-				{
-					"include": "#declaration-use"
-				},
-				{
-					"include": "#declaration-asset"
-				},
-				{
-					"include": "#declaration-record"
-				},
-				{
-					"include": "#declaration-event"
-				},
-				{
-					"include": "#declaration-entry"
-				},
-				{
-					"include": "#declaration-transition"
-				},
-				{
-					"include": "#declaration-extension"
-				},
-				{
-					"include": "#declaration-namespace"
-				},
-				{
-					"include": "#declaration-function"
-				},
-				{
-					"include": "#declaration-specification"
-				},
-				{
-					"include": "#declaration-security"
-				},
-				{
-					"include": "#declaration-predicate"
-				},
-				{
-					"include": "#declaration-definition"
-				},
-				{
-					"include": "#declaration-lemma"
-				},
-				{
-					"include": "#declaration-theorem"
-				},
-				{
-					"include": "#declaration-invariant"
-				},
-				{
-					"include": "#declaration-assert"
-				},
-				{
-					"include": "#declaration-postcondition"
-				},
-				{
-					"include": "#declaration-fails"
-				},
-				{
-					"include": "#declaration-doc-comment"
-				},
-				{
-					"include": "#declaration-label"
-				}
-			]
-		},
-		"declaration-archetype": {
-			"patterns": [
-				{
-					"match": "\\b(archetype)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.archetype.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.archetype.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-variable": {
-			"patterns": [
-				{
-					"match": "\\b(variable|constant)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.variable.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.variable.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-type": {
-			"patterns": [
-				{
-					"match": "\\b(type)\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.type.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-instance": {
-			"patterns": [
-				{
-					"match": "\\b(instance)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))(\\s+of)\\s+(([A-Za-z_]\\w*))\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.instance.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"5": {
-							"name": "entity.name.type.instance.archetype"
-						},
-						"6": {
-							"name": "keyword.control.of.archetype"
-						},
-						"7": {
-							"name": "entity.name.contract.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-enum": {
-			"patterns": [
-				{
-					"match": "\\b(enum)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.enum.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.enum.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-states": {
-			"patterns": [
-				{
-					"match": "\\b(states)(\\[\\%(.)+\\%\\])?(\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.states.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.states.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-asset": {
-			"patterns": [
-				{
-					"match": "\\b(asset)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.underline.asset.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.type.asset.archetype"
-						}
-					}
-				},
-				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:;",
-					"captures": {
-						"1": {
-							"name": "entity.other.attribute-name.field.name"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "storage.type.asset.type"
-						}
-					}
-				}
-			]
-		},
-		"declaration-record": {
-			"patterns": [
-				{
-					"match": "\\b(record)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.underline.record.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.type.record.archetype"
-						}
-					}
-				},
-				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:;",
-					"captures": {
-						"1": {
-							"name": "entity.other.attribute-name.field.name"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "storage.type.asset.type"
-						}
-					}
-				}
-			]
-		},
-		"declaration-event": {
-			"patterns": [
-				{
-					"match": "\\b(event)\\s+(([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.underline.event.archetype"
-						},
-						"3": {
-							"name": "entity.name.type.type.record.archetype"
-						}
-					}
-				},
-				{
-					"match": "([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:;",
-					"captures": {
-						"1": {
-							"name": "entity.other.attribute-name.field.name"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "storage.type.asset.type"
-						}
-					}
-				}
-			]
-		},
-		"declaration-entry": {
-			"patterns": [
-				{
-					"match": "\\b(entry)(\\[\\%(.)+\\%\\])?\\s+((\\%?[A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.entry.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.entry.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-transition": {
-			"patterns": [
-				{
-					"match": "\\b(transition)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.transition.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.type.transition.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-extension": {
-			"patterns": [
-				{
-					"match": "^%\\\\\\.$\\b"
-				}
-			]
-		},
-		"declaration-namespace": {
-			"patterns": [
-				{
-					"match": "\\b(namespace)\\b"
-				}
-			]
-		},
-		"declaration-function": {
-			"patterns": [
-				{
-					"match": "\\b(function)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.function.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.type.function.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(getter|view)(\\[\\%(.)+\\%\\])?\\s+(([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.getter.archetype"
-						},
-						"2": {
-							"name": "markup.underline.extension.archetype"
-						},
-						"4": {
-							"name": "entity.name.type.type.getter.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\(([A-Za-z_]\\w*)\\s*(\\[\\%(.)+\\%\\])?\\s*\\:\\s*(\\s+([A-Za-z_]\\w*))\\)",
-					"captures": {
-						"1": {
-							"name": "entity.name.argument.name"
-						},
-						"2": {
-							"name": "entity.name.type.extension.archetype"
-						},
-						"4": {
-							"name": "storage.type.argument.type"
-						}
-					}
-				}
-			]
-		},
-		"declaration-specification": {
-			"patterns": [
-				{
-					"match": "\\b(specification)(\\s+)(asset|variable|function|entry)(\\s+)([A-Za-z_]\\w*)\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.specification.archetype"
-						},
-						"3": {
-							"name": "markup.heading.speckind.archetype"
-						},
-						"5": {
-							"name": "entity.name.type.speckind.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(specification)(\\[\\%(.)+\\%\\])?\\b",
-					"name": "markup.heading.specification.archetype"
-				}
-			]
-		},
-		"declaration-security": {
-			"patterns": [
-				{
-					"match": "\\b(security)(\\[\\%(.)+\\%\\])?\\b",
-					"name": "markup.heading.security.archetype"
-				}
-			]
-		},
-		"declaration-predicate": {
-			"patterns": [
-				{
-					"match": "\\b(predicate)(\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.predicate.archetype"
-						},
-						"3": {
-							"name": "entity.name.type.predicate.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-definition": {
-			"patterns": [
-				{
-					"match": "\\b(definition)(\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.definition.archetype"
-						},
-						"3": {
-							"name": "entity.name.type.definition.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-lemma": {
-			"patterns": [
-				{
-					"match": "\\b(lemma)(\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.lemma.archetype"
-						},
-						"3": {
-							"name": "entity.name.type.lemma.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-theorem": {
-			"patterns": [
-				{
-					"match": "\\b(theorem)(\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.theorem.archetype"
-						},
-						"3": {
-							"name": "entity.name.type.theorem.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-invariant": {
-			"patterns": [
-				{
-					"match": "\\b(invariant)\\s+(for)(\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "storage.type.invariant.archetype"
-						},
-						"2": {
-							"name": "storage.type.invariant.archetype"
-						},
-						"3": {
-							"name": "entity.name.type.invariant.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-assert": {
-			"patterns": [
-				{
-					"match": "\\b(assert)(\\s+)([A-Za-z_]\\w*)\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.assert.archetype"
-						},
-						"3": {
-							"name": "entity.name.type.assert.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-postcondition": {
-			"patterns": [
-				{
-					"match": "\\b(postcondition)(\\s+)([A-Za-z_]\\w*)?\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.postcondition.archetype"
-						},
-						"3": {
-							"name": "entity.name.type.postcondition.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-fails": {
-			"patterns": [
-				{
-					"match": "\\b(fails)\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.fails.archetype"
-						}
-					}
-				}
-			]
-		},
-		"declaration-use": {
-			"patterns": [
-				{
-					"match": "\\b(use)(\\s*\\:)((\\s*[A-Za-z_]\\w*)+)\\b",
-					"captures": {
-						"1": {
-							"name": "storage.type.use.keywod"
-						},
-						"3": {
-							"name": "entity.name.type.use.label"
-						}
-					}
-				}
-			]
-		},
-		"declaration-doc-comment": {
-			"patterns": [
-				{
-					"name": "comment.block.documentation.archetype",
-					"begin": "doc\\*",
-					"end": "\\*doc"
-				}
-			]
-		},
-		"declaration-label": {
-			"patterns": [
-				{
-					"match": "\\b(label)(\\s*)((\\s*[A-Za-z_]\\w*)+)\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.label.archetype"
-						},
-						"3": {
-							"name": "entity.name.label.label"
-						}
-					}
-				}
-			]
-		},
-		"type": {
-			"patterns": [
-				{
-					"include": "#type-primitive"
-				},
-				{
-					"include": "#type-composite"
-				}
-			]
-		},
-		"type-with-ident": {
-			"patterns": [
-				{
-					"include": "#type-ident"
-				},
-				{
-					"include": "#type-primitive"
-				},
-				{
-					"include": "#type-composite"
-				}
-			]
-		},
-		"type-primitive": {
-			"patterns": [
-				{
-					"match": "\\b(bool|nat|int|rational|date|duration|string|address|tez|key|key_hash|signature|bytes|chain_id|unit|operation|sapling_state|sapling_transaction|bls12_381_fr|bls12_381_g1|bls12_381_g2|never|chest|chest_key)\\b",
-					"name": "storage.type.primitive.archetype"
-				}
-			]
-		},
-		"type-ident": {
-			"patterns": [
-				{
-					"match": "(\\w)+",
-					"name": "entity.name.type.archetype"
-				}
-			]
-		},
-		"type-composite": {
-			"patterns": [
-				{
-					"begin": "(set|list|map|big_map|iterable_big_map|or|lambda|option|pkey|contract|aggregate|partition|ticket|asset_key|asset_value|asset_view)\\s*(<)",
-					"beginCaptures": {
-						"0": {
-							"name": "punctuation.bracket.angle.archetype"
-						},
-						"1": {
-							"name": "storage.type.composite.archetype"
-						}
-					},
-					"end": ">",
-					"endCaptures": {
-						"0": {
-							"name": "punctuation.bracket.angle.archetype"
-						}
-					},
-					"patterns": [
-						{
-							"include": "#type"
-						},
-						{
-							"include": "#type-ident"
-						}
-					]
-				}
-			]
-		},
-		"global": {
-			"patterns": [
-				{
-					"include": "#global-variables"
-				},
-				{
-					"include": "#global-functions"
-				}
-			]
-		},
-		"global-variables": {
-			"patterns": [
-				{
-					"match": "\\b(the|state|now|transferred|caller|balance|source|requires|none|some|left|right|any|transfer|idem|before|at|unmoved|added|removed|toiterate|iterated|after|fixed|default|self_chain_id|level|operations|self|self_address|total_voting_power)\\b",
-					"name": "variable.language.global.archetype"
-				}
-			]
-		},
-		"global-functions": {
-			"patterns": [
-				{
-					"match": "\\b(fail|fail_some)\\b",
-					"name": "keyword.control.exceptions.archetype"
-				},
-				{
-					"match": "\\b(add|remove|remove_all|remove_if|remove_aggregate|update|update_all|add_update|clear)\\b",
-					"name": "support.function.asset_method_effect.archetype"
-				},
-				{
-					"match": "\\b(select|sort|contains|nth|count|sum|head|tail)\\b",
-					"name": "support.function.asset_function.archetype"
-				},
-				{
-					"match": "\\b(union|inter|diff|isempty|subsetof|empty|singleton)\\b",
-					"name": "support.function.asset_formula_function.archetype"
-				},
-				{
-					"match": "\\b(min|max|abs|concat|slice|length|is_none|is_some|int_to_nat|floor|ceil|nat_to_string|pack|unpack|address_to_contract|key_to_key_hash|lambda|set_delegate|key_hash_to_contract|voting_power|int_to_date|mutez_to_nat|call_view|emit|sub_nat|sub_mutez|greedy_and|greedy_or|make_set|make_list|make_map|make_big_map)\\b",
-					"name": "support.function.builtin_function.archetype"
-				},
-				{
-					"match": "\\b(sapling_empty_state|sapling_verify_update)\\b",
-					"name": "support.function.sapling.archetype"
-				},
-				{
-					"match": "\\b(blake2b|sha256|sha512|sha3|keccak|key_to_address|contract_to_address)\\b",
-					"name": "support.function.crypto.archetype"
-				},
-				{
-					"match": "\\b(get_entrypoint|make_operation|loop_left)\\b",
-					"name": "support.function.utils_function.archetype"
-				},
-				{
-					"match": "\\b(prepend|head_tail|reverse|map)\\b",
-					"name": "support.function.list_function.archetype"
-				},
-				{
-					"match": "\\b(add|remove|contains|length)\\b",
-					"name": "support.function.set_function.archetype"
-				},
-				{
-					"match": "\\b(exec_lambda|apply_lambda)\\b",
-					"name": "support.function.lambda_function.archetype"
-				},
-				{
-					"match": "\\b(put|remove|get|contains|length)\\b",
-					"name": "support.function.map_function.archetype"
-				},
-				{
-					"match": "\\b(create_ticket|read_ticket|split_ticket|join_tickets)\\b",
-					"name": "support.function.ticket.archetype"
-				}
-			]
-		},
-		"operator": {
-			"patterns": [
-				{
-					"match": "\\b(only_by_role|only_in_entry|only_by_role_in_entry|not_by_role|not_in_entry|not_by_role_in_entry|transferred_by|transferred_to|no_storage_fail)\\b",
-					"name": "keyword.control.security.archetype"
-				},
-				{
-					"match": "\\b(anyentry|noentry|anychange|nochange)\\b",
-					"name": "constant.language.security.archetype"
-				},
-				{
-					"match": "\\bresult\\b",
-					"name": "constant.language.formula.archetype"
-				},
-				{
-					"match": "\\b(and|or|xor|not)\\b|(\\->)",
-					"name": "keyword.control.logic.archetype"
-				},
-				{
-					"match": "(=|<>|>=|>|<|<=)",
-					"name": "keyword.operator.comparison.archetype"
-				},
-				{
-					"match": "(\\+|\\-|\\*|\\/|\\%)",
-					"name": "keyword.operator.arithmetic.archetype"
-				},
-				{
-					"match": "(forall|exists)(\\s+([A-Za-z_]\\w*))",
-					"captures": {
-						"1": {
-							"name": "keyword.control.quantifier.archetype"
-						},
-						"2": {
-							"name": "entity.name.id_quantifier.archetype"
-						}
-					}
-				},
-				{
-					"match": "(\\:=|\\+=|\\-=|\\*=|\\/=|\\&=|\\|=)",
-					"name": "keyword.operator.assignment.archetype"
-				}
-			]
-		},
-		"punctuation": {
-			"patterns": [
-				{
-					"match": ";",
-					"name": "punctuation.separator.archetype"
-				}
-			]
-		},
-		"description": {
-			"patterns": [
-				{
-					"match": "\\b(from)(\\s+([A-Za-z_]\\w*))\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.from.archetype"
-						},
-						"3": {
-							"name": "entity.name.from.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(to)(\\s+entry)(\\s+([A-Za-z_]\\w*))\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.to.archetype"
-						},
-						"2": {
-							"name": "keyword.control.entry.archetype"
-						},
-						"4": {
-							"name": "entity.name.to.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(to)(\\s+([A-Za-z_]\\w*))\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.to.archetype"
-						},
-						"3": {
-							"name": "entity.name.to.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(on)(\\s+([A-Za-z_]\\w*))\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.on.archetype"
-						},
-						"3": {
-							"name": "entity.name.on.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(identified(\\s+)by)(\\s+([A-Za-z_]\\w*))\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.identifiedby.archetype"
-						},
-						"2": {
-							"name": "entity.name.id.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(sorted(\\s+)by)(\\s+([A-Za-z_]\\w*))\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.sortedby.archetype"
-						},
-						"2": {
-							"name": "entity.name.id.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(with\\s+)?(effect)\\b",
-					"name": "markup.heading.effect.archetype"
-				},
-				{
-					"match": "((called)(\\s*)(by))\\s*(\\[\\%\\w+\\%\\])?",
-					"captures": {
-						"1": {
-							"name": "markup.heading.calledby.archetype"
-						},
-						"5": {
-							"name": "markup.underline.extension.archetype"
-						}
-					}
-				},
-				{
-					"match": "((sourced)(\\s*)(by))\\s*(\\[\\%\\w+\\%\\])?",
-					"captures": {
-						"1": {
-							"name": "markup.heading.sourcedby.archetype"
-						},
-						"5": {
-							"name": "markup.underline.extension.archetype"
-						}
-					}
-				},
-				{
-					"match": "((state)(\\s*)(is))\\s*(\\[\\%\\w+\\%\\])?",
-					"captures": {
-						"1": {
-							"name": "markup.heading.state_is.archetype"
-						},
-						"5": {
-							"name": "markup.underline.extension.archetype"
-						}
-					}
-				},
-				{
-					"match": "((with)(\\s*)(metadata))",
-					"captures": {
-						"1": {
-							"name": "markup.heading.with_metadata.archetype"
-						},
-						"5": {
-							"name": "markup.underline.extension.archetype"
-						}
-					}
-				},
-				{
-					"match": "(accept)(\\s+)(transfer)",
-					"name": "markup.heading.accepttransfer.archetype"
-				},
-				{
-					"match": "(no)(\\s+)(transfer)",
-					"name": "markup.heading.notransfer.archetype"
-				},
-				{
-					"match": "\\b(when)\\b",
-					"captures": {
-						"1": {
-							"name": "markup.heading.when.archetype"
-						}
-					}
-				},
-				{
-					"match": "(constant)\\s+\\{",
-					"captures": {
-						"1": {
-							"name": "markup.heading.constant.archetype"
-						}
-					}
-				},
-				{
-					"match": "(require)\\s+\\{",
-					"captures": {
-						"1": {
-							"name": "markup.heading.require.archetype"
-						}
-					}
-				},
-				{
-					"match": "(fail\\s+if)\\s+\\{",
-					"captures": {
-						"1": {
-							"name": "markup.heading.failif.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(assert)(\\s+)([A-Za-z_]\\w*);\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.assert.archetype"
-						},
-						"3": {
-							"name": "entity.name.type.assert.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(shadow)\\b",
-					"name": "markup.heading.shadow.archetype"
-				},
-				{
-					"match": "\\b(initialized(\\s+)by)\\b",
-					"name": "markup.heading.initializedby.archetype"
-				},
-				{
-					"match": "\\b(with(\\s+)states)\\b",
-					"name": "markup.heading.withstates.archetype"
-				},
-				{
-					"match": "\\b(with)\\b",
-					"name": "markup.heading.with.archetype"
-				},
-				{
-					"match": "\\b(initial)\\b",
-					"name": "keyword.control.initial.archetype"
-				}
-			]
-		},
-		"control": {
-			"patterns": [
-				{
-					"match": "\\b(let)(\\s+some)?(\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.let.archetype"
-						},
-						"2": {
-							"name": "keyword.control.some.archetype"
-						},
-						"4": {
-							"name": "variable.other.definition.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(var)(\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.var.archetype"
-						},
-						"3": {
-							"name": "variable.other.definition.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(const)(\\s+([A-Za-z_]\\w*))?\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.const.var.archetype"
-						},
-						"3": {
-							"name": "variable.other.definition.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(match_option)(.)+(with)\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.matchoption.archetype"
-						},
-						"3": {
-							"name": "keyword.control.with.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(match_or)(.)+(with)\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.matchor.archetype"
-						},
-						"3": {
-							"name": "keyword.control.with.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(match_list)(.)+(with)\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.matchlist.archetype"
-						},
-						"3": {
-							"name": "keyword.control.with.archetype"
-						}
-					}
-				},
-				{
-					"match": "\\b(match)(.)+(with)\\b",
-					"captures": {
-						"1": {
-							"name": "keyword.control.match.archetype"
-						},
-						"3": {
-							"name": "keyword.control.with.archetype"
-						}
-					}
-				},
-				{
-					"match": "([A-Za-z0-9_]\\w*)\\s*(with)",
-					"captures": {
-						"1": {
-							"name": "entity.name.type.label.archetype"
-						},
-						"2": {
-							"name": "keyword.control.with.archetype"
-						}
-					}
-				},
-				{
-					"match": "([A-Za-z0-9_]\\w*)\\s*(otherwise)",
-					"captures": {
-						"1": {
-							"name": "entity.name.type.label.archetype"
-						},
-						"2": {
-							"name": "keyword.control.otherwise.archetype"
-						}
-					}
-				},
-				{
-					"match": "(([A-Za-z0-9_]\\w*)\\s*\\:\\s+)",
-					"name": "entity.name.type.label.archetype"
-				},
-				{
-					"match": "\\b(if|then|else|in|is|otherwise|transfer|call|do_require|do_fail_if|to|from|as|begin|end|return|do|done?)\\b",
-					"name": "keyword.control.flow.archetype"
-				}
-			]
-		},
-		"literal": {
-			"patterns": [
-				{
-					"name": "string.quoted.double.archetype",
-					"begin": "\"",
-					"end": "\"",
-					"patterns": [
-						{
-							"name": "constant.character.escape.archetype",
-							"match": "\\\\."
-						}
-					]
-				},
-				{
-					"match": "\\b(\\d+ div \\d+)\\b",
-					"name": "constant.numeric.rational.archetype"
-				},
-				{
-					"match": "\\b(\\d+(\\.\\d+)?tz)\\b",
-					"name": "constant.language.currency.tz.archetype"
-				},
-				{
-					"match": "\\b(\\d+(\\.\\d+)?mtz)\\b",
-					"name": "constant.language.currency.mtz.archetype"
-				},
-				{
-					"match": "\\b(\\d+(\\.\\d+)?utz)\\b",
-					"name": "constant.language.currency.utz.archetype"
-				},
-				{
-					"match": "\\b(\\d+\\.\\d+)\\b",
-					"name": "constant.numeric.rational.decimal.archetype"
-				},
-				{
-					"match": "\\d+%",
-					"name": "constant.numeric.rational.percent.archetype"
-				},
-				{
-					"match": "\\b(\\d+[wdhms])+\\b",
-					"name": "constant.language.duration.archetype"
-				},
-				{
-					"match": "@(\\w+)",
-					"name": "constant.language.address.archetype"
-				},
-				{
-					"match": "\\b((tz(1|2|3))|KT1)[0-9a-zA-Z]{33}\\b",
-					"name": "constant.language.address.archetype"
-				},
-				{
-					"match": "0x([0-9a-fA-F]+)",
-					"name": "constant.language.bytes.archetype"
-				},
-				{
-					"match": "\\b([\\+-]?\\d{4}(?!\\d{2}\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?\\b",
-					"name": "constant.language.date.archetype"
-				},
-				{
-					"match": "\\d+i",
-					"name": "constant.numeric.int.archetype"
-				},
-				{
-					"match": "\\b\\d+\\b",
-					"name": "constant.numeric.nat.archetype"
-				},
-				{
-					"match": "\\b\\d\\d?\\d?(_\\d\\d\\d)+i\\b",
-					"name": "constant.numeric.int.archetype"
-				},
-				{
-					"match": "\\b\\d\\d?\\d?(_\\d\\d\\d)+\\b",
-					"name": "constant.numeric.nat.archetype"
-				},
-				{
-					"match": "\\b(true|false)\\b",
-					"name": "constant.language.bool.archetype"
-				},
-				{
-					"match": "\\bUnit\\b",
-					"name": "constant.language.unit.archetype"
-				},
-				{
-					"match": "\\bconst\\b",
-					"name": "keyword.language.const.archetype"
-				}
-			]
-		}
-	},
-	"scopeName": "source.archetype"
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Archetype",
+  "scopeName": "source.archetype",
+  "fileTypes": [
+    "arl"
+  ],
+  "patterns": [
+    {
+      "include": "#expression"
+    }
+  ],
+  "repository": {
+    "expression": {
+      "patterns": [
+        {
+          "include": "#declaration"
+        },
+        {
+          "include": "#operator"
+        },
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#literal"
+        },
+        {
+          "include": "#type"
+        },
+        {
+          "include": "#builtin"
+        },
+        {
+          "include": "#case"
+        },
+        {
+          "include": "#control"
+        },
+        {
+          "include": "#local"
+        },
+        {
+          "include": "#seq"
+        },
+        {
+          "include": "#section"
+        },
+        {
+          "include": "#emphasis"
+        }
+      ]
+    },
+    "operator": {
+      "patterns": [
+        {
+          "match": "<|>|<=|=|\\+|\\-|\\*",
+          "name": "keyword.control"
+        }
+      ]
+    },
+    "emphasis": {
+      "patterns": [
+        {
+          "match": "\\b(do_require|fail_some|do_fail_if)\\b",
+          "name": "entity.name.tag"
+        },
+        {
+          "match": "\\b[A-Z][0-9A-Z_]*\\b",
+          "name": "entity.name.tag"
+        }
+      ]
+    },
+    "section": {
+      "patterns": [
+        {
+          "match": "\\b(called\\s+by|sourced\\s+by|effect|no\\s+transfer|constant|require|fail\\s+if)\\b",
+          "captures": {
+            "1": {
+              "name": "storage.modifier"
+            }
+          }
+        }
+      ]
+    },
+    "seq": {
+      "patterns": [
+        {
+          "begin": "\\b(begin)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.block"
+            }
+          },
+          "end": "\\b(end)\\b",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.block"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        }
+      ]
+    },
+    "local": {
+      "patterns": [
+        {
+          "match": "\\b(var|const)\\b",
+          "name": "storage.type"
+        }
+      ]
+    },
+    "control": {
+      "patterns": [
+        {
+          "match": "\\b(return|if|then|else)\\b",
+          "name": "keyword.control"
+        },
+        {
+          "match": "\\bmatch\\b",
+          "name": "keyword.control"
+        },
+        {
+          "begin": "\\b(with)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "end": "\\b(end)\\b",
+          "endCaptures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(do)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "end": "\\b(done)\\b",
+          "endCaptures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(for)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "end": "\\b(in)\\b",
+          "endCaptures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        }
+      ]
+    },
+    "case": {
+      "patterns": [
+        {
+          "match": "(\\|)\\s+",
+          "name": "keyword.control"
+        }
+      ]
+    },
+    "builtin": {
+      "patterns": [
+        {
+          "begin": "\\b(unpack|left|right|make_map|make_list|call_view|get_entrypoint|none)\\s*(<)",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.name.function"
+            },
+            "2": {
+              "name": "keyword.control"
+            }
+          },
+          "end": "\\s*(>)",
+          "endCaptures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#type"
+            }
+          ]
+        },
+        {
+          "name": "entity.name.function",
+          "match": "\\b(abs|floor|put|keccak|pack|blake2b|key_to_address|check_signature|int_to_nat|slice|mutez_to_nat|fold|reverse|exec_lambda|apply_lambda|get_some|is_some|some|none|isempty|length|put|get|transfer|call|emit|prepend|make_operation)\\b"
+        }
+      ]
+    },
+    "declaration": {
+      "patterns": [
+        {
+          "match": "\\b(archetype)\\s+([a-z][a-zA-z0-9_]*)?",
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          }
+        },
+        {
+          "match": "\\bwith\\s+metadata\\b",
+          "name": "keyword.control"
+        },
+        {
+          "match": "\\b(constant|variable|entry|getter|view|function|asset)\\b\\s*([a-zA-Z][a-zA-z0-9_]*)?",
+          "captures": {
+            "1": {
+              "name": "storage.type.function"
+            }
+          }
+        },
+        {
+          "match": "\\b(enum|record)\\b\\s*([a-zA-Z][a-zA-z0-9_]*)?",
+          "captures": {
+            "1": {
+              "name": "storage.type.class"
+            }
+          }
+        }
+      ]
+    },
+    "type": {
+      "patterns": [
+        {
+          "begin": "(:)?\\s*\\b(option|or|list|set)\\b\\s*(<)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword"
+            },
+            "2": {
+              "name": "support.type"
+            },
+            "3": {
+              "name": "keyword"
+            }
+          },
+          "end": "\\s?(>)",
+          "endCaptures": {
+            "1": {
+              "name": "keyword"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#type"
+            },
+            {
+              "match": "(\\*)",
+              "captures": {
+                "1": {
+                  "name": "keyword"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "match": "(:)?\\s*\\b(unit|lambda|contract|big_map|map|int|nat|tez|string|rational|bytes|key|key_hash|address|sapling|signature|date|duration|bool|operation|aggregate|partition|asset_view|asset_key|asset_value|iterable_big_map)\\b",
+          "captures": {
+            "1": {
+              "name": "keyword"
+            },
+            "2": {
+              "name": "support.type"
+            }
+          }
+        },
+        {
+          "match": "(\\*)",
+          "captures": {
+            "1": {
+              "name": "keyword"
+            }
+          }
+        },
+        {
+          "match": "(:)\\s*(%?[a-zA-Z][a-zA-z0-9_]*)?",
+          "captures": {
+            "1": {
+              "name": "keyword"
+            }
+          }
+        }
+      ]
+    },
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.block.slash",
+          "begin": "\\(\\*",
+          "end": "\\*\\)"
+        },
+        {
+          "name": "comment.block.parenthese",
+          "begin": "/\\*",
+          "end": "\\*/"
+        },
+        {
+          "name": "comment.line.slash",
+          "begin": "//",
+          "end": "\\n"
+        }
+      ]
+    },
+    "literal": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.archetype",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.archetype",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "constant.numeric.rational.archetype",
+          "match": "\\b(\\d+ div \\d+)\\b"
+        },
+        {
+          "name": "constant.numeric.currency.tz.archetype",
+          "match": "\\b(\\d+(\\.\\d+)?tz)\\b"
+        },
+        {
+          "name": "constant.numeric.currency.mtz.archetype",
+          "match": "\\b(\\d+(\\.\\d+)?mtz)\\b"
+        },
+        {
+          "name": "constant.numeric.currency.utz.archetype",
+          "match": "\\b(\\d+(\\.\\d+)?utz)\\b"
+        },
+        {
+          "name": "constant.numeric.rational.decimal.archetype",
+          "match": "\\b(\\d+\\.\\d+)\\b"
+        },
+        {
+          "name": "constant.numeric.rational.percent.archetype",
+          "match": "\\d+%"
+        },
+        {
+          "name": "constant.language.duration.archetype",
+          "match": "\\b(\\d+[wdhms])+\\b"
+        },
+        {
+          "name": "constant.language.address.archetype",
+          "match": "@(\\w+)"
+        },
+        {
+          "name": "constant.language.address.archetype",
+          "match": "\\b((tz(1|2|3))|KT1)[0-9a-zA-Z]{33}\\b"
+        },
+        {
+          "name": "constant.language.bytes.archetype",
+          "match": "0x([0-9a-fA-F]+)"
+        },
+        {
+          "name\"": "constant.numeric.int.archetype",
+          "match": "\\d+i"
+        },
+        {
+          "name": "constant.numeric.nat.archetype",
+          "match": "\\b\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.int.archetype",
+          "match": "\\b\\d\\d?\\d?(_\\d\\d\\d)+i\\b"
+        },
+        {
+          "name": "constant.numeric.nat.archetype",
+          "match": "\\b\\d\\d?\\d?(_\\d\\d\\d)+\\b"
+        },
+        {
+          "name": "constant.language.date.archetype",
+          "match": "\\b([\\+-]?\\d{4}(?!\\d{2}\\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\\\d|2[0-3]):?([0-5]\\d)?)?)?)?\\b"
+        },
+        {
+          "name": "constant.language.bool.archetype",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "constant.language.unit.archetype",
+          "match": "\\bUnit\\b"
+        }
+      ]
+    }
+  }
 }

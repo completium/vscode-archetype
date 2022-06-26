@@ -258,6 +258,7 @@
   "devDependencies": {
     "@types/mocha": "^5.2.0",
     "@types/vscode": "^1.38.0",
+    "js-yaml": "^4.1.0",
     "tar": "^6.1.11",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
