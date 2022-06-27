@@ -46,7 +46,9 @@ repository:
     patterns:
     - match: <|>|<=|>=|<>|=|<=>|\|>>|\|<<
       name: keyword.operator.comparison
-    - match: \+|\-|\*|,|\[|\]|/|&
+    - match: \+|\-|\*|,|\[|\]|/|/%|&
+      name: keyword.operator.arithmetic
+    - match: \b(div)\b
       name: keyword.operator.arithmetic
     - match: \b(and|or|not|xor|\->)\b
       name: keyword.operator.boolean
@@ -207,10 +209,8 @@ repository:
       match: \b@?((tz(1|2|3))|KT1)[0-9a-zA-Z]{33}\b
     - name: constant.language.bytes.archetype
       match: 0x([0-9a-fA-F]+)
-    - name": constant.numeric.int.archetype
-      match: \d+i
-    - name: constant.numeric.nat.archetype
-      match: \b\d+\b
+    - name: constant.numeric.number.archetype
+      match: \b\d+(i?)\b
     - name: constant.numeric.int.archetype
       match: \b\d\d?\d?(_\d\d\d)+i\b
     - name: constant.numeric.nat.archetype
