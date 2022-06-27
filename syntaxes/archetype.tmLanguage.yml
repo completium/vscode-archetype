@@ -199,10 +199,10 @@ repository:
       match: \b(\d+(\.\d+)?mtz)\b
     - name: constant.numeric.currency.utz.archetype
       match: \b(\d+(\.\d+)?utz)\b
+    - name: constant.numeric.rational.percent.archetype
+      match: \d+(\.\d+)?%
     - name: constant.numeric.rational.decimal.archetype
       match: \b(\d+\.\d+)\b
-    - name: constant.numeric.rational.percent.archetype
-      match: \d+%
     - name: constant.language.boolean
       match: \b(\d+[wdhms])+\b
     - name: constant.language.address.archetype
