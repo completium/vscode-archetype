@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
-import { CompletionItem, CompletionItemKind, createConnection, Diagnostic, DiagnosticSeverity, DidChangeConfigurationNotification, DocumentSymbolParams, InitializeParams, Location, Position, ProposedFeatures, Range, SymbolInformation, SymbolKind, TextDocument, TextDocumentPositionParams, TextDocuments } from 'vscode-languageserver';
+import { CompletionItem, CompletionItemKind, createConnection, Diagnostic, DiagnosticSeverity, DiagnosticRelatedInformation, DidChangeConfigurationNotification, DocumentSymbolParams, InitializeParams, Location, Position, ProposedFeatures, Range, SymbolInformation, SymbolKind, TextDocument, TextDocumentPositionParams, TextDocuments } from 'vscode-languageserver';
 
 const { spawn } = require('child_process');
 const archetype = require("@completium/archetype");
@@ -149,7 +149,18 @@ function validateProcessing(textDocument: TextDocument, result: string) {
 	let obj: Result = JSON.parse(result);
 
 	let diagnostics: Diagnostic[] = [];
-	if (obj.status[0] === "Error") {
+	if (obj.status[0] === "Crash") {
+		const diagnostic: Diagnostic = {
+			severity: DiagnosticSeverity.Error,
+			range: {
+				start: textDocument.positionAt(0),
+				end: textDocument.positionAt(textDocument.getText().length),
+			},
+			message: "Reached JS compiler limit, please switch to binary compiler.\nFor information, visit https://archetype-lang.org/docs/installation#js-1",
+			source: 'archetype'
+		};
+		diagnostics.push(diagnostic);
+	} else if (obj.status[0] === "Error") {
 		for (var i = 0; i < obj.items.length; ++i) {
 			var lItem = obj.items[i];
 
