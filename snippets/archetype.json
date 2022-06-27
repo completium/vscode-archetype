@@ -1,57 +1,29 @@
 {
-  "Asset": {
-    "prefix": "asset",
+  "Block": {
+    "prefix": "begin",
     "body": [
-      "asset ${1:ident} identified by id {",
-      "\tid : int;",
-      "} with {",
-      "\ta1: true;",
-      "} initialized by {",
-      "\t{ 0 }",
-      "}"
-    ],
-    "description": "Asset"
+      "begin",
+      "end"
+    ]
   },
-  "States": {
-    "prefix": "states",
+  "IfThen": {
+    "prefix": "if",
     "body": [
-      "states =",
-      "  | Created initial",
-      "  | Aborted",
-      "  | Confirmed",
-      "  | Canceled",
-      "  | Completed"
-    ],
-    "description": "States"
+      "if then"
+    ]
   },
-  "Entry_Transentry": {
-    "prefix": "entry",
+  "For": {
+    "prefix": "for",
     "body": [
-      "entry ${1:ident} () {",
-      "\tspecification {",
-      "\t\ts1 : true;",
-      "\t}",
-      "\tcalled by any",
-      "\teffect {",
-      "\t\t()",
-      "\t}",
-      "}"
-    ],
-    "description": "Entry transaction"
+      "for in do",
+      "done"
+    ]
   },
-  "Transition_Transentry": {
-    "prefix": "transition",
+  "Iter": {
+    "prefix": "iter",
     "body": [
-      "transition ${1:ident} () {",
-      "\tcalled by any",
-      "\tfrom ${2:source}",
-      "\tto ${3:target}",
-      "\twhen { true }",
-      "\twith effect {",
-      "\t\t()",
-      "\t}",
-      "}"
-    ],
-    "description": "Transition transaction"
+      "iter from to do",
+      "done"
+    ]
   }
 }
