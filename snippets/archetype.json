@@ -2,28 +2,36 @@
   "Block": {
     "prefix": "begin",
     "body": [
-      "begin",
+      "begin $0",
       "end"
     ]
   },
   "IfThen": {
     "prefix": "if",
     "body": [
-      "if then"
+      "if $0 then"
     ]
   },
   "For": {
     "prefix": "for",
     "body": [
-      "for in do",
+      "for $0 in do",
       "done"
     ]
   },
   "Iter": {
     "prefix": "iter",
     "body": [
-      "iter from to do",
+      "iter $0 from to do",
       "done"
+    ]
+  },
+  "Match": {
+    "prefix": "match",
+    "body": [
+      "match $0 with",
+      "| -> ",
+      "end"
     ]
   }
 }
