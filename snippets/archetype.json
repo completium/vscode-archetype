@@ -3,27 +3,83 @@
     "prefix": "begin",
     "body": [
       "begin",
+      "\t$0",
       "end"
     ]
   },
   "IfThen": {
     "prefix": "if",
     "body": [
-      "if then"
+      "if $0 then"
+    ]
+  },
+  "IfThenElse": {
+    "prefix": "if",
+    "body": [
+      "if $0 then",
+      "else"
     ]
   },
   "For": {
     "prefix": "for",
     "body": [
-      "for in do",
+      "for $0 in do",
       "done"
     ]
   },
   "Iter": {
     "prefix": "iter",
     "body": [
-      "iter from to do",
+      "iter $0 from to do",
       "done"
+    ]
+  },
+  "Match": {
+    "prefix": "match",
+    "body": [
+      "match $0 with",
+      "| -> ",
+      "end"
+    ]
+  },
+  "CalledBy": {
+    "prefix": "called",
+    "body": [
+      "called by $0"
+    ]
+  },
+  "FailIf": {
+    "prefix": "fail",
+    "body": [
+      "fail if {",
+      "\tf: $0 with \"\"",
+      "}"
+    ]
+  },
+  "Require": {
+    "prefix": "require",
+    "body": [
+      "require {",
+      "\tr: $0",
+      "}"
+    ]
+  },
+  "Map": {
+    "prefix": "map",
+    "body": [
+      "map<$0, >"
+    ]
+  },
+  "BigMap": {
+    "prefix": "big_map",
+    "body": [
+      "big_map<$0, >"
+    ]
+  },
+  "IterableBigMap": {
+    "prefix": "iterable_big_map",
+    "body": [
+      "iterable_big_map<$0, >"
     ]
   }
 }
