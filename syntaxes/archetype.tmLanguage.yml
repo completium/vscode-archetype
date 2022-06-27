@@ -11,9 +11,10 @@ patterns:
 repository:
   expression:
     patterns:
+    - include: "#transfer"
     - include: "#declaration"
-    - include: "#operator"
     - include: "#comment"
+    - include: "#operator"
     - include: "#literal"
     - include: "#type"
     - include: "#builtin"
@@ -23,11 +24,27 @@ repository:
     - include: "#seq"
     - include: "#section"
     - include: "#emphasis"
+    - include: "#constant"
 
+  transfer:
+    patterns:
+    - begin: \b(transfer)\b
+      beginCaptures:
+        '1': { name: entity.name.function }
+      end: \b(to entry|to)\b
+      endCaptures:
+        '1': { name: entity.name.function }
+      patterns:
+      - include: '#expression'
+  constant:
+    patterns:
+    - match: \b(self_chain_id|now|balance|transferred|self|caller|source|self_address|state|operations|metadata)\b
+      captures:
+        '1': { name: constant.language.boolean }
   operator:
     patterns:
-    - match: <|>|<=|=|\+|\-|\*
-      name: keyword.control
+    - match: <|>|<=|=|\+|\-|\*|,|\[|\]|/|&
+      name: keyword.operator
   emphasis:
     patterns:
     - match: \b(do_require|fail_some|do_fail_if|fail)\b
@@ -36,9 +53,17 @@ repository:
       name: 'entity.name.tag'
   section:
     patterns:
-    - match: \b(called\s+by|sourced\s+by|effect|no\s+transfer|constant|require|fail\s+if)\b
+    - match: \b(called\s+by|sourced\s+by|effect|no\s+transfer|constant|require|fail\s+if|otherwise|is|when)\b
       captures:
         '1': { name: storage.modifier }
+    - begin: \b(from)\b
+      beginCaptures:
+        '1': { name: storage.modifier }
+      end: \b(to)\b
+      endCaptures:
+        '1': { name: storage.modifier }
+      patterns:
+      - include: '#expression'
   seq:
     patterns:
     - begin: \b(begin)\b
@@ -99,7 +124,7 @@ repository:
       patterns:
       - include: '#type'
     - name: entity.name.function
-      match: \b(abs|floor|put|keccak|pack|blake2b|key_to_address|check_signature|int_to_nat|slice|mutez_to_nat|fold|reverse|exec_lambda|apply_lambda|get_some|is_some|some|none|isempty|length|put|get|transfer|call|emit|prepend|make_operation)\b
+      match: \b(call|remove_all|remove_if|clear|nth|sort|select|update|add_update|update_all|remove|the|abs|add|address_to_contract|apply_lambda|blake2b|call_view|ceil|check_signature|concat|contains|contract_to_address|create_ticket|exec_lambda|floor|fold|get_entrypoint|greedy_and|greedy_or|int_to_date|int_to_nat|is_none|is_some|join_tickets|keccak|key_hash_to_contract|key_to_address|key_to_key_hash|left|length|make_big_map|make_list|make_map|make_operation|make_set|map|max|min|mutez_to_nat|nat_to_string|none|nth|open_chest|pack|pairing_chec|prepend|put|read_ticket|remove|reverse|right|sapling_empty_state|sapling_verify_update|set_delegate|sha256|sha3|sha512|slice|some|split_ticket|sub_mutez|sub_nat|unpack|update|voting_power)\b
   declaration:
     patterns:
     - match: \b(archetype)\s+([a-z][a-zA-z0-9_]*)?
@@ -107,10 +132,10 @@ repository:
         '1': { name: keyword.control }
     - match: \bwith\s+metadata\b
       name: keyword.control
-    - match: \b(constant|variable|entry|getter|view|function|asset)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
+    - match: \b(constant|variable|entry|getter|view|function|asset|transition|to)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
       captures:
         '1': { name: storage.type.function }
-    - match: \b(enum|record)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
+    - match: \b(enum|record|states)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
       captures:
         '1': { name: storage.type.class }
   type:
@@ -169,11 +194,11 @@ repository:
       match: \b(\d+\.\d+)\b
     - name: constant.numeric.rational.percent.archetype
       match: \d+%
-    - name: constant.language.duration.archetype
+    - name: constant.language.boolean
       match: \b(\d+[wdhms])+\b
     - name: constant.language.address.archetype
       match: '@(\w+)'
-    - name: constant.language.address.archetype
+    - name: constant.language.boolean
       match: \b((tz(1|2|3))|KT1)[0-9a-zA-Z]{33}\b
     - name: constant.language.bytes.archetype
       match: 0x([0-9a-fA-F]+)
@@ -185,12 +210,9 @@ repository:
       match: \b\d\d?\d?(_\d\d\d)+i\b
     - name: constant.numeric.nat.archetype
       match: \b\d\d?\d?(_\d\d\d)+\b
-    - name: constant.language.date.archetype
+    - name: constant.language.boolean
       match: \b([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\\d|2[0-3]):?([0-5]\d)?)?)?)?\b
-    - name: constant.language.bool.archetype
+    - name: constant.language.boolean
       match: \b(true|false)\b
-    - name: constant.language.unit.archetype
+    - name: constant.language.boolean
       match: \bUnit\b
-
-
-
