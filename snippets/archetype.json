@@ -33,5 +33,45 @@
       "| -> ",
       "end"
     ]
+  },
+  "CalledBy": {
+    "prefix": "called",
+    "body": [
+      "called by $0"
+    ]
+  },
+  "FailIf": {
+    "prefix": "fail",
+    "body": [
+      "fail if {",
+      "\t$0",
+      "}"
+    ]
+  },
+  "Require": {
+    "prefix": "require",
+    "body": [
+      "require {",
+      "\tr: $0",
+      "}"
+    ]
+  },
+  "Map": {
+    "prefix": "map",
+    "body": [
+      "map<$0, >"
+    ]
+  },
+  "BigMap": {
+    "prefix": "big_map",
+    "body": [
+      "big_map<$0, >"
+    ]
+  },
+  "IterableBigMap": {
+    "prefix": "iterable_big_map",
+    "body": [
+      "iterable_big_map<$0, >"
+    ]
   }
 }
