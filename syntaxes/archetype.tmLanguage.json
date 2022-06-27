@@ -54,6 +54,9 @@
         },
         {
           "include": "#constant"
+        },
+        {
+          "include": "#other"
         }
       ]
     },
@@ -127,7 +130,7 @@
     "section": {
       "patterns": [
         {
-          "match": "\\b(called\\s+by|sourced\\s+by|effect|with\\s+effect|no\\s+transfer|constant|require|fail\\s+if|otherwise|is|when|identified\\s+by)\\b",
+          "match": "\\b(called\\s+by|sourced\\s+by|effect|with\\s+effect|no\\s+transfer|constant|require|fail\\s+if|otherwise|is|when|identified\\s+by|initialized\\s+by)\\b",
           "captures": {
             "1": {
               "name": "storage.modifier"
@@ -316,7 +319,7 @@
           }
         },
         {
-          "match": "\\b(enum|record|states)\\b\\s*([a-zA-Z][a-zA-z0-9_]*)?",
+          "match": "\\b(enum|record|states|event)\\b\\s*([a-zA-Z][a-zA-z0-9_]*)?",
           "captures": {
             "1": {
               "name": "storage.type.class"
@@ -328,7 +331,7 @@
     "type": {
       "patterns": [
         {
-          "begin": "(:)?\\s*\\b(option|or|list|set)\\b\\s*(<)",
+          "begin": "(:)?\\s*\\b(aggregate|asset_key|asset_value|asset_view|big_map|contract|iterable_big_map|lambda|list|map|option|or|partition|set)\\b\\s*(<)",
           "beginCaptures": {
             "1": {
               "name": "keyword"
@@ -361,7 +364,7 @@
           ]
         },
         {
-          "match": "(:)?\\s*\\b(unit|lambda|contract|big_map|map|int|nat|tez|string|rational|bytes|key|key_hash|address|sapling|signature|date|duration|bool|operation|aggregate|partition|asset_view|asset_key|asset_value|iterable_big_map)\\b",
+          "match": "(:)?\\s*\\b(address|bls12_381_fr|bls12_381_g1|bls12_381_g2|bool|bytes|chain_id|chest|chest_key|date|duration|int|key|key_hash|nat|never|operation|rational|record|sapling_state|sapling_transaction|signature|string|tez|ticket|unit)\\b",
           "captures": {
             "1": {
               "name": "keyword"
@@ -451,11 +454,7 @@
         },
         {
           "name": "constant.language.address.archetype",
-          "match": "@(\\w+)"
-        },
-        {
-          "name": "constant.language.boolean",
-          "match": "\\b((tz(1|2|3))|KT1)[0-9a-zA-Z]{33}\\b"
+          "match": "\\b@?((tz(1|2|3))|KT1)[0-9a-zA-Z]{33}\\b"
         },
         {
           "name": "constant.language.bytes.archetype",
