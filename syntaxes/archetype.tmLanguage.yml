@@ -19,12 +19,13 @@ repository:
     - include: "#type"
     - include: "#builtin"
     - include: "#case"
+    - include: "#section"
     - include: "#control"
     - include: "#local"
     - include: "#seq"
-    - include: "#section"
     - include: "#emphasis"
     - include: "#constant"
+    - include: "#other"
 
   transfer:
     patterns:
@@ -43,8 +44,14 @@ repository:
         '1': { name: constant.language.boolean }
   operator:
     patterns:
-    - match: <|>|<=|=|\+|\-|\*|,|\[|\]|/|&
-      name: keyword.operator
+    - match: <|>|<=|>=|<>|=|<=>|\|>>|\|<<
+      name: keyword.operator.comparison
+    - match: \+|\-|\*|,|\[|\]|/|&
+      name: keyword.operator.arithmetic
+    - match: \b(and|or|not|xor|\->)\b
+      name: keyword.operator.boolean
+    - match: \,|\[|\]|/|&
+      name: keyword.operator.arithmetic
   emphasis:
     patterns:
     - match: \b(do_require|fail_some|do_fail_if|fail)\b
@@ -53,7 +60,7 @@ repository:
       name: 'entity.name.tag'
   section:
     patterns:
-    - match: \b(called\s+by|sourced\s+by|effect|no\s+transfer|constant|require|fail\s+if|otherwise|is|when)\b
+    - match: \b(called\s+by|sourced\s+by|effect|with\s+effect|no\s+transfer|constant|require|fail\s+if|otherwise|is|when|identified\s+by)\b
       captures:
         '1': { name: storage.modifier }
     - begin: \b(from)\b

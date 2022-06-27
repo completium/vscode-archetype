@@ -252,6 +252,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
+    "generate-json": "npx js-yaml syntaxes/archetype.tmLanguage.yml > syntaxes/archetype.tmLanguage.json",
     "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
     "test": "sh ./scripts/e2e.sh"
   },
