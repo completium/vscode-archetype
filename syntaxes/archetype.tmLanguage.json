@@ -190,13 +190,32 @@
         {
           "match": "\\b(var|const)\\b",
           "name": "storage.type"
+        },
+        {
+          "begin": "\\b(let\\s+some|let)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type"
+            }
+          },
+          "end": "\\b(in)\\b",
+          "endCaptures": {
+            "1": {
+              "name": "storage.type"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
         }
       ]
     },
     "control": {
       "patterns": [
         {
-          "match": "\\b(return|if|then|else)\\b",
+          "match": "\\b(return|if|then|else|exists)\\b",
           "name": "keyword.control"
         },
         {
@@ -242,7 +261,7 @@
           ]
         },
         {
-          "begin": "\\b(for)\\b",
+          "begin": "\\b(for|forall)\\b",
           "beginCaptures": {
             "1": {
               "name": "keyword.control"
@@ -315,7 +334,7 @@
           "name": "keyword.control"
         },
         {
-          "match": "\\b(constant|variable|entry|getter|view|function|asset|transition|to)\\b\\s*([a-zA-Z][a-zA-z0-9_]*)?",
+          "match": "\\b(constant|variable|entry|getter|view|function|asset|transition|to|specification\\s+(entry|getter|transition)|specification|definition|predicate|shadow\\s+effect|assert|postcondition|fails|invariant\\s+for)\\b\\s*([a-zA-Z][a-zA-z0-9_]*)?",
           "captures": {
             "1": {
               "name": "storage.type.function"

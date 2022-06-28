@@ -135,6 +135,7 @@ function validateProcessing(textDocument: TextDocument, result: string) {
 	}
 
 	interface Item {
+		severity ?: number;
 		status: string[];
 		range: Range;
 		message: string;
@@ -167,9 +168,10 @@ function validateProcessing(textDocument: TextDocument, result: string) {
 			let message = lItem.message;
 			let start = lItem.range.start.char;
 			let end = lItem.range.end.char;
+			let severity : DiagnosticSeverity = lItem.severity == 2 ? DiagnosticSeverity.Warning : DiagnosticSeverity.Error;
 
 			let diagnostic: Diagnostic = {
-				severity: DiagnosticSeverity.Error,
+				severity: severity,
 				range: {
 					start: textDocument.positionAt(start),
 					end: textDocument.positionAt(end)
