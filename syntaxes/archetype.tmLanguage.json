@@ -363,6 +363,10 @@
               "name": "storage.type.class"
             }
           }
+        },
+        {
+          "match": "\\binitial\\b",
+          "name": "storage.type.other"
         }
       ]
     },

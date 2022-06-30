@@ -162,6 +162,8 @@ repository:
     - match: \b(enum|record|states|event)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
       captures:
         '1': { name: storage.type.class }
+    - match: \binitial\b
+      name: storage.type.other
   type:
     patterns:
     - begin: \b(aggregate|asset_key|asset_value|asset_view|big_map|contract|iterable_big_map|lambda|list|map|option|or|partition|set)\b\s*(<)
