@@ -11,22 +11,27 @@ patterns:
 repository:
   expression:
     patterns:
+    - include: "#identifier"
     - include: "#transfer"
     - include: "#declaration"
     - include: "#comment"
     - include: "#operator"
     - include: "#literal"
     - include: "#type"
+    - include: "#control"
     - include: "#builtin"
     - include: "#case"
     - include: "#section"
-    - include: "#control"
     - include: "#local"
     - include: "#seq"
     - include: "#emphasis"
     - include: "#constant"
     - include: "#other"
 
+  identifier:
+    patterns:
+    - match: \%[a-zA-Z][a-zA-Z0-9_]*
+      name: variable.other
   transfer:
     patterns:
     - begin: \b(transfer)\b
@@ -54,6 +59,8 @@ repository:
       name: keyword.operator.boolean
     - match: \,|\[|\]|/|&
       name: keyword.operator.arithmetic
+    - match: ':'
+      name: keyword.operator.type
   emphasis:
     patterns:
     - match: \b(do_require|fail_some|do_fail_if|fail)\b
@@ -149,7 +156,7 @@ repository:
         '1': { name: keyword.control }
     - match: \bwith\s+metadata\b
       name: keyword.control
-    - match: \b(constant|variable|entry|getter|view|function|asset|transition|to|specification\s+(entry|getter|transition)|specification|definition|predicate|shadow\s+effect|assert|postcondition|fails|invariant\s+for)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
+    - match: \b(constant|variable|entry|getter|view|function|asset|transition|specification\s+(entry|getter|transition)|specification|definition|predicate|shadow\s+effect|assert|postcondition|fails|invariant\s+for)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
       captures:
         '1': { name: storage.type.function }
     - match: \b(enum|record|states|event)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
@@ -157,11 +164,10 @@ repository:
         '1': { name: storage.type.class }
   type:
     patterns:
-    - begin: (:)?\s*\b(aggregate|asset_key|asset_value|asset_view|big_map|contract|iterable_big_map|lambda|list|map|option|or|partition|set)\b\s*(<)
+    - begin: \b(aggregate|asset_key|asset_value|asset_view|big_map|contract|iterable_big_map|lambda|list|map|option|or|partition|set)\b\s*(<)
       beginCaptures:
-        '1': { name: keyword }
-        '2': { name: support.type }
-        '3': { name: keyword }
+        '1': { name: support.type }
+        '2': { name: keyword }
       end: \s?(>)
       endCaptures:
         '1': { name: keyword }
@@ -170,14 +176,10 @@ repository:
       - match: (\*)
         captures:
           '1': { name: keyword }
-    - match: (:)?\s*\b(address|bls12_381_fr|bls12_381_g1|bls12_381_g2|bool|bytes|chain_id|chest|chest_key|date|duration|int|key|key_hash|nat|never|operation|rational|sapling_state|sapling_transaction|signature|string|tez|ticket|unit)\b
+    - match: \b(address|bls12_381_fr|bls12_381_g1|bls12_381_g2|bool|bytes|chain_id|chest|chest_key|date|duration|int|key|key_hash|nat|never|operation|rational|sapling_state|sapling_transaction|signature|string|tez|ticket|unit)\b
       captures:
-        '1': { name: keyword }
-        '2': { name: support.type }
+        '1': { name: support.type }
     - match: (\*)
-      captures:
-        '1': { name: keyword }
-    - match: (:)\s*(%?[a-zA-Z][a-zA-z0-9_]*)?
       captures:
         '1': { name: keyword }
   comment:
