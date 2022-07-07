@@ -154,6 +154,10 @@ repository:
     - match: \b(archetype)\s+([a-z][a-zA-z0-9_]*)?
       captures:
         '1': { name: keyword.control }
+    - match: \b(import)\s+([a-z][a-zA-z0-9_]*)?\s+(from)
+      captures:
+        '1': { name: keyword.control }
+        '3': { name: keyword.control }
     - match: \bwith\s+metadata\b
       name: keyword.control
     - match: \b(constant|variable|entry|getter|view|function|asset|to\s+big_map|transition|specification\s+(entry|getter|transition)|specification|definition|predicate|shadow\s+effect|assert|postcondition|fails|invariant\s+for)\b\s*([a-zA-Z][a-zA-z0-9_]*)?

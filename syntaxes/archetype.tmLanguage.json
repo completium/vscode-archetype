@@ -345,6 +345,17 @@
           }
         },
         {
+          "match": "\\b(import)\\s+([a-z][a-zA-z0-9_]*)?\\s+(from)",
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "3": {
+              "name": "keyword.control"
+            }
+          }
+        },
+        {
           "match": "\\bwith\\s+metadata\\b",
           "name": "keyword.control"
         },
