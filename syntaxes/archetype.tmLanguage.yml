@@ -160,6 +160,8 @@ repository:
         '3': { name: keyword.control }
     - match: \bwith\s+metadata\b
       name: keyword.control
+    - match: \b(onchain|offchain)\b
+      name: storage.type.function.visibility
     - match: \b(constant|variable|entry|getter|view|function|asset|to\s+big_map|transition|specification\s+(entry|getter|transition)|specification|definition|predicate|shadow\s+effect|assert|postcondition|fails|invariant\s+for)\b\s*([a-zA-Z][a-zA-z0-9_]*)?
       captures:
         '1': { name: storage.type.function }
