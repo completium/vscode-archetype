@@ -24,7 +24,7 @@
     "type": "git",
     "url": "https://github.com/completium/vscode-archetype"
   },
-  "version": "0.61.0",
+  "version": "0.62.0",
   "engines": {
     "vscode": "^1.38.0"
   },
