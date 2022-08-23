@@ -149,7 +149,7 @@
     "section": {
       "patterns": [
         {
-          "match": "\\b(called\\s+by|sourced\\s+by|effect|with\\s+effect|no\\s+transfer|constant|require|fail\\s+if|otherwise|is|when|identified\\s+by|initialized\\s+by)\\b",
+          "match": "\\b(called\\s+by|sourced\\s+by|effect|with\\s+effect|no\\s+transfer|constant|require|fail\\s+if|otherwise|is|when|identified\\s+by|initialized\\s+(by|with))\\b",
           "captures": {
             "1": {
               "name": "storage.modifier"
