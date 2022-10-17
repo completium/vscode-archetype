@@ -138,7 +138,7 @@ repository:
       name: keyword.control
   builtin:
     patterns:
-    - begin: \b(call_view|get_entrypoint|left|make_event|make_asset|make_set|make_list|make_map|none|right|unpack)\s*(<)
+    - begin: \b(call_view|get_entrypoint|left|make_event|make_asset|make_set|make_list|make_map|none|right|unpack|emit)\s*(<)
       beginCaptures:
         '1': { name: entity.name.function }
         '2': { name: keyword.control }
