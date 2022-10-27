@@ -224,7 +224,7 @@ repository:
     - name: constant.language.boolean
       match: \b(\d+[wdhms])+\b
     - name: constant.language.address.archetype
-      match: \b@?((tz(1|2|3))|KT1)[0-9a-zA-Z]{33}\b
+      match: \b@?((tz(1|2|3|4))|KT1)[0-9a-zA-Z]{33}\b
     - name: constant.language.bytes.archetype
       match: 0x([0-9a-fA-F]+)
     - name: constant.numeric.number.archetype

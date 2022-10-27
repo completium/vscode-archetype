@@ -497,7 +497,7 @@
         },
         {
           "name": "constant.language.address.archetype",
-          "match": "\\b@?((tz(1|2|3))|KT1)[0-9a-zA-Z]{33}\\b"
+          "match": "\\b@?((tz(1|2|3|4))|KT1)[0-9a-zA-Z]{33}\\b"
         },
         {
           "name": "constant.language.bytes.archetype",
