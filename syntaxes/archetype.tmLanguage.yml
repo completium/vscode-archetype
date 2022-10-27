@@ -184,7 +184,7 @@ repository:
       - match: (\*)
         captures:
           '1': { name: keyword }
-    - match: \b(address|bls12_381_fr|bls12_381_g1|bls12_381_g2|bool|bytes|chain_id|chest|chest_key|date|duration|int|key|key_hash|nat|never|operation|rational|sapling_state|sapling_transaction|signature|string|tez|ticket|unit)\b
+    - match: \b(address|bls12_381_fr|bls12_381_g1|bls12_381_g2|bool|bytes|chain_id|chest|chest_key|date|duration|int|key|key_hash|nat|never|operation|rational|sapling_state|sapling_transaction|signature|string|tez|ticket|tx_rollup_l2_address|unit)\b
       captures:
         '1': { name: support.type }
     - match: (\*)
