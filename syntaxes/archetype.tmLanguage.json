@@ -20,6 +20,9 @@
           "include": "#transfer"
         },
         {
+          "include": "#detach"
+        },
+        {
           "include": "#declaration"
         },
         {
@@ -91,6 +94,14 @@
               "include": "#expression"
             }
           ]
+        }
+      ]
+    },
+    "detach": {
+      "patterns": [
+        {
+          "match": "\\b(detach)\\b",
+          "name": "storage.type"
         }
       ]
     },
