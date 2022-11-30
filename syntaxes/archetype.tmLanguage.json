@@ -108,7 +108,7 @@
     "constant": {
       "patterns": [
         {
-          "match": "\\b(self_chain_id|now|balance|transferred|self|caller|source|self_address|state|operations|metadata)\\b",
+          "match": "\\b(self_chain_id|now|balance|transferred|self|caller|source|self_address|state|operations|metadata|level|total_voting_power|min_block_time)\\b",
           "captures": {
             "1": {
               "name": "constant.language.boolean"
