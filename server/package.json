@@ -13,7 +13,7 @@
 	},
 	"dependencies": {
 		"vscode-languageserver": "^4.1.3",
-		"@completium/archetype": "0.4.9",
+		"@completium/archetype": "0.4.10",
  		"nth-check": ">=2.0.1"
 	},
 	"scripts": {},
