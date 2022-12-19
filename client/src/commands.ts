@@ -39,7 +39,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
 				let cp = require('child_process');
 				const archetype_bin = config.get('archetypeBin');
 				const cwd = vscode.workspace.workspaceFolders[0].uri.fsPath
-				const bin = archetypeMode == 'binary' ? archetype_bin : `docker run --rm -v ${cwd}:${cwd} -w ${cwd} completium/archetype:latest`;
+				const bin = archetypeMode == 'binary' ? archetype_bin : `docker run --platform=linux/amd64 --rm -v ${cwd}:${cwd} -w ${cwd} completium/archetype:latest`;
 				let cmd = bin + ' --set-caller-init=' + caller + ' -t ' + target + ' ' + fsPath + ' > ' + outputFsPath;
 				cp.exec(cmd, cb);
 			} else {
@@ -96,7 +96,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
 				let cp = require('child_process');
 				const archetype_bin = config.get('archetypeBin');
 				const cwd = vscode.workspace.workspaceFolders[0].uri.fsPath
-				const bin = archetypeMode == 'binary' ? archetype_bin : `docker run --rm -v ${cwd}:${cwd} -w ${cwd} completium/archetype:latest`;
+				const bin = archetypeMode == 'binary' ? archetype_bin : `docker run --platform=linux/amd64 --rm -v ${cwd}:${cwd} -w ${cwd} completium/archetype:latest`;
 				let cmd = bin + ' -d ' + fsPath + ' > ' + outputFsPath;
 				cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
 					if (_err) {
