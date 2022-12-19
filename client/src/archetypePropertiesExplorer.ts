@@ -265,7 +265,7 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 			if (res) {
 				// console.log("res");
 				// console.log(res);
-				if (res.status === ['Error']) {
+				if (res.status.length > 0 && res.status[0] == 'Error') {
 					vscode.window.showErrorMessage("Error");
 				} else {
 					if (res.obj) {
