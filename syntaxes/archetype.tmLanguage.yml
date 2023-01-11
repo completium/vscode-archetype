@@ -129,7 +129,7 @@ repository:
         '1': { name : keyword.control }
       patterns:
       - include: "#expression"
-    - begin: \b(for|forall)\b
+    - begin: \b(for|forall|iter)\b
       beginCaptures:
         '1': { name : keyword.control }
       end: \b(in)\b
