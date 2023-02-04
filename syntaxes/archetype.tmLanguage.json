@@ -341,7 +341,7 @@
         },
         {
           "name": "entity.name.function",
-          "match": "\\b(to_container|call|remove_all|remove_if|clear|nth|sort|select|update|add_update|update_all|put_remove|remove|the|abs|add|address_to_contract|apply_lambda|blake2b|call_view|ceil|check_signature|concat|contains|contract_to_address|create_ticket|exec_lambda|floor|fold|get_entrypoint|greedy_and|greedy_or|int_to_date|int_to_nat|is_none|is_some|join_tickets|keccak|key_hash_to_contract|key_to_address|key_to_key_hash|left|length|make_big_map|make_list|make_map|make_operation|make_set|map|max|min|mutez_to_nat|nat_to_string|none|nth|head|tail|open_chest|pack|pairing_check|prepend|put|read_ticket|remove|reverse|right|sapling_empty_state|sapling_verify_update|set_delegate|sha256|sha3|sha512|slice|some|split_ticket|sub_mutez|sub_nat|unpack|update|voting_power|create_contract|nat_to_bytes|bytes_to_nat|int_to_bytes|bytes_to_int|simplify_rational|get_numerator|get_denominator)\\b"
+          "match": "\\b(to_container|call|remove_all|remove_if|clear|nth|sort|select|update|add_update|update_all|put_remove|remove|the|abs|add|address_to_contract|apply_lambda|blake2b|call_view|ceil|check_signature|concat|contains|contract_to_address|create_ticket|exec_lambda|floor|fold|get_entrypoint|greedy_and|greedy_or|int_to_date|int_to_nat|is_none|is_some|join_tickets|keccak|key_hash_to_contract|key_to_address|key_to_key_hash|left|length|make_big_map|make_list|make_map|make_operation|make_set|map|max|min|mutez_to_nat|nat_to_string|none|nth|head|tail|open_chest|pack|pairing_check|prepend|put|read_ticket|remove|reverse|right|sapling_empty_state|sapling_verify_update|set_delegate|sha256|sha3|sha512|slice|some|split_ticket|sub_mutez|sub_nat|unpack|update|voting_power|create_contract|nat_to_bytes|bytes_to_nat|int_to_bytes|bytes_to_int|simplify_rational|get_numerator|get_denominator|global_constant)\\b"
         }
       ]
     },
@@ -509,6 +509,10 @@
         {
           "name": "constant.language.address.archetype",
           "match": "\\b@?((tz(1|2|3|4))|KT1)[0-9a-zA-Z]{33}\\b"
+        },
+        {
+          "name": "constant.language.tz_expr.archetype",
+          "match": "\\b@?(expr)[0-9a-zA-Z]{50}\\b"
         },
         {
           "name": "constant.language.bytes.archetype",
