@@ -100,8 +100,23 @@
     "detach": {
       "patterns": [
         {
-          "match": "\\b(detach)\\b",
-          "name": "storage.type"
+          "begin": "\\b(detach)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type"
+            }
+          },
+          "end": "\\b(as)\\b",
+          "endCaptures": {
+            "1": {
+              "name": "storage.type"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
         }
       ]
     },

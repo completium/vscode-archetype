@@ -45,8 +45,14 @@ repository:
       - include: '#expression'
   detach:
     patterns:
-    - match: \b(detach)\b
-      name: storage.type
+    - begin: \b(detach)\b
+      beginCaptures:
+        '1': { name: storage.type }
+      end: \b(as)\b
+      endCaptures:
+        '1': { name: storage.type }
+      patterns:
+      - include: '#expression'
   constant:
     patterns:
     - match: \b(self_chain_id|now|balance|transferred|self|caller|source|self_address|state|operations|metadata|level|total_voting_power|min_block_time)\b
