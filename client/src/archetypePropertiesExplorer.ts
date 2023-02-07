@@ -216,35 +216,35 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 	}
 
 	doRefresh(): void {
-		if (vscode.window.activeTextEditor.document.languageId == "archetype") {
-			const config = vscode.workspace.getConfiguration('archetype');
-			const archetypeMode: string = config.get('archetypeMode');
+		// if (vscode.window.activeTextEditor.document.languageId == "archetype") {
+		// 	const config = vscode.workspace.getConfiguration('archetype');
+		// 	const archetypeMode: string = config.get('archetypeMode');
 
-			if (archetypeMode == 'binary' || archetypeMode == 'docker') {
-				let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
-				const archetype_bin = config.get('archetypeBin');
-				const cwd = vscode.workspace.workspaceFolders[0].uri.fsPath
-				const bin = archetypeMode == 'binary' ? archetype_bin : `docker run --platform=linux/amd64 --rm -v ${cwd}:${cwd} -w ${cwd} completium/archetype:latest`;
-				let cmd = bin + ' --service get_properties ' + fsPath;
-				let cp = require('child_process');
-				cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
-					if (_err) {
-						vscode.window.showErrorMessage(stderr);
-						res = undefined;
-					} else {
-						res = JSON.parse(stdout);
-					}
-					this._onDidChangeTreeData.fire();
-				});
-			} else {
-				const archetype = require('@completium/archetype');
-				let text = vscode.window.activeTextEditor.document.getText();
-				const json = archetype.services("get_properties", text)
-				res = JSON.parse(json);
-				this._onDidChangeTreeData.fire();
-			}
-
-		} else {
+		// 	if (archetypeMode == 'binary' || archetypeMode == 'docker') {
+		// 		let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
+		// 		const archetype_bin = config.get('archetypeBin');
+		// 		const cwd = vscode.workspace.workspaceFolders[0].uri.fsPath
+		// 		const bin = archetypeMode == 'binary' ? archetype_bin : `docker run --platform=linux/amd64 --rm -v ${cwd}:${cwd} -w ${cwd} completium/archetype:latest`;
+		// 		let cmd = bin + ' --service get_properties ' + fsPath;
+		// 		let cp = require('child_process');
+		// 		cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
+		// 			if (_err) {
+		// 				vscode.window.showErrorMessage(stderr);
+		// 				res = undefined;
+		// 			} else {
+		// 				res = JSON.parse(stdout);
+		// 			}
+		// 			this._onDidChangeTreeData.fire();
+		// 		});
+		// 	} else {
+		// 		const archetype = require('@completium/archetype');
+		// 		let text = vscode.window.activeTextEditor.document.getText();
+		// 		const json = archetype.services("get_properties", text)
+		// 		res = JSON.parse(json);
+		// 		this._onDidChangeTreeData.fire();
+		// 	}
+		// } else
+		{
 			res = undefined;
 			this._onDidChangeTreeData.fire();
 		}
