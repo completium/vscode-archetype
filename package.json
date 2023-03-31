@@ -183,6 +183,71 @@
         "title": "Archetype: Decompile"
       }
     ],
+    "breakpoints": [
+      {
+        "language": "archetype"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "mock",
+        "languages": [
+          "archetype"
+        ],
+        "label": "Archetype Debug",
+        "program": "./client/out/debugAdapter.js",
+        "runtime": "node",
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to a text file.",
+                "default": "${workspaceFolder}/${command:AskForProgramName}"
+              }
+            }
+          },
+          "attach": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to a text file.",
+                "default": "${workspaceFolder}/${command:AskForProgramName}"
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "archetype",
+            "request": "launch",
+            "name": "Debug Archetype",
+            "program": "${workspaceFolder}/${command:AskForProgramName}"
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Archetype Debug: Launch",
+            "description": "A new configuration for 'debugging' a user selected archetype file.",
+            "body": {
+              "type": "archetype",
+              "request": "launch",
+              "name": "Debug Archetype",
+              "program": "^\"\\${workspaceFolder}/\\${command:AskForProgramName}\""
+            }
+          }
+        ],
+        "variables": {
+          "AskForProgramName": "extension.mock-debug.getProgramName"
+        }
+      }
+    ],
     "viewsContainers": {
       "activitybar": [
         {

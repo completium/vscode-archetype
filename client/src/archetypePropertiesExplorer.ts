@@ -244,10 +244,10 @@ export class ArchetypeNodeProvider implements vscode.TreeDataProvider<ArchetypeI
 		// 		this._onDidChangeTreeData.fire();
 		// 	}
 		// } else
-		{
-			res = undefined;
-			this._onDidChangeTreeData.fire();
-		}
+		// {
+		// 	res = undefined;
+		// 	this._onDidChangeTreeData.fire();
+		// }
 	}
 
 	getTreeItem(element: ArchetypeItem): vscode.TreeItem {
