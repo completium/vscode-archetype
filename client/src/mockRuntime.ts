@@ -64,7 +64,7 @@ export class RuntimeVariable {
 		return this._memory;
 	}
 
-	constructor(public readonly name: string, private _value: IRuntimeVariableType) {}
+	constructor(public readonly name: string, private _value: IRuntimeVariableType) { }
 
 	public setMemory(data: Uint8Array, offset = 0) {
 		const memory = this.memory;
@@ -131,7 +131,7 @@ export class MockRuntime extends EventEmitter {
 	private currentColumn: number | undefined;
 
 	// This is the next instruction that will be 'executed'
-	public instruction= 0;
+	public instruction = 0;
 
 	// maps from sourceFile to array of IRuntimeBreakpoint
 	private breakPoints = new Map<string, IRuntimeBreakpoint[]>();
@@ -222,7 +222,7 @@ export class MockRuntime extends EventEmitter {
 				return true;
 			}
 		} else {
-			if (this.currentLine < this.sourceLines.length-1) {
+			if (this.currentLine < this.sourceLines.length - 1) {
 				this.currentLine++;
 			} else {
 				// no more lines: run to end
@@ -276,7 +276,7 @@ export class MockRuntime extends EventEmitter {
 			return [];
 		}
 
-		const { name, index  }  = words[frameId];
+		const { name, index } = words[frameId];
 
 		// make every character of the frame a potential "step in" target
 		return name.split('').map((c, ix) => {
@@ -403,7 +403,7 @@ export class MockRuntime extends EventEmitter {
 		this.instructionBreakpoints.clear();
 	}
 
-	public async getGlobalVariables(cancellationToken?: () => boolean ): Promise<RuntimeVariable[]> {
+	public async getGlobalVariables(cancellationToken?: () => boolean): Promise<RuntimeVariable[]> {
 
 		let a: RuntimeVariable[] = [];
 
@@ -497,7 +497,7 @@ export class MockRuntime extends EventEmitter {
 	/**
 	 * return true on stop
 	 */
-	 private findNextStatement(reverse: boolean, stepEvent?: string): boolean {
+	private findNextStatement(reverse: boolean, stepEvent?: string): boolean {
 
 		for (let ln = this.currentLine; reverse ? ln >= 0 : ln < this.sourceLines.length; reverse ? ln-- : ln++) {
 
@@ -552,89 +552,106 @@ export class MockRuntime extends EventEmitter {
 
 		const line = this.getLine(ln);
 
-		// find variable accesses
-		let reg0 = /\$([a-z][a-z0-9]*)(=(false|true|[0-9]+(\.[0-9]+)?|\".*\"|\{.*\}))?/ig;
-		let matches0: RegExpExecArray | null;
-		while (matches0 = reg0.exec(line)) {
-			if (matches0.length === 5) {
-
-				let access: string | undefined;
-
-				const name = matches0[1];
-				const value = matches0[3];
-
-				let v = new RuntimeVariable(name, value);
-
-				if (value && value.length > 0) {
-
-					if (value === 'true') {
-						v.value = true;
-					} else if (value === 'false') {
-						v.value = false;
-					} else if (value[0] === '"') {
-						v.value = value.slice(1, -1);
-					} else if (value[0] === '{') {
-						v.value = [
-							new RuntimeVariable('fBool', true),
-							new RuntimeVariable('fInteger', 123),
-							new RuntimeVariable('fString', 'hello'),
-							new RuntimeVariable('flazyInteger', 321)
-						];
-					} else {
-						v.value = parseFloat(value);
-					}
-
-					if (this.variables.has(name)) {
-						// the first write access to a variable is the "declaration" and not a "write access"
-						access = 'write';
-					}
-					this.variables.set(name, v);
-				} else {
-					if (this.variables.has(name)) {
-						// variable must exist in order to trigger a read access
-						access = 'read';
-					}
-				}
-
-				const accessType = this.breakAddresses.get(name);
-				if (access && accessType && accessType.indexOf(access) >= 0) {
-					this.sendEvent('stopOnDataBreakpoint', access);
-					return true;
-				}
-			}
+		if (line == 'variable a : nat = 0') {
+			const name = 'a';
+			const value = 0;
+			let v = new RuntimeVariable(name, value);
+			this.variables.set(name, v);
+		} else if (line == 'var v = 2;') {
+			const name = 'v';
+			const value = 2;
+			let v = new RuntimeVariable(name, value);
+			this.variables.set(name, v);
+		} else if (line == 'a := v') {
+			const name = 'a';
+			const value = 2;
+			let v = new RuntimeVariable(name, value);
+			this.variables.set(name, v);
 		}
 
-		// if 'log(...)' found in source -> send argument to debug console
-		const reg1 = /(log|prio|out|err)\(([^\)]*)\)/g;
-		let matches1: RegExpExecArray | null;
-		while (matches1 = reg1.exec(line)) {
-			if (matches1.length === 3) {
-				this.sendEvent('output', matches1[1], matches1[2], this._sourceFile, ln, matches1.index);
-			}
-		}
+		// // find variable accesses
+		// let reg0 = /\$([a-z][a-z0-9]*)(=(false|true|[0-9]+(\.[0-9]+)?|\".*\"|\{.*\}))?/ig;
+		// let matches0: RegExpExecArray | null;
+		// while (matches0 = reg0.exec(line)) {
+		// 	if (matches0.length === 5) {
 
-		// if pattern 'exception(...)' found in source -> throw named exception
-		const matches2 = /exception\((.*)\)/.exec(line);
-		if (matches2 && matches2.length === 2) {
-			const exception = matches2[1].trim();
-			if (this.namedException === exception) {
-				this.sendEvent('stopOnException', exception);
-				return true;
-			} else {
-				if (this.otherExceptions) {
-					this.sendEvent('stopOnException', undefined);
-					return true;
-				}
-			}
-		} else {
-			// if word 'exception' found in source -> throw exception
-			if (line.indexOf('exception') >= 0) {
-				if (this.otherExceptions) {
-					this.sendEvent('stopOnException', undefined);
-					return true;
-				}
-			}
-		}
+		// 		let access: string | undefined;
+
+		// 		const name = matches0[1];
+		// 		const value = matches0[3];
+
+		// 		let v = new RuntimeVariable(name, value);
+
+		// 		if (value && value.length > 0) {
+
+		// 			if (value === 'true') {
+		// 				v.value = true;
+		// 			} else if (value === 'false') {
+		// 				v.value = false;
+		// 			} else if (value[0] === '"') {
+		// 				v.value = value.slice(1, -1);
+		// 			} else if (value[0] === '{') {
+		// 				v.value = [
+		// 					new RuntimeVariable('fBool', true),
+		// 					new RuntimeVariable('fInteger', 123),
+		// 					new RuntimeVariable('fString', 'hello'),
+		// 					new RuntimeVariable('flazyInteger', 321)
+		// 				];
+		// 			} else {
+		// 				v.value = parseFloat(value);
+		// 			}
+
+		// 			if (this.variables.has(name)) {
+		// 				// the first write access to a variable is the "declaration" and not a "write access"
+		// 				access = 'write';
+		// 			}
+		// 			this.variables.set(name, v);
+		// 		} else {
+		// 			if (this.variables.has(name)) {
+		// 				// variable must exist in order to trigger a read access
+		// 				access = 'read';
+		// 			}
+		// 		}
+
+		// 		const accessType = this.breakAddresses.get(name);
+		// 		if (access && accessType && accessType.indexOf(access) >= 0) {
+		// 			this.sendEvent('stopOnDataBreakpoint', access);
+		// 			return true;
+		// 		}
+		// 	}
+		// }
+
+		// // if 'log(...)' found in source -> send argument to debug console
+		// const reg1 = /(log|prio|out|err)\(([^\)]*)\)/g;
+		// let matches1: RegExpExecArray | null;
+		// while (matches1 = reg1.exec(line)) {
+		// 	if (matches1.length === 3) {
+		// 		this.sendEvent('output', matches1[1], matches1[2], this._sourceFile, ln, matches1.index);
+		// 	}
+		// }
+
+		// // if pattern 'exception(...)' found in source -> throw named exception
+		// const matches2 = /exception\((.*)\)/.exec(line);
+		// if (matches2 && matches2.length === 2) {
+		// 	const exception = matches2[1].trim();
+		// 	if (this.namedException === exception) {
+		// 		this.sendEvent('stopOnException', exception);
+		// 		return true;
+		// 	} else {
+		// 		if (this.otherExceptions) {
+		// 			this.sendEvent('stopOnException', undefined);
+		// 			return true;
+		// 		}
+		// 	}
+		// } else {
+		// 	// if word 'exception' found in source -> throw exception
+		// 	if (line.indexOf('exception') >= 0) {
+		// 		if (this.otherExceptions) {
+		// 			this.sendEvent('stopOnException', undefined);
+		// 			return true;
+		// 		}
+		// 	}
+		// }
 
 		// nothing interesting found -> continue
 		return false;
@@ -668,7 +685,7 @@ export class MockRuntime extends EventEmitter {
 		}
 	}
 
-	private sendEvent(event: string, ... args: any[]): void {
+	private sendEvent(event: string, ...args: any[]): void {
 		setTimeout(() => {
 			this.emit(event, ...args);
 		}, 0);
