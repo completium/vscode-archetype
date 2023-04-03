@@ -11,8 +11,8 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { platform } from 'process';
 import { ProviderResult } from 'vscode';
-import { MockDebugSession } from './mockDebug';
-import { activateMockDebug, workspaceFileAccessor } from './activateMockDebug';
+import { MockDebugSession } from './debugger/mockDebug';
+import { activateMockDebug, workspaceFileAccessor } from './debugger/activateMockDebug';
 
 import { ArchetypeNodeProvider, ArchetypeItem, ArchetypePropertiesExplorer } from './archetypePropertiesExplorer';
 import { registerCommands } from './commands';
