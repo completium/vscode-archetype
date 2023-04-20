@@ -169,6 +169,8 @@ repository:
       captures:
         '1': { name: keyword.control }
         '3': { name: keyword.control }
+    - match: \bimport\b
+      name: keyword.control
     - match: \bwith\s+metadata\b
       name: keyword.control
     - match: \b(onchain|offchain)\b

@@ -382,6 +382,10 @@
           }
         },
         {
+          "match": "\\bimport\\b",
+          "name": "keyword.control"
+        },
+        {
           "match": "\\bwith\\s+metadata\\b",
           "name": "keyword.control"
         },
