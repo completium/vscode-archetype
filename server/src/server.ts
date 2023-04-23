@@ -3,6 +3,7 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
+import { URL } from 'url';
 import { CompletionItem, CompletionItemKind, createConnection, Diagnostic, DiagnosticSeverity, DiagnosticRelatedInformation, DidChangeConfigurationNotification, DocumentSymbolParams, InitializeParams, Location, Position, ProposedFeatures, Range, SymbolInformation, SymbolKind, TextDocument, TextDocumentPositionParams, TextDocuments } from 'vscode-languageserver';
 
 const { spawn } = require('child_process');
@@ -135,7 +136,7 @@ function validateProcessing(textDocument: TextDocument, result: string) {
 	}
 
 	interface Item {
-		severity ?: DiagnosticSeverity;
+		severity?: DiagnosticSeverity;
 		status: string[];
 		range: Range;
 		message: string;
@@ -168,7 +169,7 @@ function validateProcessing(textDocument: TextDocument, result: string) {
 			let message = lItem.message;
 			let start = lItem.range.start.char;
 			let end = lItem.range.end.char;
-			let severity : DiagnosticSeverity = lItem.severity ? lItem.severity : DiagnosticSeverity.Error;
+			let severity: DiagnosticSeverity = lItem.severity ? lItem.severity : DiagnosticSeverity.Error;
 
 			let diagnostic: Diagnostic = {
 				severity: severity,
@@ -236,14 +237,16 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	let settings = await getDocumentSettings(textDocument.uri);
 
 	// The validator creates diagnostics for all uppercase words length 2 and more
-	let text = textDocument.getText();
+	const text = textDocument.getText();
+	const url = new URL(textDocument.uri);
+	const path_doc = url.pathname;
 
 	if (settings.archetypeMode === 'binary' || settings.archetypeMode === 'docker') {
 		const { spawn } = require('child_process');
 
 		const bin = settings.archetypeMode === 'binary' ? settings.archetypeBin : 'docker';
 		const cwd = process.cwd();
-		const args = settings.archetypeMode === 'binary' ? ['-lsp', 'errors'] : ['run', '-i', '--rm', '-v', `${cwd}:${cwd}`, '-w', `${cwd}`, 'completium/archetype:latest', '-lsp', 'errors'];
+		const args = settings.archetypeMode === 'binary' ? ['-lsp', 'errors', '--path', path_doc] : ['run', '-i', '--rm', '-v', `${cwd}:${cwd}`, '-w', `${cwd}`, 'completium/archetype:latest', '-lsp', 'errors', '--path', path_doc];
 
 		const child = spawn(bin, args);
 
@@ -261,7 +264,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 			}
 		});
 	} else {
-		const res = await archetype.lsp("errors", text);
+		const res = await archetype.lsp("errors", path_doc, text);
 		validateProcessing(textDocument, res);
 	}
 }
@@ -275,11 +278,13 @@ async function updateSymbols(textDocument: TextDocument): Promise<void> {
 
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	let text = textDocument.getText();
+	const url = new URL(textDocument.uri);
+	const path_doc = url.pathname;
 
 	if (settings.archetypeMode === 'binary') {
 		const { spawn } = require('child_process');
 
-		const child = spawn(settings.archetypeBin, ['-lsp', 'outline']);
+		const child = spawn(settings.archetypeBin, ['-lsp', 'outline', '--path', path_doc]);
 
 		child.stdin.setEncoding('utf8')
 		child.stdin.write(text);
