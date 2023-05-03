@@ -1,7 +1,3 @@
-[![Latest Release](https://vsmarketplacebadge.apphb.com/version-short/edukera.archetype.svg)](https://marketplace.visualstudio.com/items?itemName=edukera.archetype)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs/edukera.archetype.svg)](https://marketplace.visualstudio.com/items?itemName=edukera.archetype)
-[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/edukera.archetype.svg)](https://marketplace.visualstudio.com/items?itemName=edukera.archetype#review-details)
-
 # Archetype support for Visual Studio code
 
 Archetype is a domain-specific language (DSL) to develop smart contracts on the Tezos blockchain, with a specific focus on contract security.
