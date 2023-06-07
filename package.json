@@ -69,6 +69,11 @@
           "type": "string",
           "default": "$OPAM_SWITCH_PREFIX/share/archetype/mlw",
           "description": "Path to Why3 library for archetype verification."
+        },
+        "archetype.octezClientBin": {
+          "type": "string",
+          "default": "octez-client",
+          "description": "Path of octez-client binary."
         }
       }
     },
