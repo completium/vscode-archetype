@@ -119,6 +119,8 @@ repository:
       name: keyword.control
     - match: \bmatch\b
       name: keyword.control
+    - match: \bmatch_detach\b
+      name: keyword.control
     - begin: \b(with)\b
       beginCaptures:
         '1': { name : keyword.control }
