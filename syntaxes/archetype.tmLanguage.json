@@ -264,6 +264,10 @@
           "name": "keyword.control"
         },
         {
+          "match": "\\bmatch_detach\\b",
+          "name": "keyword.control"
+        },
+        {
           "begin": "\\b(with)\\b",
           "beginCaptures": {
             "1": {

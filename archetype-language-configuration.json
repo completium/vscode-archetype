@@ -10,7 +10,8 @@
         ["(", ")"],
         ["do", "done"],
         ["begin", "end"],
-        ["match", "end"]
+        ["match", "end"],
+        ["match_detach", "end"]
     ],
     "autoClosingPairs": [
         ["{", "}"],
@@ -20,7 +21,8 @@
         ["\"", "\""],
         ["do", "done"],
         ["begin", "end"],
-        ["match", "end"]
+        ["match", "end"],
+        ["match_detach", "end"]
     ],
     "surroundingPairs": [
         ["{", "}"],
@@ -30,7 +32,8 @@
         ["\"", "\""],
         ["do", "done"],
         ["begin", "end"],
-        ["match", "end"]
+        ["match", "end"],
+        ["match_detach", "end"]
     ],
     "wordPattern": {
         "pattern": "[A-Za-z_'`][A-Za-z_'.0-9]*"
