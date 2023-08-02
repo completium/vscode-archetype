@@ -11,12 +11,12 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { platform } from 'process';
 import { ProviderResult } from 'vscode';
-import { MockDebugSession } from './debugger/mockDebug';
-import { activateMockDebug, workspaceFileAccessor } from './debugger/activateMockDebug';
+import { activateMockDebug, workspaceFileAccessor } from './debugger/activateArchetypeDebug';
 
 import { ArchetypeNodeProvider, ArchetypeItem, ArchetypePropertiesExplorer } from './archetypePropertiesExplorer';
 import { registerCommands } from './commands';
 import { startClient, stopClient } from './lsp';
+import { ArchetypeDebugSession } from './debugger/archetypeDebug';
 
 /*
  * The compile time flag 'runMode' controls how the debug adapter is run.
@@ -95,7 +95,7 @@ class MockDebugAdapterServerDescriptorFactory implements vscode.DebugAdapterDesc
 		if (!this.server) {
 			// start listening on a random port
 			this.server = Net.createServer(socket => {
-				const session = new MockDebugSession(workspaceFileAccessor);
+				const session = new ArchetypeDebugSession(workspaceFileAccessor);
 				session.setRunAsServer(true);
 				session.start(socket as NodeJS.ReadableStream, socket);
 			}).listen(0);

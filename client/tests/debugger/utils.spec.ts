@@ -235,7 +235,7 @@ describe('generate_steps', () => {
         }
       ]
     };
-    // console.log(JSON.stringify(actualOutput, null, 2))
+    console.log(JSON.stringify(actualOutput))
     // expect(actualOutput).to.deep.equal(expectedOutput);
   })
 })

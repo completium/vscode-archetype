@@ -74,18 +74,18 @@ type ContractMapSource = {
 	contract: ExtMicheline
 }
 
-type StackItemValue = {
+export type StackItemValue = {
 	"name": string
 	"value": string
 }
 
-type Step = {
+export type Step = {
 	"stack": Array<StackItemValue>
   "range"?: RangeItem
 	"decl_bound"?: DeclBound
 }
 
-type ArchetypeTrace = {
+export type ArchetypeTrace = {
 	steps: Array<Step>
 }
 
@@ -186,7 +186,7 @@ function compute_stack_value (stack: Array<StackItem>, values: Array<string>) : 
 export function build_execution(contract_map_source: ContractMapSource, trace: Trace): ArchetypeTrace {
 	let res: ArchetypeTrace = { steps: [] }
 	const map_ext_micheline: Map<number, ExtMicheline> = build_map_ext_micheline(contract_map_source.contract);
-	console.log(map_ext_micheline);
+	// console.log(map_ext_micheline);
 	for (let i = 0; i < trace.items.length; ++i) {
 		const trace_item = trace.items[i];
 		const ext_micheline: ExtMicheline = map_ext_micheline.get(trace_item.location);
