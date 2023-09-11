@@ -1,0 +1,11 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "mock",
+			"request": "launch",
+			"name": "Debug Archetype",
+			"program": "/home/dev/archetype/vscode-archetype/test_dir/contracts/debug.arl"
+		}
+	]
+}

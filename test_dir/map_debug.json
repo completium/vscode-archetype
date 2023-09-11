@@ -1,0 +1,178 @@
+{
+  "contract": [
+    {
+      "prim": "storage",
+      "args": [
+        {
+          "prim": "nat"
+        }
+      ]
+    },
+    {
+      "prim": "parameter",
+      "args": [
+        {
+          "prim": "unit",
+          "annots": [
+            "%exec"
+          ]
+        }
+      ]
+    },
+    {
+      "prim": "code",
+      "args": [
+        [
+          {
+            "prim": "UNPAIR"
+          },
+          {
+            "prim": "DROP",
+            "args": [
+              {
+                "int": "1"
+              }
+            ],
+            "debug": {
+              "stack": [
+                {
+                  "name": "a"
+                }
+              ],
+              "decl_bound": {
+                "kind": "entry",
+                "name": "exec",
+                "bound": "begin"
+              }
+            }
+          },
+          {
+            "prim": "PUSH",
+            "args": [
+              {
+                "prim": "nat"
+              },
+              {
+                "int": "2"
+              }
+            ],
+            "debug": {
+              "stack": [
+                {
+                  "name": "v"
+                },
+                {
+                  "name": "a"
+                }
+              ],
+              "range": {
+                "name": "/home/guillaume/archetype/archetype-lang/tests/passed/debug_assign.arl",
+                "begin": {
+                  "line": 6,
+                  "col": 1,
+                  "char": 62
+                },
+                "end": {
+                  "line": 6,
+                  "col": 10,
+                  "char": 71
+                }
+              }
+            }
+          },
+          {
+            "prim": "DUP"
+          },
+          {
+            "prim": "DIP",
+            "args": [
+              {
+                "int": "1"
+              },
+              [
+                {
+                  "prim": "DIG",
+                  "args": [
+                    {
+                      "int": "1"
+                    }
+                  ]
+                },
+                {
+                  "prim": "DROP",
+                  "args": [
+                    {
+                      "int": "1"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "prim": "DUG",
+            "args": [
+              {
+                "int": "1"
+              }
+            ],
+            "debug": {
+              "stack": [
+                {
+                  "name": "v"
+                },
+                {
+                  "name": "a"
+                }
+              ],
+              "range": {
+                "name": "/home/guillaume/archetype/archetype-lang/tests/passed/debug_assign.arl",
+                "begin": {
+                  "line": 7,
+                  "col": 1,
+                  "char": 74
+                },
+                "end": {
+                  "line": 7,
+                  "col": 7,
+                  "char": 80
+                }
+              }
+            }
+          },
+          {
+            "prim": "DROP",
+            "args": [
+              {
+                "int": "1"
+              }
+            ],
+            "debug": {
+              "stack": [
+                {
+                  "name": "a"
+                }
+              ],
+              "decl_bound": {
+                "kind": "entry",
+                "name": "exec",
+                "bound": "end"
+              }
+            }
+          },
+          {
+            "prim": "NIL",
+            "args": [
+              {
+                "prim": "operation"
+              }
+            ]
+          },
+          {
+            "prim": "PAIR"
+          }
+        ]
+      ]
+    }
+  ]
+}

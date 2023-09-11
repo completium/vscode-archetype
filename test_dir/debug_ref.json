@@ -1,0 +1,17 @@
+{
+  "name": "debug",
+  "path": "debug.arl",
+  "decls": [
+    {
+      "name": "exec",
+      "kind": "entry",
+      "steps": [
+        {
+          "range": {"begin": 100, "end": 102},
+          "micheline_location": [8, 9, 10],
+          "stack": [{ "name": "a", "type": "" }]
+        }
+      ]
+    }
+  ]
+}
