@@ -116,10 +116,10 @@ export class ArchetypeRuntime extends EventEmitter {
 	}
 
 	// This is the next instruction that will be 'executed'
-	public instruction = 0;
+	public instruction = -1;
 
 	private displayStep(step : Step) {
-
+		console.log(step)
 	}
 
 	public step(instruction: boolean, reverse: boolean) {
