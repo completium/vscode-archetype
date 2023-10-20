@@ -8,6 +8,9 @@
 			"WebWorker",
 			"ES2020"
 		],
+		"esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
 		"sourceMap": true,
     // "strict": true,   /* enable all strict type-checking options */
 		// /* Additional Checks */

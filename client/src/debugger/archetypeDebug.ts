@@ -10,17 +10,12 @@
  * The most important class of the Debug Adapter is the MockDebugSession which implements many DAP requests by talking to the MockRuntime.
  */
 
-import {
-	Logger, logger,
-	LoggingDebugSession,
-	InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent,
-	ProgressStartEvent, ProgressUpdateEvent, ProgressEndEvent, InvalidatedEvent,
-	Thread, StackFrame, Scope, Source, Handles, Breakpoint, MemoryEvent
-} from '@vscode/debugadapter';
+import { Breakpoint, BreakpointEvent, Handles, InitializedEvent, InvalidatedEvent, logger, Logger, LoggingDebugSession, MemoryEvent, OutputEvent, ProgressEndEvent, ProgressStartEvent, ProgressUpdateEvent, Scope, Source, StackFrame, StoppedEvent, TerminatedEvent, Thread } from '@vscode/debugadapter';
 import { DebugProtocol } from '@vscode/debugprotocol';
-import { basename } from 'path-browserify';
 import { Subject } from 'await-notify';
 import * as base64 from 'base64-js';
+import { basename } from 'path-browserify';
+
 import { ArchetypeRuntime, FileAccessor, IRuntimeBreakpoint, RuntimeVariable } from './archetypeRuntime';
 
 /**
@@ -53,7 +48,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 	// a Mock runtime (or debugger)
 	private _runtime: ArchetypeRuntime;
 
-	private _variableHandles = new Handles<'locals' | 'globals' | RuntimeVariable>();
+	private _variableHandles = new Handles<'storage' | 'inputs' | 'locals' | RuntimeVariable>();
 
 	private _configurationDone = new Subject();
 
@@ -228,6 +223,29 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 		this.sendEvent(new InitializedEvent());
 	}
 
+	protected scopesRequest(response: DebugProtocol.ScopesResponse, args: DebugProtocol.ScopesArguments): void {
+
+		response.body = {
+			scopes: [
+				new Scope("Storage", this._variableHandles.create('storage'), false),
+				new Scope("Inputs", this._variableHandles.create('inputs'), true),
+				new Scope("Locals", this._variableHandles.create('locals'), true)
+			]
+		};
+		this.sendResponse(response);
+	}
+
+	protected nextRequest(response: DebugProtocol.NextResponse, args: DebugProtocol.NextArguments): void {
+		this._runtime.step(args.granularity === 'instruction', false);
+		this.sendResponse(response);
+	}
+
+	protected stepBackRequest(response: DebugProtocol.StepBackResponse, args: DebugProtocol.StepBackArguments): void {
+		this._runtime.step(args.granularity === 'instruction', true);
+		this.sendResponse(response);
+	}
+
+
 	/**
 	 * Called at the end of the configuration sequence.
 	 * Indicates that all breakpoints etc. have been sent to the DA and that the 'launch' can start.
@@ -245,6 +263,29 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 
 	protected async attachRequest(response: DebugProtocol.AttachResponse, args: IAttachRequestArguments) {
 		return this.launchRequest(response, args);
+	}
+
+	protected stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): void {
+		console.log('Stack request')
+
+		const stk = this._runtime.stack();
+
+		response.body = {
+			stackFrames: stk.frames.map((f, ix) => {
+				const sf: DebugProtocol.StackFrame = new StackFrame(f.index, f.name, this.createSource(f.file), f.line);
+				//sf.column = f.column
+				//sf.endLine = f.endLine
+				//sf.endColumn = f.endColumn
+				//console.log(sf)
+				return sf;
+			}),
+			// 4 options for 'totalFrames':
+			//omit totalFrames property: 	// VS Code has to probe/guess. Should result in a max. of two requests
+			totalFrames: stk.count			// stk.count is the correct size, should result in a max. of two requests
+			//totalFrames: 1000000 			// not the correct size, should result in a max. of two requests
+			//totalFrames: endFrame + 20 	// dynamically increases the size with every requested chunk, results in paging
+		};
+		this.sendResponse(response);
 	}
 
 	protected async launchRequest(response: DebugProtocol.LaunchResponse, args: ILaunchRequestArguments) {
@@ -300,6 +341,89 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 			]
 		};
 		this.sendResponse(response);
+	}
+
+	protected async variablesRequest(response: DebugProtocol.VariablesResponse, args: DebugProtocol.VariablesArguments, request?: DebugProtocol.Request): Promise<void> {
+		let vs: RuntimeVariable[] = [];
+
+		const v = this._variableHandles.get(args.variablesReference);
+		if (v === 'locals') {
+			vs = this._runtime.getLocalVariables();
+			console.log('Locals request')
+		} else if (v === 'storage') {
+			vs = this._runtime.getStorageVariables();
+			console.log('Storage request')
+		} else if (v === 'inputs') {
+			vs = this._runtime.getInputVariables();
+			console.log('Inputs request')
+		} else {
+			console.log('Other variables request')
+		}
+		response.body = {
+			variables: vs.map(v => this.convertFromRuntime(v))
+		};
+		this.sendResponse(response);
+	}
+
+	private convertFromRuntime(v: RuntimeVariable): DebugProtocol.Variable {
+
+		let dapVariable: DebugProtocol.Variable = {
+			name: v.name,
+			value: '???',
+			type: typeof v.value,
+			variablesReference: 0,
+			evaluateName: '$' + v.name
+		};
+
+		if (v.name.indexOf('lazy') >= 0) {
+			// a "lazy" variable needs an additional click to retrieve its value
+
+			dapVariable.value = 'lazy var';		// placeholder value
+			v.reference ??= this._variableHandles.create(new RuntimeVariable('', [ new RuntimeVariable('', v.value) ]));
+			dapVariable.variablesReference = v.reference;
+			dapVariable.presentationHint = { lazy: true };
+		} else {
+
+			if (Array.isArray(v.value)) {
+				dapVariable.value = 'Object';
+				v.reference ??= this._variableHandles.create(v);
+				dapVariable.variablesReference = v.reference;
+			} else {
+
+				switch (typeof v.value) {
+					case 'number':
+						if (Math.round(v.value) === v.value) {
+							dapVariable.value = this.formatNumber(v.value);
+							(<any>dapVariable).__vscodeVariableMenuContext = 'simple';	// enable context menu contribution
+							dapVariable.type = 'integer';
+						} else {
+							dapVariable.value = v.value.toString();
+							dapVariable.type = 'float';
+						}
+						break;
+					case 'string':
+						dapVariable.value = `"${v.value}"`;
+						break;
+					case 'boolean':
+						dapVariable.value = v.value ? 'true' : 'false';
+						break;
+					default:
+						dapVariable.value = typeof v.value;
+						break;
+				}
+			}
+		}
+
+		if (v.memory) {
+			v.reference ??= this._variableHandles.create(v);
+			dapVariable.memoryReference = String(v.reference);
+		}
+
+		return dapVariable;
+	}
+
+	private formatNumber(x: number) {
+		return this._valuesInHex ? '0x' + x.toString(16) : x.toString(10);
 	}
 
 	private createSource(filePath: string): Source {

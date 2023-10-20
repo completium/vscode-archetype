@@ -1,0 +1,13 @@
+archetype debug2
+
+variable a : nat = 0
+
+entry exec(b : nat) {
+	var v = b;
+	a := v
+}
+
+entry exec2() {
+	var v = 3;
+	a += v
+}

@@ -1,7 +1,12 @@
-
-import * as vscode from 'vscode';
 import { EventEmitter } from 'events';
-import { ArchetypeTrace, Step } from './utils';
+import * as vscode from 'vscode';
+
+import * as fs from 'fs';
+
+import debugData from './debug.json'
+import { ArchetypeTrace, askClosed, askOpen, EntryPoint, Step, Storage, EntryArg } from './utils';
+import { build_execution, extract_trace, gen_contract_map_source } from './utils';
+
 
 export interface FileAccessor {
 	isWindows: boolean;
@@ -25,7 +30,9 @@ interface IRuntimeStackFrame {
 	name: string;
 	file: string;
 	line: number;
-	column?: number;
+	column: number;
+	endLine: number;
+	endColumn: number;
 	instruction?: number;
 }
 
@@ -108,12 +115,109 @@ export class ArchetypeRuntime extends EventEmitter {
 		super();
 	}
 
+	private sendEvent(event: string, ... args: any[]): void {
+		setTimeout(() => {
+			this.emit(event, ...args);
+		}, 0);
+	}
+
+	private _debugData = debugData
+	private _filename = ""
+	private _entrypoint = ""
+	private _inputs : EntryArg[] = []
+	private _initStorage : Storage = null
+	private _debugTrace : ArchetypeTrace = null
+	private _step : Step = null
+
+	private getDebugTrace() : ArchetypeTrace {
+		// TODO: change this section to real sys call to archetye binary
+		let trace = ""
+		const dir = "/Users/benoitrognier/Projects/completium/vscode-archetype/client/src/debugger/"
+		if (this._entrypoint == "exec") {
+			trace = fs.readFileSync(dir+'debug2_exec.input', 'utf-8');
+		} else if (this._entrypoint == "exec2") {
+			trace = fs.readFileSync(dir+'debug2_exec2.input', 'utf-8');
+		}
+		// ......
+		const exec_trace = extract_trace(trace)
+    const contract_map_source = gen_contract_map_source(JSON.stringify(this._debugData))
+    const output = build_execution(contract_map_source, exec_trace)
+		return output
+	}
+
+
+	private getEntries() : { [key: string]: number; } {
+		const entries : { [key: string]: number; } = {}
+		for (let i= 0; i< this._debugData.interface.entrypoints.length; i++) {
+			entries[this._debugData.interface.entrypoints[i].name] = i
+		}
+		return entries
+	}
+
 	/**
 	 * Start executing the given program.
 	 */
 	public async start(program: string, stopOnEntry: boolean, debug: boolean): Promise<void> {
 		console.log(`program: ${program}`)
+		console.log(`stopOnEntry: ${stopOnEntry}`)
+		console.log(`debug: ${debug}`)
+		this._filename = program
+		const entries = this.getEntries()
+		const entryname = await askClosed("Select entry point to debug:", Object.keys(entries))
+		this._entrypoint = entryname
+		const entrypoint = new EntryPoint(entryname)
+		const args = this._debugData.interface.entrypoints[entries[entryname]].args
+		for(let i=0; i < args.length; i++) {
+			const prompt = `Argument '${args[i].name}' value:`
+			const argvalue = await askOpen(prompt, 'Argument value', '0')
+			entrypoint.addArg(args[i].name, argvalue)
+		}
+		const storage = new Storage()
+		for(let i=0; i<this._debugData.interface.storage.length; i++) {
+			const name = this._debugData.interface.storage[i].name
+			const prompt = `Storage element '${name}' value:`
+			const value = await askOpen(prompt, 'Element value', '0')
+			storage.addElement(name, value)
+		}
+		console.log(entrypoint.toString())
+		console.log(storage.toString())
+		this._initStorage = storage
+		this._inputs = entrypoint.args
+		this._debugTrace = this.getDebugTrace()
+		console.log(JSON.stringify(this._debugTrace))
+		this.sendEvent('stopOnEntry')
 	}
+
+	public getStorageVariables() : RuntimeVariable[] {
+		if (this.instruction == -1) {
+			return this._initStorage.elements().map(x => {
+				return new RuntimeVariable(x.name, x.value)
+			})
+		} else {
+			return this._step.stack.filter(x => {
+				return this._initStorage.elements().some(item => item.name == x.name)
+			}).map(x => {
+				return new RuntimeVariable(x.name, x.value)
+			})
+		}
+	}
+
+	public getInputVariables() : RuntimeVariable[] {
+		return this._inputs.map(x => {
+			return new RuntimeVariable(x.name, x.value)
+		})
+	}
+
+	public getLocalVariables() : RuntimeVariable[] {
+		if(this.instruction >= 0) {
+			return this._step.stack.filter(x => {
+				return !this._initStorage.elements().some(item => item.name == x.name) && !this._inputs.some(item => item.name == x.name)
+			}).map(x => {
+				return new RuntimeVariable(x.name, x.value)
+			})
+		}
+		return []
+ 	}
 
 	// This is the next instruction that will be 'executed'
 	public instruction = -1;
@@ -123,18 +227,51 @@ export class ArchetypeRuntime extends EventEmitter {
 	}
 
 	public step(instruction: boolean, reverse: boolean) {
-		const trace : ArchetypeTrace = {"steps":[{"stack":[{"name":"a","value":"0"}],"decl_bound":{"kind":"entry","name":"exec","bound":"begin"}},{"stack":[{"name":"v","value":"2"},{"name":"a","value":"0"}],"range":{"name":"./client/tests/resources/debug.arl","begin":{"line":6,"col":1,"char":55},"end":{"line":6,"col":10,"char":64}}},{"stack":[{"name":"v","value":"2"},{"name":"a","value":"2"}],"range":{"name":"./client/tests/resources/debug.arl","begin":{"line":7,"col":1,"char":67},"end":{"line":7,"col":7,"char":73}}},{"stack":[{"name":"a","value":"2"}],"decl_bound":{"kind":"entry","name":"exec","bound":"end"}}]}
+		console.log('Next Step')
 		if (reverse) {
 			this.instruction--;
 		} else {
 			this.instruction++;
 		}
 
-		if (this.instruction >= 0 && this.instruction < trace.steps.length) {
-			const step = trace[this.instruction];
-			this.displayStep(step);
+		if (this.instruction >= 0 && this.instruction < this._debugTrace.steps.length) {
+			this._step = this._debugTrace.steps[this.instruction];
+			console.log(JSON.stringify(this._step, null,2))
+			this.sendEvent('stopOnEntry')
 		}
 
 
+	}
+
+	public stack() : IRuntimeStack  {
+		const frames: IRuntimeStackFrame[] = [];
+		if (this.instruction == -1) {
+			const entries = this.getEntries()
+			frames.push({
+				index      : this.instruction,
+				name       : this._entrypoint,
+				file       : this._filename,
+				line       : this._debugData.interface.entrypoints[entries[this._entrypoint]].range.begin_.line,
+				column     : this._debugData.interface.entrypoints[entries[this._entrypoint]].range.begin_.col,
+				endLine    : this._debugData.interface.entrypoints[entries[this._entrypoint]].range.end_.line,
+				endColumn  : this._debugData.interface.entrypoints[entries[this._entrypoint]].range.end_.col,
+				instruction: this.instruction
+			})
+		} else {
+			frames.push({
+				index      : this.instruction,
+				name       : this._entrypoint,
+				file       : this._filename,
+				line       : this._step.range.begin.line,
+				column     : this._step.range.begin.col,
+				endLine    : this._step.range.end.line,
+				endColumn  : this._step.range.end.col,
+				instruction: this.instruction
+			})
+		}
+		return {
+			frames: frames,
+			count: 0
+		}
 	}
 }

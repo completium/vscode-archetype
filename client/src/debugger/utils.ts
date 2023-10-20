@@ -1,3 +1,4 @@
+import * as vscode from 'vscode';
 
 interface ExecutionParams {
 	entrypoint: string,
@@ -198,3 +199,102 @@ export function build_execution(contract_map_source: ContractMapSource, trace: T
 	}
 	return res
 }
+
+export class EntryArg {
+	private _name: string;
+	private _value: string; // Je suppose que la valeur est une chaîne, vous pouvez changer le type si nécessaire
+
+	constructor(name: string, value: string) {
+			this._name = name;
+			this._value = value;
+	}
+
+	// Getters
+	public get name(): string {
+			return this._name;
+	}
+
+	public get value(): string {
+			return this._value;
+	}
+
+	// Setters
+	public set name(name: string) {
+			this._name = name;
+	}
+
+	public set value(value: string) {
+			this._value = value;
+	}
+
+	public toString(): string {
+			return `EntryArg(name: ${this._name}, value: ${this._value})`;
+	}
+}
+
+export class EntryPoint {
+	private _name: string;
+	private _args: EntryArg[];
+
+	constructor(name: string) {
+			this._name = name;
+			this._args = []; // initialiser la liste comme vide
+	}
+
+	// Getters
+	public get name(): string {
+			return this._name;
+	}
+
+	public get args(): EntryArg[] {
+			return this._args;
+	}
+
+	// Setters
+	public set name(name: string) {
+			this._name = name;
+	}
+
+	// Méthode pour ajouter un nouvel EntryArg
+	public addArg(name: string, val : string | undefined): void {
+			this._args.push(new EntryArg(name, val));
+	}
+
+	public toString(): string {
+			return `EntryPoint(name: ${this._name}, args: [${this._args.map(arg => arg.toString()).join(', ')}])`;
+	}
+}
+
+export class Storage {
+	constructor() {
+		this._args = []
+	}
+	private _args: EntryArg[];
+	public addElement(name: string, val : string | undefined): void {
+		this._args.push(new EntryArg(name, val));
+	}
+	public toString(): string {
+		return `Storage([${this._args.map(arg => arg.toString()).join(', ')}])`;
+	}
+	public elements() : Array<EntryArg> { return this._args }
+}
+
+export async function askOpen(prompt: string, placeHolder: string, def: string) : Promise<string | undefined> {
+	const value = await vscode.window.showInputBox({
+		prompt: prompt, // Le texte à afficher pour guider l'utilisateur
+		placeHolder: placeHolder, // Texte affiché à l'intérieur de la zone de saisie
+		value : def // Valeur par défaut déjà remplie
+	});
+
+	console.log(`${prompt} : ${value}`)
+	return value
+}
+
+export async function askClosed(prompt : string, options : string[]) : Promise<string | undefined> {
+	const value = await vscode.window.showQuickPick(options, {
+		placeHolder: prompt, // Texte à afficher pour guider l'utilisateur
+	});
+	console.log(`${prompt} : ${value}`)
+	return value
+}
+
