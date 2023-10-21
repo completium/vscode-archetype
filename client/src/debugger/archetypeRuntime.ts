@@ -1,5 +1,7 @@
 import { EventEmitter } from 'events';
 import * as child_process from 'child_process';
+import * as os from 'os';
+import * as path from 'path';
 import * as vscode from 'vscode';
 
 import * as fs from 'fs';
@@ -132,6 +134,45 @@ export class ArchetypeRuntime extends EventEmitter {
 
 	private BASE_DIR = '/Users/benoitrognier/.completium/mockup'
 	private OCTEZ_CLIENT = '/Users/benoitrognier/Projects/nomadiclabs/tezos/octez-client'
+	private ARCHETYPE = 'archetype';
+
+	private executeArchetypeBinary(sourceFile: string): Promise<string> {
+		return new Promise((resolve, reject) => {
+			// Construct the command string
+			const command = `${this.ARCHETYPE} -g ${sourceFile}`;
+
+			// Execute the command
+			child_process.exec(command, (error, stdout, stderr) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					reject(error);
+					return;
+				}
+
+				if (stderr) {
+					console.error(`stderr: ${stderr}`);
+					reject(new Error(`Error executing command: ${stderr}`));
+					return;
+				}
+
+				// Get the system temporary directory
+				const tmpDir = os.tmpdir();
+
+				// Generate a unique file name with an extension
+				const tmpFilePath = path.join(tmpDir, `output_${Date.now()}.txt`);
+
+				// Write the command output to the temporary file
+				fs.writeFile(tmpFilePath, stdout, 'utf8', (err) => {
+					if (err) {
+						console.error(`Failed to write to temp file: ${err}`);
+						reject(err);
+					} else {
+						resolve(tmpFilePath);
+					}
+				});
+			});
+		});
+	}
 
 
 	private executeTrace(storage: string, input: string, entrypoint: string, tzSource: string): Promise<string> {
@@ -150,9 +191,9 @@ export class ArchetypeRuntime extends EventEmitter {
 		});
 	}
 
-	private async getDebugTrace() : Promise<ArchetypeTrace> {
+	private async getDebugTrace(program : string) : Promise<ArchetypeTrace> {
 		// TODO: change this section to real sys call to archetye binary
-		const tzSource = "/Users/benoitrognier/Projects/completium/vscode-archetype/client/tests/resources/debug2.tz"
+		const tzSource = await this.executeArchetypeBinary(program)
 		const entry = this._entrypoint
 		const storage = argsToMich(this._initStorage.elements())
 		const input = argsToMich(this._inputs)
@@ -203,7 +244,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		console.log(storage.toString())
 		this._initStorage = storage
 		this._inputs = entrypoint.args
-		this._debugTrace = await this.getDebugTrace()
+		this._debugTrace = await this.getDebugTrace(program)
 		console.log(JSON.stringify(this._debugTrace))
 		this.sendEvent('stopOnEntry')
 	}

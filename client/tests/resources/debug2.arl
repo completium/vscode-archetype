@@ -8,6 +8,6 @@ entry exec(b : nat) {
 }
 
 entry exec2() {
-	var v = 3;
+	var v = 4;
 	a += v
 }
