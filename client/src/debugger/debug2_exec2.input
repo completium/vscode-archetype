@@ -1,11 +1,11 @@
 storage
   3
 emitted operations
-
+  
 big_map diff
-
+  
 trace
-  - location: 9 (just consumed gas: 19.958)
+  - location: 9 (just consumed gas: 19.728)
     [ (Pair (Right Unit) 0) ]
   - location: 9 (just consumed gas: 0.010)
     [ (Right Unit)
@@ -13,47 +13,47 @@ trace
   - location: 10 (just consumed gas: 0)
     [ Unit
       0 ]
-  - location: 31 (just consumed gas: 0.032)
+  - location: 29 (just consumed gas: 0.032)
     [ 0 ]
-  - location: 33 (just consumed gas: 0.010)
+  - location: 31 (just consumed gas: 0.010)
     [ 3
       0 ]
-  - location: 36 (just consumed gas: 0.010)
+  - location: 34 (just consumed gas: 0.010)
     [ 3
       3
       0 ]
-  - location: 37 (just consumed gas: 0.023)
+  - location: 35 (just consumed gas: 0.023)
     [ 0
       3
       3
       0 ]
-  - location: 39 (just consumed gas: 0.035)
+  - location: 37 (just consumed gas: 0.035)
     [ 3
       3
       0 ]
-  - location: 40 (just consumed gas: 0)
+  - location: 38 (just consumed gas: 0)
     [ 3
       0 ]
-  - location: 43 (just consumed gas: 0.010)
+  - location: 41 (just consumed gas: 0.010)
     [ 0
       3 ]
-  - location: 44 (just consumed gas: 0.032)
+  - location: 42 (just consumed gas: 0.032)
     [ 3 ]
-  - location: 40 (just consumed gas: 0.025)
+  - location: 38 (just consumed gas: 0.025)
     [ 3
       3 ]
-  - location: 40 (just consumed gas: 0)
+  - location: 38 (just consumed gas: 0)
     [ 3
       3 ]
-  - location: 46 (just consumed gas: 0.010)
+  - location: 44 (just consumed gas: 0.010)
     [ 3
       3 ]
-  - location: 47 (just consumed gas: 0.032)
+  - location: 45 (just consumed gas: 0.032)
     [ 3 ]
-  - location: 49 (just consumed gas: 0.010)
+  - location: 47 (just consumed gas: 0.010)
     [ {}
       3 ]
-  - location: 51 (just consumed gas: 0.010)
+  - location: 49 (just consumed gas: 0.010)
     [ (Pair {} 3) ]
   - location: 10 (just consumed gas: 0.015)
     [ (Pair {} 3) ]

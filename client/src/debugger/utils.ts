@@ -202,11 +202,24 @@ export function build_execution(contract_map_source: ContractMapSource, trace: T
 
 export class EntryArg {
 	private _name: string;
-	private _value: string; // Je suppose que la valeur est une chaîne, vous pouvez changer le type si nécessaire
+	private _value: any;
+	private _type  : string
 
-	constructor(name: string, value: string) {
+	public static format(value : string, typ : string) : any {
+		switch(typ) {
+			case "nat":
+			case "int": return parseInt(value, 10)
+			case "bytes" :
+			case "string" : return value
+			case "bool" : return (value == "True" ? true : false)
+			default : return value
+		}
+	}
+
+	constructor(name: string, value: string, typ ?: string) {
 			this._name = name;
-			this._value = value;
+			this._type = typ ? typ : "string"
+			this._value = EntryArg.format(value, typ)
 	}
 
 	// Getters
@@ -214,7 +227,7 @@ export class EntryArg {
 			return this._name;
 	}
 
-	public get value(): string {
+	public get value(): any {
 			return this._value;
 	}
 
@@ -227,8 +240,12 @@ export class EntryArg {
 			this._value = value;
 	}
 
+	public get typ() : string {
+		return this._type
+	}
+
 	public toString(): string {
-			return `EntryArg(name: ${this._name}, value: ${this._value})`;
+			return `EntryArg(name: ${this._name}, value: ${this._value}, type: ${this._type})`;
 	}
 }
 
@@ -256,8 +273,8 @@ export class EntryPoint {
 	}
 
 	// Méthode pour ajouter un nouvel EntryArg
-	public addArg(name: string, val : string | undefined): void {
-			this._args.push(new EntryArg(name, val));
+	public addArg(name: string, val ?: string, typ ?: string): void {
+			this._args.push(new EntryArg(name, val, typ));
 	}
 
 	public toString(): string {
@@ -270,13 +287,22 @@ export class Storage {
 		this._args = []
 	}
 	private _args: EntryArg[];
-	public addElement(name: string, val : string | undefined): void {
-		this._args.push(new EntryArg(name, val));
+	public addElement(name: string, val ?: string, typ ?: string): void {
+		this._args.push(new EntryArg(name, val, typ));
 	}
 	public toString(): string {
 		return `Storage([${this._args.map(arg => arg.toString()).join(', ')}])`;
 	}
 	public elements() : Array<EntryArg> { return this._args }
+
+	public getType(name : string) : string {
+		for(let i=0; i<this._args.length; i++) {
+			if (this._args[i].name == name) {
+				return this._args[i].typ
+			}
+		}
+		return ""
+	}
 }
 
 export async function askOpen(prompt: string, placeHolder: string, def: string) : Promise<string | undefined> {

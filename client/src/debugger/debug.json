@@ -7,20 +7,20 @@
         "args": [
           {
             "name": "b",
-            "type_": ""
+            "type_": "nat"
           }
         ],
         "range": {
           "name": "./debug2.arl",
           "begin_": {
             "line": 5,
-            "col": 6,
-            "char": 46
+            "col": 0,
+            "char": 40
           },
           "end_": {
-            "line": 5,
-            "col": 10,
-            "char": 50
+            "line": 8,
+            "col": 1,
+            "char": 83
           }
         }
       },
@@ -31,13 +31,13 @@
           "name": "./debug2.arl",
           "begin_": {
             "line": 10,
-            "col": 6,
-            "char": 91
+            "col": 0,
+            "char": 85
           },
           "end_": {
-            "line": 10,
-            "col": 11,
-            "char": 96
+            "line": 13,
+            "col": 1,
+            "char": 122
           }
         }
       }
@@ -45,8 +45,8 @@
     "storage": [
       {
         "name": "a",
-        "type_": "",
-        "value": null
+        "type_": "nat",
+        "value": "0"
       }
     ]
   },
@@ -93,7 +93,36 @@
             "args": [
               [
                 {
-                  "prim": "DUP"
+                  "prim": "DUP",
+                  "debug": {
+                    "stack": [
+                      {
+                        "name": "v",
+                        "kind": "local"
+                      },
+                      {
+                        "name": "b",
+                        "kind": "argument"
+                      },
+                      {
+                        "name": "a",
+                        "kind": "storage"
+                      }
+                    ],
+                    "range": {
+                      "name": "./debug2.arl",
+                      "begin": {
+                        "line": 6,
+                        "col": 1,
+                        "char": 63
+                      },
+                      "end": {
+                        "line": 6,
+                        "col": 10,
+                        "char": 72
+                      }
+                    }
+                  }
                 },
                 {
                   "prim": "DUP"
@@ -175,7 +204,24 @@
                     {
                       "int": "1"
                     }
-                  ]
+                  ],
+                  "debug": {
+                    "stack": [
+                      {
+                        "name": "b",
+                        "kind": "argument"
+                      },
+                      {
+                        "name": "a",
+                        "kind": "storage"
+                      }
+                    ],
+                    "decl_bound": {
+                      "kind": "entry",
+                      "name": "exec",
+                      "bound": "end"
+                    }
+                  }
                 },
                 {
                   "prim": "NIL",
@@ -196,20 +242,7 @@
                     {
                       "int": "1"
                     }
-                  ],
-                  "debug": {
-                    "stack": [
-                      {
-                        "name": "a",
-                        "kind": "storage"
-                      }
-                    ],
-                    "decl_bound": {
-                      "kind": "entry",
-                      "name": "exec2",
-                      "bound": "begin"
-                    }
-                  }
+                  ]
                 },
                 {
                   "prim": "PUSH",

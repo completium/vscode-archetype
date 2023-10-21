@@ -375,42 +375,32 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 			evaluateName: '$' + v.name
 		};
 
-		if (v.name.indexOf('lazy') >= 0) {
-			// a "lazy" variable needs an additional click to retrieve its value
-
-			dapVariable.value = 'lazy var';		// placeholder value
-			v.reference ??= this._variableHandles.create(new RuntimeVariable('', [ new RuntimeVariable('', v.value) ]));
+		if (Array.isArray(v.value)) {
+			dapVariable.value = 'Object';
+			v.reference ??= this._variableHandles.create(v);
 			dapVariable.variablesReference = v.reference;
-			dapVariable.presentationHint = { lazy: true };
 		} else {
 
-			if (Array.isArray(v.value)) {
-				dapVariable.value = 'Object';
-				v.reference ??= this._variableHandles.create(v);
-				dapVariable.variablesReference = v.reference;
-			} else {
-
-				switch (typeof v.value) {
-					case 'number':
-						if (Math.round(v.value) === v.value) {
-							dapVariable.value = this.formatNumber(v.value);
-							(<any>dapVariable).__vscodeVariableMenuContext = 'simple';	// enable context menu contribution
-							dapVariable.type = 'integer';
-						} else {
-							dapVariable.value = v.value.toString();
-							dapVariable.type = 'float';
-						}
-						break;
-					case 'string':
-						dapVariable.value = `"${v.value}"`;
-						break;
-					case 'boolean':
-						dapVariable.value = v.value ? 'true' : 'false';
-						break;
-					default:
-						dapVariable.value = typeof v.value;
-						break;
-				}
+			switch (typeof v.value) {
+				case 'number':
+					if (Math.round(v.value) === v.value) {
+						dapVariable.value = this.formatNumber(v.value);
+						(<any>dapVariable).__vscodeVariableMenuContext = 'simple';	// enable context menu contribution
+						dapVariable.type = 'integer';
+					} else {
+						dapVariable.value = v.value.toString();
+						dapVariable.type = 'float';
+					}
+					break;
+				case 'string':
+					dapVariable.value = `"${v.value}"`;
+					break;
+				case 'boolean':
+					dapVariable.value = v.value ? 'true' : 'false';
+					break;
+				default:
+					dapVariable.value = typeof v.value;
+					break;
 			}
 		}
 

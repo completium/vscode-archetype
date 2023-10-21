@@ -170,14 +170,15 @@ export class ArchetypeRuntime extends EventEmitter {
 		for(let i=0; i < args.length; i++) {
 			const prompt = `Argument '${args[i].name}' value:`
 			const argvalue = await askOpen(prompt, 'Argument value', '0')
-			entrypoint.addArg(args[i].name, argvalue)
+			entrypoint.addArg(args[i].name, argvalue, args[i].type_)
 		}
 		const storage = new Storage()
 		for(let i=0; i<this._debugData.interface.storage.length; i++) {
 			const name = this._debugData.interface.storage[i].name
+			const typ = this._debugData.interface.storage[i].type_
 			const prompt = `Storage element '${name}' value:`
 			const value = await askOpen(prompt, 'Element value', '0')
-			storage.addElement(name, value)
+			storage.addElement(name, value, typ)
 		}
 		console.log(entrypoint.toString())
 		console.log(storage.toString())
@@ -197,7 +198,8 @@ export class ArchetypeRuntime extends EventEmitter {
 			return this._step.stack.filter(x => {
 				return this._initStorage.elements().some(item => item.name == x.name)
 			}).map(x => {
-				return new RuntimeVariable(x.name, x.value)
+				const value = EntryArg.format(x.value, this._initStorage.getType(x.name))
+				return new RuntimeVariable(x.name, value)
 			})
 		}
 	}
@@ -234,41 +236,45 @@ export class ArchetypeRuntime extends EventEmitter {
 			this.instruction++;
 		}
 
-		if (this.instruction >= 0 && this.instruction < this._debugTrace.steps.length) {
+		if (this.instruction >= 0 && this.instruction < this._debugTrace.steps.length - 1) {
 			this._step = this._debugTrace.steps[this.instruction];
 			console.log(JSON.stringify(this._step, null,2))
 			this.sendEvent('stopOnEntry')
 		}
 
-
 	}
 
 	public stack() : IRuntimeStack  {
 		const frames: IRuntimeStackFrame[] = [];
-		if (this.instruction == -1) {
-			const entries = this.getEntries()
-			frames.push({
-				index      : this.instruction,
-				name       : this._entrypoint,
-				file       : this._filename,
-				line       : this._debugData.interface.entrypoints[entries[this._entrypoint]].range.begin_.line,
-				column     : this._debugData.interface.entrypoints[entries[this._entrypoint]].range.begin_.col,
-				endLine    : this._debugData.interface.entrypoints[entries[this._entrypoint]].range.end_.line,
-				endColumn  : this._debugData.interface.entrypoints[entries[this._entrypoint]].range.end_.col,
-				instruction: this.instruction
-			})
+		let step = this._debugTrace.steps[this.instruction + 1];
+		let line = 0
+		let column = 0
+		let endLine = 0
+		let endColumn = 0
+		if (step.decl_bound != undefined) {
+			// this is last step; retrieve location from debug data
+			const range = this._debugData.interface.entrypoints[this.getEntries()[this._entrypoint]].range
+			line = range.end_.line
+			column = 0
+			endLine = range.end_.line
+			endColumn = range.end_.col
 		} else {
-			frames.push({
-				index      : this.instruction,
-				name       : this._entrypoint,
-				file       : this._filename,
-				line       : this._step.range.begin.line,
-				column     : this._step.range.begin.col,
-				endLine    : this._step.range.end.line,
-				endColumn  : this._step.range.end.col,
-				instruction: this.instruction
-			})
+			line = step.range.begin.line
+			column = step.range.begin.col
+			endLine = step.range.end.line
+			endColumn = step.range.end.col
 		}
+		frames.push({
+			index      : this.instruction,
+			name       : this._entrypoint,
+			file       : this._filename,
+			line       : line,
+			column     : column,
+			endLine    : endLine,
+			endColumn  : endColumn,
+			instruction: this.instruction
+		})
+
 		return {
 			frames: frames,
 			count: 0

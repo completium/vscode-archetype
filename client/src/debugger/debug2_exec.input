@@ -1,33 +1,33 @@
 storage
   5
 emitted operations
-
+  
 big_map diff
-
+  
 trace
   - location: 9 (just consumed gas: 19.693)
-    [ (Pair (Left 5) 3) ]
+    [ (Pair (Left 5) 0) ]
   - location: 9 (just consumed gas: 0.010)
     [ (Left 5)
-      3 ]
+      0 ]
   - location: 10 (just consumed gas: 0)
     [ 5
-      3 ]
+      0 ]
   - location: 12 (just consumed gas: 0.010)
     [ 5
       5
-      3 ]
+      0 ]
   - location: 13 (just consumed gas: 0.010)
     [ 5
       5
       5
-      3 ]
+      0 ]
   - location: 14 (just consumed gas: 0)
     [ 5
       5
-      3 ]
+      0 ]
   - location: 17 (just consumed gas: 0.043)
-    [ 3
+    [ 0
       5
       5 ]
   - location: 19 (just consumed gas: 0.032)
