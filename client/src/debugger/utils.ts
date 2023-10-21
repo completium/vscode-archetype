@@ -324,3 +324,19 @@ export async function askClosed(prompt : string, options : string[]) : Promise<s
 	return value
 }
 
+export function toPair(elements : any[]) : string {
+	if (elements.length == 0) {
+		return "Unit"
+	} else if(elements.length == 1) {
+		return "" + elements[0]
+	} else if(elements.length == 2) {
+		return `(Pair ${elements[0]} ${elements[1]})`
+	} else {
+		return `(Pair ${elements[0]} ${toPair(elements.slice(1))})`
+	}
+}
+
+export function argsToMich(elements : EntryArg[]) : string {
+	return toPair(elements.map(x => (x.typ == "int" || x.typ == "nat") ? x.value : `"${x.value}"`))
+}
+

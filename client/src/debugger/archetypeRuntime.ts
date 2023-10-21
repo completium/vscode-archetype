@@ -1,10 +1,11 @@
 import { EventEmitter } from 'events';
+import * as child_process from 'child_process';
 import * as vscode from 'vscode';
 
 import * as fs from 'fs';
 
 import debugData from './debug.json'
-import { ArchetypeTrace, askClosed, askOpen, EntryPoint, Step, Storage, EntryArg } from './utils';
+import { ArchetypeTrace, askClosed, askOpen, EntryPoint, Step, Storage, EntryArg, argsToMich } from './utils';
 import { build_execution, extract_trace, gen_contract_map_source } from './utils';
 
 
@@ -129,15 +130,33 @@ export class ArchetypeRuntime extends EventEmitter {
 	private _debugTrace : ArchetypeTrace = null
 	private _step : Step = null
 
-	private getDebugTrace() : ArchetypeTrace {
+	private BASE_DIR = '/Users/benoitrognier/.completium/mockup'
+	private OCTEZ_CLIENT = '/Users/benoitrognier/Projects/nomadiclabs/tezos/octez-client'
+
+
+	private executeTrace(storage: string, input: string, entrypoint: string, tzSource: string): Promise<string> {
+		return new Promise((resolve, reject) => {
+			// Construct the command string
+			const command = `${this.OCTEZ_CLIENT} --mode mockup --base-dir ${this.BASE_DIR} run script ${tzSource} on storage '${storage}' and input '${input}' --entrypoint '${entrypoint}' --trace-stack`;
+
+			// Execute the command
+			child_process.exec(command, (error, stdout, stderr) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					reject(error);
+				}
+				resolve(stdout? stdout : stderr);
+			});
+		});
+	}
+
+	private async getDebugTrace() : Promise<ArchetypeTrace> {
 		// TODO: change this section to real sys call to archetye binary
-		let trace = ""
-		const dir = "/Users/benoitrognier/Projects/completium/vscode-archetype/client/src/debugger/"
-		if (this._entrypoint == "exec") {
-			trace = fs.readFileSync(dir+'debug2_exec.input', 'utf-8');
-		} else if (this._entrypoint == "exec2") {
-			trace = fs.readFileSync(dir+'debug2_exec2.input', 'utf-8');
-		}
+		const tzSource = "/Users/benoitrognier/Projects/completium/vscode-archetype/client/tests/resources/debug2.tz"
+		const entry = this._entrypoint
+		const storage = argsToMich(this._initStorage.elements())
+		const input = argsToMich(this._inputs)
+		const trace = await this.executeTrace(storage, input, entry, tzSource)
 		// ......
 		const exec_trace = extract_trace(trace)
     const contract_map_source = gen_contract_map_source(JSON.stringify(this._debugData))
@@ -184,7 +203,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		console.log(storage.toString())
 		this._initStorage = storage
 		this._inputs = entrypoint.args
-		this._debugTrace = this.getDebugTrace()
+		this._debugTrace = await this.getDebugTrace()
 		console.log(JSON.stringify(this._debugTrace))
 		this.sendEvent('stopOnEntry')
 	}
@@ -210,12 +229,23 @@ export class ArchetypeRuntime extends EventEmitter {
 		})
 	}
 
+	private parseString(input: string): string | number {
+		const number = Number(input); // Attempt to convert the string to a number
+
+		// Check if the conversion was successful and the result is not NaN (which occurs when the conversion fails)
+		if (!isNaN(number)) {
+			return number; // Return the number if the conversion was successful
+		} else {
+			return input; // Return the original string if the conversion failed
+		}
+	}
+
 	public getLocalVariables() : RuntimeVariable[] {
 		if(this.instruction >= 0) {
 			return this._step.stack.filter(x => {
 				return !this._initStorage.elements().some(item => item.name == x.name) && !this._inputs.some(item => item.name == x.name)
 			}).map(x => {
-				return new RuntimeVariable(x.name, x.value)
+				return new RuntimeVariable(x.name, this.parseString(x.value))
 			})
 		}
 		return []
