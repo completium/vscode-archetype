@@ -2,9 +2,9 @@ archetype debug2
 
 variable a : nat = 0
 
-entry exec(b : nat) {
+entry exec(b : nat, c : nat) {
 	var v = b;
-	a := v
+	a := v + c
 }
 
 entry exec2() {

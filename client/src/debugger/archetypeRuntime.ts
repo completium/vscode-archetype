@@ -1,15 +1,11 @@
 import { EventEmitter } from 'events';
-import * as child_process from 'child_process';
 import * as os from 'os';
 import * as path from 'path';
-import * as vscode from 'vscode';
 
 import * as fs from 'fs';
 
-import debugData from './debug.json'
-import { ArchetypeTrace, askClosed, askOpen, EntryPoint, Step, Storage, EntryArg, argsToMich } from './utils';
-import { build_execution, extract_trace, gen_contract_map_source } from './utils';
-
+import { ArchetypeTrace, askClosed, askOpen, EntryPoint, Step, Storage, EntryArg, argsToMich, DebugData } from './utils';
+import { build_execution, extract_trace, gen_contract_map_source, executeCommand } from './utils';
 
 export interface FileAccessor {
 	isWindows: boolean;
@@ -124,7 +120,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		}, 0);
 	}
 
-	private _debugData = debugData
+	private _debugData : DebugData = null
 	private _filename = ""
 	private _entrypoint = ""
 	private _inputs : EntryArg[] = []
@@ -136,69 +132,65 @@ export class ArchetypeRuntime extends EventEmitter {
 	private OCTEZ_CLIENT = '/Users/benoitrognier/Projects/nomadiclabs/tezos/octez-client'
 	private ARCHETYPE = 'archetype';
 
-	private executeArchetypeBinary(sourceFile: string): Promise<string> {
-		return new Promise((resolve, reject) => {
-			// Construct the command string
-			const command = `${this.ARCHETYPE} -g ${sourceFile}`;
+	public async generateDebugData(arlFilePath: string): Promise<DebugData> {
+		try {
+			// Replace with the actual path to the 'archetype' command if it's not in $PATH
+			const command = `${this.ARCHETYPE} -t debug-trace ${arlFilePath}`;
 
 			// Execute the command
-			child_process.exec(command, (error, stdout, stderr) => {
-				if (error) {
-					console.error(`exec error: ${error}`);
-					reject(error);
-					return;
-				}
+			const output = await executeCommand(command);
 
-				if (stderr) {
-					console.error(`stderr: ${stderr}`);
-					reject(new Error(`Error executing command: ${stderr}`));
-					return;
-				}
-
-				// Get the system temporary directory
-				const tmpDir = os.tmpdir();
-
-				// Generate a unique file name with an extension
-				const tmpFilePath = path.join(tmpDir, `output_${Date.now()}.txt`);
-
-				// Write the command output to the temporary file
-				fs.writeFile(tmpFilePath, stdout, 'utf8', (err) => {
-					if (err) {
-						console.error(`Failed to write to temp file: ${err}`);
-						reject(err);
-					} else {
-						resolve(tmpFilePath);
-					}
-				});
-			});
-		});
+			// Parse the command's output and cast it to the IDebug2 type
+			const debugData: DebugData = JSON.parse(output);
+			return debugData;
+		} catch (error) {
+			// Handle errors as appropriate for your application's requirements
+			throw error;
+		}
 	}
 
+	public compile(sourceFile: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+			// compilation is in debug mode
+      const command = `${this.ARCHETYPE} -g ${sourceFile}`;
+
+      executeCommand(command)
+        .then((output) => {
+          // Get the system temporary directory
+          const tmpDir = os.tmpdir();
+
+          // Generate a unique file name with an extension
+          const tmpFilePath = path.join(tmpDir, `output_${Date.now()}.txt`);
+
+          // Write the command output to the temporary file
+          fs.writeFile(tmpFilePath, output, 'utf8', (err) => {
+            if (err) {
+              console.error(`Failed to write to temp file: ${err}`);
+              reject(err);
+            } else {
+              resolve(tmpFilePath);
+            }
+          });
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 
 	private executeTrace(storage: string, input: string, entrypoint: string, tzSource: string): Promise<string> {
-		return new Promise((resolve, reject) => {
-			// Construct the command string
-			const command = `${this.OCTEZ_CLIENT} --mode mockup --base-dir ${this.BASE_DIR} run script ${tzSource} on storage '${storage}' and input '${input}' --entrypoint '${entrypoint}' --trace-stack`;
-
-			// Execute the command
-			child_process.exec(command, (error, stdout, stderr) => {
-				if (error) {
-					console.error(`exec error: ${error}`);
-					reject(error);
-				}
-				resolve(stdout? stdout : stderr);
-			});
-		});
-	}
+    // Construct the command string
+    const command = `${this.OCTEZ_CLIENT} --mode mockup --base-dir ${this.BASE_DIR} run script ${tzSource} on storage '${storage}' and input '${input}' --entrypoint '${entrypoint}' --trace-stack`;
+    // Use the generic executeCommand function to run the command
+    return executeCommand(command)
+  }
 
 	private async getDebugTrace(program : string) : Promise<ArchetypeTrace> {
-		// TODO: change this section to real sys call to archetye binary
-		const tzSource = await this.executeArchetypeBinary(program)
+		const tzSource = await this.compile(program)
 		const entry = this._entrypoint
 		const storage = argsToMich(this._initStorage.elements())
 		const input = argsToMich(this._inputs)
 		const trace = await this.executeTrace(storage, input, entry, tzSource)
-		// ......
 		const exec_trace = extract_trace(trace)
     const contract_map_source = gen_contract_map_source(JSON.stringify(this._debugData))
     const output = build_execution(contract_map_source, exec_trace)
@@ -222,6 +214,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		console.log(`stopOnEntry: ${stopOnEntry}`)
 		console.log(`debug: ${debug}`)
 		this._filename = program
+		this._debugData = await this.generateDebugData(program)
 		const entries = this.getEntries()
 		const entryname = await askClosed("Select entry point to debug:", Object.keys(entries))
 		this._entrypoint = entryname

@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as child_process from 'child_process';
 
 interface ExecutionParams {
 	entrypoint: string,
@@ -340,3 +341,52 @@ export function argsToMich(elements : EntryArg[]) : string {
 	return toPair(elements.map(x => (x.typ == "int" || x.typ == "nat") ? x.value : `"${x.value}"`))
 }
 
+export function executeCommand(command: string): Promise<string> {
+	return new Promise((resolve, reject) => {
+		child_process.exec(command, (error, stdout, stderr) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				reject(error);
+				return;
+			}
+			if (stderr) {
+				console.error(`stderr: ${stderr}`);
+				reject(new Error(`Error executing command: ${stderr}`));
+				return;
+			}
+			resolve(stdout);
+		});
+	});
+}
+
+export interface DebugData {
+  name: string;
+  interface: {
+    entrypoints: Array<{
+      name: string;
+      args: Array<{
+        name: string;
+        type_: string;
+      }>;
+      range: {
+        name: string;
+        begin_: {
+          line: number;
+          col: number;
+          char: number;
+        };
+        end_: {
+          line: number;
+          col: number;
+          char: number;
+        };
+      };
+    }>;
+    storage: Array<{
+      name: string;
+      type_: string;
+      value: string;
+    }>;
+  };
+  contract: any
+}
