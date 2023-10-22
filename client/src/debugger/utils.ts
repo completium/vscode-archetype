@@ -201,6 +201,15 @@ export function build_execution(contract_map_source: ContractMapSource, trace: T
 	return res
 }
 
+export function removeDoubleQuotes(input: string): string {
+  if (input.startsWith('"') && input.endsWith('"')) {
+    // Remove the first and last characters (the double quotes)
+    return input.substring(1, input.length - 1);
+  }
+  // Return the original string if it doesn't start and end with double quotes
+  return input;
+}
+
 export class EntryArg {
 	private _name: string;
 	private _value: any;
@@ -211,7 +220,7 @@ export class EntryArg {
 			case "nat":
 			case "int": return parseInt(value, 10)
 			case "bytes" :
-			case "string" : return value
+			case "string" : return removeDoubleQuotes(value)
 			case "bool" : return (value == "True" ? true : false)
 			default : return value
 		}

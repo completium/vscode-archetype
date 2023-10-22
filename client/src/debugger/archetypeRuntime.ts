@@ -4,7 +4,7 @@ import * as path from 'path';
 
 import * as fs from 'fs';
 
-import { ArchetypeTrace, askClosed, askOpen, EntryPoint, Step, Storage, EntryArg, argsToMich, DebugData } from './utils';
+import { ArchetypeTrace, askClosed, askOpen, EntryPoint, Step, Storage, EntryArg, argsToMich, DebugData, removeDoubleQuotes } from './utils';
 import { build_execution, extract_trace, gen_contract_map_source, executeCommand } from './utils';
 
 export interface FileAccessor {
@@ -229,8 +229,9 @@ export class ArchetypeRuntime extends EventEmitter {
 		for(let i=0; i<this._debugData.interface.storage.length; i++) {
 			const name = this._debugData.interface.storage[i].name
 			const typ = this._debugData.interface.storage[i].type_
+			const def = this._debugData.interface.storage[i].value
 			const prompt = `Storage element '${name}' value:`
-			const value = await askOpen(prompt, 'Element value', '0')
+			const value = await askOpen(prompt, 'Element value', removeDoubleQuotes(def))
 			storage.addElement(name, value, typ)
 		}
 		//console.log(entrypoint.toString())

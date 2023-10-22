@@ -1,10 +1,12 @@
 archetype debug2
 
 variable a : nat = 0
+variable d : string = "hello"
 
 entry exec(b : nat, c : nat) {
 	var v = b;
-	a := v + c
+	a := v + c;
+	d += " exec"
 }
 
 entry exec2() {
