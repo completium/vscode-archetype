@@ -210,9 +210,9 @@ export class ArchetypeRuntime extends EventEmitter {
 	 * Start executing the given program.
 	 */
 	public async start(program: string, stopOnEntry: boolean, debug: boolean): Promise<void> {
-		console.log(`program: ${program}`)
-		console.log(`stopOnEntry: ${stopOnEntry}`)
-		console.log(`debug: ${debug}`)
+		//console.log(`program: ${program}`)
+		//console.log(`stopOnEntry: ${stopOnEntry}`)
+		//console.log(`debug: ${debug}`)
 		this._filename = program
 		this._debugData = await this.generateDebugData(program)
 		const entries = this.getEntries()
@@ -233,12 +233,12 @@ export class ArchetypeRuntime extends EventEmitter {
 			const value = await askOpen(prompt, 'Element value', '0')
 			storage.addElement(name, value, typ)
 		}
-		console.log(entrypoint.toString())
-		console.log(storage.toString())
+		//console.log(entrypoint.toString())
+		//console.log(storage.toString())
 		this._initStorage = storage
 		this._inputs = entrypoint.args
 		this._debugTrace = await this.getDebugTrace(program)
-		console.log(JSON.stringify(this._debugTrace))
+		//console.log(JSON.stringify(this._debugTrace))
 		this.sendEvent('stopOnEntry')
 	}
 
@@ -293,7 +293,7 @@ export class ArchetypeRuntime extends EventEmitter {
 	}
 
 	public step(instruction: boolean, reverse: boolean) {
-		console.log('Next Step')
+		//console.log('Next Step')
 		if (reverse) {
 			this.instruction--;
 		} else {
@@ -302,7 +302,7 @@ export class ArchetypeRuntime extends EventEmitter {
 
 		if (this.instruction >= 0 && this.instruction < this._debugTrace.steps.length - 1) {
 			this._step = this._debugTrace.steps[this.instruction];
-			console.log(JSON.stringify(this._step, null,2))
+			//console.log(JSON.stringify(this._step, null,2))
 			this.sendEvent('stopOnEntry')
 		}
 
