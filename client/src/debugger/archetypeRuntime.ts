@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import * as os from 'os';
 import * as path from 'path';
+import * as vscode from 'vscode';
 
 import * as fs from 'fs';
 
@@ -128,14 +129,13 @@ export class ArchetypeRuntime extends EventEmitter {
 	private _debugTrace : ArchetypeTrace = null
 	private _step : Step = null
 
-	private BASE_DIR = '/Users/benoitrognier/.completium/mockup'
-	private OCTEZ_CLIENT = '/Users/benoitrognier/Projects/nomadiclabs/tezos/octez-client'
-	private ARCHETYPE = 'archetype';
-
 	public async generateDebugData(arlFilePath: string): Promise<DebugData> {
 		try {
+   		const config = vscode.workspace.getConfiguration('archetype');
+			const archetype_exec = config.get('archetypeBin');
+
 			// Replace with the actual path to the 'archetype' command if it's not in $PATH
-			const command = `${this.ARCHETYPE} -t debug-trace ${arlFilePath}`;
+			const command = `${archetype_exec} -t debug-trace ${arlFilePath}`;
 
 			// Execute the command
 			const output = await executeCommand(command);
@@ -151,8 +151,11 @@ export class ArchetypeRuntime extends EventEmitter {
 
 	public compile(sourceFile: string): Promise<string> {
     return new Promise((resolve, reject) => {
+			const config = vscode.workspace.getConfiguration('archetype');
+			const archetype_exec = config.get('archetypeBin');
+
 			// compilation is in debug mode
-      const command = `${this.ARCHETYPE} -g ${sourceFile}`;
+      const command = `${archetype_exec} -g ${sourceFile}`;
 
       executeCommand(command)
         .then((output) => {
@@ -180,7 +183,11 @@ export class ArchetypeRuntime extends EventEmitter {
 
 	private executeTrace(storage: string, input: string, entrypoint: string, tzSource: string): Promise<string> {
     // Construct the command string
-    const command = `${this.OCTEZ_CLIENT} --mode mockup --base-dir ${this.BASE_DIR} run script ${tzSource} on storage '${storage}' and input '${input}' --entrypoint '${entrypoint}' --trace-stack`;
+		const config = vscode.workspace.getConfiguration('archetype');
+		const octez_client_exec = config.get('octezClientBin');
+		const base_dir = config.get('mockupBaseDir');
+
+    const command = `${octez_client_exec} --mode mockup --base-dir ${base_dir} run script ${tzSource} on storage '${storage}' and input '${input}' --entrypoint '${entrypoint}' --trace-stack`;
     // Use the generic executeCommand function to run the command
     return executeCommand(command)
   }

@@ -58,7 +58,7 @@
         "archetype.archetypeBin": {
           "type": "string",
           "default": "archetype",
-          "description": "Path of archetype binary."
+          "description": "Path to archetype binary."
         },
         "archetype.archetypeCallerAddress": {
           "type": "string",
@@ -73,7 +73,12 @@
         "archetype.octezClientBin": {
           "type": "string",
           "default": "octez-client",
-          "description": "Path of octez-client binary."
+          "description": "Path to octez-client binary."
+        },
+        "archetype.mockupBaseDir": {
+          "type": "string",
+          "default": "${HOME}/.completium/mockup",
+          "description": "Path to mockup working directory."
         }
       }
     },

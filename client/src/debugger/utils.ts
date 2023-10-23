@@ -346,8 +346,16 @@ export function toPair(elements : any[]) : string {
 	}
 }
 
+function toMichelson(value : any, ty : string) : string {
+	switch (ty) {
+		case "string": return `"${value}"`
+		case "bool": return value ? "True" : "False"
+		default: return value
+	}
+}
+
 export function argsToMich(elements : EntryArg[]) : string {
-	return toPair(elements.map(x => (x.typ == "int" || x.typ == "nat") ? x.value : `"${x.value}"`))
+	return toPair(elements.map(x => toMichelson(x.value, x.typ)))
 }
 
 export function executeCommand(command: string): Promise<string> {
