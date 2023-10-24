@@ -49,7 +49,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 	// a Mock runtime (or debugger)
 	private _runtime: ArchetypeRuntime;
 
-	private _variableHandles = new Handles<'constants' | 'storage' | 'inputs' | 'locals' | RuntimeVariable>();
+	private _variableHandles = new Handles<'operations' | 'constants' | 'storage' | 'inputs' | 'locals' | RuntimeVariable>();
 
 	private _configurationDone = new Subject();
 
@@ -231,6 +231,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 				new Scope("Storage", this._variableHandles.create('storage'), false),
 				new Scope("Inputs", this._variableHandles.create('inputs'), true),
 				new Scope("Locals", this._variableHandles.create('locals'), true),
+				new Scope("Operations", this._variableHandles.create('operations'), true),
 				new Scope ("Constants", this._variableHandles.create('constants'), false),
 			]
 		};
@@ -377,7 +378,10 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 		} else if (v === 'constants') {
 			vs = this._runtime.getConstantVariables();
 			//console.log('constant request')
-		} else {
+		} else if (v === 'operations') {
+			vs = this._runtime.getOperations();
+			//console.log('constant request')
+		}else {
 			//console.log('Other variables request')
 		}
 		response.body = {

@@ -11,6 +11,8 @@ entry exec(b : nat, c : nat) {
 
 entry exec2() {
 	const s = self_address;
+	transfer 1tz to caller;
+	transfer 2tz to caller;
 	var v = 4;
 	a += v
 }

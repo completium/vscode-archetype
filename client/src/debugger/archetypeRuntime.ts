@@ -295,6 +295,19 @@ export class ArchetypeRuntime extends EventEmitter {
 		]
 	}
 
+	public getOperations() : RuntimeVariable[] {
+		const l = this._step.stack.filter(x => x.name == '_ops')
+		if (l.length > 0) {
+			const ops = l[0].value
+			const regex = /0x[0-9a-fA-F]+/g;
+    	const matches = ops.match(regex);
+			return matches.map((x,i) => {
+				return new RuntimeVariable(i+"", x)
+			})
+		}
+		return []
+	}
+
 	private parseString(input: string): string | number {
 		const number = Number(input); // Attempt to convert the string to a number
 
@@ -309,7 +322,7 @@ export class ArchetypeRuntime extends EventEmitter {
 	public getLocalVariables() : RuntimeVariable[] {
 		if(this.instruction >= 0) {
 			return this._step.stack.filter(x => {
-				return !this._initStorage.elements().some(item => item.name == x.name) && !this._inputs.some(item => item.name == x.name)
+				return x.name != '_ops' && !this._initStorage.elements().some(item => item.name == x.name) && !this._inputs.some(item => item.name == x.name)
 			}).map(x => {
 				return new RuntimeVariable(x.name, this.parseString(removeDoubleQuotes(x.value)))
 			})
