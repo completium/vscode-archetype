@@ -104,6 +104,22 @@ function removeFirstAndLastCharacter(str: string): string {
 	return str.slice(1, -1);
 }
 
+function countCharOccurrences(inputString, charToCount) {
+  let count = 0;
+
+  for (let i = 0; i < inputString.length; i++) {
+    if (inputString[i] === charToCount) {
+      count++;
+    }
+  }
+
+  return count;
+}
+
+function is_micheline_valid(str : string) : boolean {
+	return countCharOccurrences(str, "{") - countCharOccurrences(str, "}") == 0
+}
+
 export function extract_trace(input: string): Trace {
 	if (!input || input.trim().length === 0) {
 		throw new Error("Invalid input, empty.");
@@ -126,7 +142,18 @@ export function extract_trace(input: string): Trace {
 				const gas = Number.parseFloat(arr[2]);
 				const stack_raw = removeFirstLine(tr).trim();
 				const s1 = removeFirstAndLastCharacter(stack_raw);
-				const stack: Array<string> = s1.split("\n").map(x => { return x.trim() });
+				const s2 = s1.split("\n");
+				const stack: Array<string> = [];
+				let accu = "";
+				for (const cl of s2) {
+					accu += cl
+					if (is_micheline_valid(accu)) {
+						stack.push(accu)
+						accu = "";
+					} else {
+						accu += "\n"
+					}
+				}
 				res.push({ location: location, gas: gas, stack: stack });
 			} else {
 				// Invalid regex match, skip this trace item.
