@@ -6,9 +6,9 @@
  */
 
 'use strict';
-
 import * as vscode from 'vscode';
-import { WorkspaceFolder, DebugConfiguration, ProviderResult, CancellationToken } from 'vscode';
+import { CancellationToken, DebugConfiguration, ProviderResult, WorkspaceFolder } from 'vscode';
+
 import { ArchetypeDebugSession } from './archetypeDebug';
 import { FileAccessor } from './archetypeRuntime';
 

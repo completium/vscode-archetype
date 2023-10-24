@@ -311,11 +311,39 @@ export class ArchetypeRuntime extends EventEmitter {
 			return this._step.stack.filter(x => {
 				return !this._initStorage.elements().some(item => item.name == x.name) && !this._inputs.some(item => item.name == x.name)
 			}).map(x => {
-				return new RuntimeVariable(x.name, this.parseString(x.value))
+				return new RuntimeVariable(x.name, this.parseString(removeDoubleQuotes(x.value)))
 			})
 		}
 		return []
  	}
+
+	public evaluate(name: string) : RuntimeVariable | undefined {
+		const storageVars = this.getStorageVariables()
+		for(let i=0; i<storageVars.length; i++) {
+			if (storageVars[i].name == name) {
+				return storageVars[i]
+			}
+		}
+		const localVars = this.getLocalVariables()
+		for(let i=0; i<localVars.length; i++) {
+			if (localVars[i].name == name) {
+				return localVars[i]
+			}
+		}
+		const inputVars = this.getInputVariables()
+		for(let i=0; i<inputVars.length; i++) {
+			if (inputVars[i].name == name) {
+				return inputVars[i]
+			}
+		}
+		const constants = this.getConstantVariables()
+		for(let i=0; i<constants.length; i++) {
+			if (constants[i].name == name) {
+				return constants[i]
+			}
+		}
+		return undefined
+	}
 
 	// This is the next instruction that will be 'executed'
 	public instruction = -1;
@@ -336,6 +364,8 @@ export class ArchetypeRuntime extends EventEmitter {
 			this._step = this._debugTrace.steps[this.instruction];
 			//console.log(JSON.stringify(this._step, null,2))
 			this.sendEvent('stopOnEntry')
+		} else if (this.instruction >= this._debugTrace.steps.length - 1) {
+			this.sendEvent('end');
 		}
 
 	}

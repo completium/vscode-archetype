@@ -237,6 +237,22 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 		this.sendResponse(response);
 	}
 
+	protected async evaluateRequest(response: DebugProtocol.EvaluateResponse, args: DebugProtocol.EvaluateArguments): Promise<void> {
+		if (args.context == 'hover') {
+			const variable = this._runtime.evaluate(args.expression)
+			if (variable != undefined) {
+				const v = this.convertFromRuntime(variable)
+				response.body = {
+					result: v.value,
+					type: v.type,
+					variablesReference: v.variablesReference,
+					presentationHint: v.presentationHint
+				};
+			}
+			this.sendResponse(response);
+		}
+	}
+
 	protected nextRequest(response: DebugProtocol.NextResponse, args: DebugProtocol.NextArguments): void {
 		this._runtime.step(args.granularity === 'instruction', false);
 		this.sendResponse(response);
