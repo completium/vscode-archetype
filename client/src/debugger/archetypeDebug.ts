@@ -363,6 +363,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 	}
 
 	protected async variablesRequest(response: DebugProtocol.VariablesResponse, args: DebugProtocol.VariablesArguments, request?: DebugProtocol.Request): Promise<void> {
+		const variableReference = args.variablesReference;
 		let vs: RuntimeVariable[] = [];
 
 		const v = this._variableHandles.get(args.variablesReference);
@@ -382,7 +383,9 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 			vs = this._runtime.getOperations();
 			//console.log('constant request')
 		}else {
-			//console.log('Other variables request')
+			console.log('Other variables request')
+			console.log(variableReference)
+			vs = this._runtime.getOperationDetail(variableReference)
 		}
 		response.body = {
 			variables: vs.map(v => this.convertFromRuntime(v))
@@ -429,9 +432,12 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 			}
 		}
 
-		if (v.memory) {
-			v.reference ??= this._variableHandles.create(v);
-			dapVariable.memoryReference = String(v.reference);
+		//if (v.memory) {
+		//	v.reference ??= this._variableHandles.create(v);
+		//	dapVariable.memoryReference = String(v.reference);
+		//}
+		if (v.reference != undefined) {
+			dapVariable.variablesReference = v.reference;
 		}
 
 		return dapVariable;

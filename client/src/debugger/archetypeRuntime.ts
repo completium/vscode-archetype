@@ -302,10 +302,20 @@ export class ArchetypeRuntime extends EventEmitter {
 			const regex = /0x[0-9a-fA-F]+/g;
     	const matches = ops.match(regex);
 			return matches.map((x,i) => {
-				return new RuntimeVariable(i+"", x)
+				let op = new RuntimeVariable(i+"", x)
+				op.reference = i+1
+				return op
 			})
 		}
 		return []
+	}
+
+	public getOperationDetail(variableReference : number) : RuntimeVariable[] {
+		//const l = this._step.stack.filter(x => x.name == '_ops')
+		return [
+			new RuntimeVariable("destination", "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"),
+			new RuntimeVariable("amount", 0)
+		]
 	}
 
 	private parseString(input: string): string | number {
