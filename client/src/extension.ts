@@ -25,7 +25,7 @@ import { ArchetypeDebugSession } from './debugger/archetypeDebug';
 const runMode: 'external' | 'server' | 'namedPipeServer' | 'inline' = 'inline';
 
 export function activate(context: vscode.ExtensionContext) {
-	// console.log("Archetype extension is active");
+	//console.log("Archetype extension is active");
 
 	switch (runMode) {
 		case 'server':

@@ -59,6 +59,7 @@ export function activateMockDebug(context: vscode.ExtensionContext, factory?: vs
 			placeHolder: "Please enter the name of a markdown file in the workspace folder",
 			value: "readme.md"
 		});
+
 	}));
 
 	// register a configuration provider for 'mock' debug type

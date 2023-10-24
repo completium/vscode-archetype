@@ -1,12 +1,11 @@
 import { EventEmitter } from 'events';
+import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-import * as fs from 'fs';
-
-import { ArchetypeTrace, askClosed, askOpen, EntryPoint, Step, Storage, EntryArg, argsToMich, DebugData, removeDoubleQuotes } from './utils';
-import { build_execution, extract_trace, gen_contract_map_source, executeCommand } from './utils';
+import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, CallParameters, dateStringToSeconds, DebugData, EntryArg, EntryPoint, getCurrentDateTime, removeDoubleQuotes, Step, Storage } from './utils';
+import { build_execution, executeCommand, extract_trace, gen_contract_map_source } from './utils';
 
 export interface FileAccessor {
 	isWindows: boolean;
@@ -128,6 +127,7 @@ export class ArchetypeRuntime extends EventEmitter {
 	private _initStorage : Storage = null
 	private _debugTrace : ArchetypeTrace = null
 	private _step : Step = null
+	private _parameters : CallParameters = null
 
 	public async generateDebugData(arlFilePath: string): Promise<DebugData> {
 		try {
@@ -187,7 +187,8 @@ export class ArchetypeRuntime extends EventEmitter {
 		const octez_client_exec = config.get('octezClientBin');
 		const base_dir = config.get('mockupBaseDir');
 
-    const command = `${octez_client_exec} --mode mockup --base-dir ${base_dir} run script ${tzSource} on storage '${storage}' and input '${input}' --entrypoint '${entrypoint}' --trace-stack`;
+		const parameters = `--amount '${this._parameters.transferred}' --source '${this._parameters.caller}' --self-address '${this._parameters.selfaddress}' --now '${dateStringToSeconds(this._parameters.now)}' --level '${this._parameters.level}' --balance '${this._parameters.balance}'`
+    const command = `${octez_client_exec} --mode mockup --base-dir ${base_dir} run script ${tzSource} on storage '${storage}' and input '${input}' --entrypoint '${entrypoint}' ${parameters} --trace-stack`;
     // Use the generic executeCommand function to run the command
     return executeCommand(command)
   }
@@ -216,7 +217,7 @@ export class ArchetypeRuntime extends EventEmitter {
 	/**
 	 * Start executing the given program.
 	 */
-	public async start(program: string, stopOnEntry: boolean, debug: boolean): Promise<void> {
+	public async start(program: string, pargs: string[], stopOnEntry: boolean, debug: boolean): Promise<void> {
 		//console.log(`program: ${program}`)
 		//console.log(`stopOnEntry: ${stopOnEntry}`)
 		//console.log(`debug: ${debug}`)
@@ -229,8 +230,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		const args = this._debugData.interface.entrypoints[entries[entryname]].args
 		for(let i=0; i < args.length; i++) {
 			const prompt = `Argument '${args[i].name}' value:`
-			const argvalue = await askOpen(prompt, 'Argument value', '0')
-			entrypoint.addArg(args[i].name, argvalue, args[i].type_)
+			await askOpenValidate(prompt, 'Argument value', '', (x) => entrypoint.addArg(args[i].name, x, args[i].type_))
 		}
 		const storage = new Storage()
 		for(let i=0; i<this._debugData.interface.storage.length; i++) {
@@ -238,13 +238,23 @@ export class ArchetypeRuntime extends EventEmitter {
 			const typ = this._debugData.interface.storage[i].type_
 			const def = this._debugData.interface.storage[i].value
 			const prompt = `Storage element '${name}' value:`
-			const value = await askOpen(prompt, 'Element value', removeDoubleQuotes(def))
-			storage.addElement(name, value, typ)
+			await askOpenValidate(prompt, 'Element value', removeDoubleQuotes(def), x => storage.addElement(name, x, typ))
 		}
 		//console.log(entrypoint.toString())
 		//console.log(storage.toString())
 		this._initStorage = storage
 		this._inputs = entrypoint.args
+		this._parameters = new CallParameters()
+		if (pargs != undefined && pargs.find(x => x == '--all')) {
+			this._parameters = new CallParameters()
+			// caller
+			await askOpenValidate("Set caller's address", 'Caller address', this._parameters.caller, (x) => { this._parameters.setCaller(x) })
+			await askOpenValidate("Set transferred amount value", 'Amount value', this._parameters.transferred, (x) => { this._parameters.setTransferred(x) })
+			await askOpenValidate("Set balance value", 'Amount value', this._parameters.balance, (x) => { this._parameters.setBalance(x) })
+			await askOpenValidate("Set now value", 'now date', this._parameters.now, (x) => { this._parameters.setNow(x) })
+			await askOpenValidate("Set self address", 'Self address', this._parameters.selfaddress, (x) => { this._parameters.setSelfAddress(x) })
+			await askOpenValidate("Set level value", 'level', this._parameters.level, (x) => { this._parameters.setLevel(x) })
+		}
 		this._debugTrace = await this.getDebugTrace(program)
 		//console.log(JSON.stringify(this._debugTrace))
 		this.sendEvent('stopOnEntry')
@@ -269,6 +279,20 @@ export class ArchetypeRuntime extends EventEmitter {
 		return this._inputs.map(x => {
 			return new RuntimeVariable(x.name, x.value)
 		})
+	}
+
+	public getConstantVariables() : RuntimeVariable[] {
+		const transferred = Number.parseInt(this._parameters.transferred)
+		const balance = Number.parseInt(this._parameters.balance)
+		const level = Number.parseInt(this._parameters.level)
+		return [
+			new RuntimeVariable("caller", this._parameters.caller),
+			new RuntimeVariable("transferred", transferred),
+			new RuntimeVariable("balance", balance + transferred),
+			new RuntimeVariable("now", this._parameters.now),
+			new RuntimeVariable("self_address", this._parameters.selfaddress),
+			new RuntimeVariable("level", level),
+		]
 	}
 
 	private parseString(input: string): string | number {

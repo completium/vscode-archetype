@@ -10,6 +10,7 @@ entry exec(b : nat, c : nat) {
 }
 
 entry exec2() {
+	const s = self_address;
 	var v = 4;
 	a += v
 }

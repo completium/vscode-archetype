@@ -4,8 +4,15 @@
 		{
 			"type": "mock",
 			"request": "launch",
-			"name": "Debug Archetype",
-			"program": "/Users/benoitrognier/Projects/completium/vscode-archetype/client/tests/resources/debug2.arl"
+			"name": "Debug Archetype (simple)",
+			"program": "${file}",
+		},
+		{
+			"type": "mock",
+			"request": "launch",
+			"name": "Debug Archetype (all parameters)",
+			"program": "${file}",
+			"args": [	"--all" ]
 		}
 	]
 }

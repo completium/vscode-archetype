@@ -1,5 +1,6 @@
-import * as vscode from 'vscode';
 import * as child_process from 'child_process';
+import { isNumber } from 'util';
+import * as vscode from 'vscode';
 
 interface ExecutionParams {
 	entrypoint: string,
@@ -210,6 +211,16 @@ export function removeDoubleQuotes(input: string): string {
   return input;
 }
 
+function isValidString(input: string): boolean {
+  for (let i = 0; i < input.length; i++) {
+    if (input.charCodeAt(i) > 127) {
+      return false; // caractère non-ASCII trouvé, donc la chaîne n'est pas valide
+    }
+  }
+  return true; // aucun caractère non-ASCII trouvé, donc la chaîne est valide
+}
+
+
 export class EntryArg {
 	private _name: string;
 	private _value: any;
@@ -227,9 +238,17 @@ export class EntryArg {
 	}
 
 	constructor(name: string, value: string, typ ?: string) {
-			this._name = name;
-			this._type = typ ? typ : "string"
-			this._value = EntryArg.format(value, typ)
+		this._type = typ ? typ : "string"
+		switch(this._type) {
+			case 'nat' : if(!isNat(value)) throw new InputError("argument", "a nat value is expected"); break
+			case 'int' : if(!isInteger(value)) throw new InputError("argument", "an integer value is expected"); break
+			case 'address' : if(!isAddress(value)) throw new InputError("argument", "an address value is expected"); break
+			case 'timestamp': if(!isDate(value)) throw new InputError("argument", "a date value 'YYYY-MM-DD dd:mm:ss' is expected"); break
+			case 'string': if(!isValidString(removeDoubleQuotes(value))) throw new InputError("argument", "a string with non extended ASCII characters is expected")
+			default: {}
+		}
+		this._name = name;
+		this._value = EntryArg.format(value, typ)
 	}
 
 	// Getters
@@ -326,6 +345,22 @@ export async function askOpen(prompt: string, placeHolder: string, def: string) 
 	return value
 }
 
+export async function askOpenValidate(prompt : string, placeHolder : string, def : string, validate : (string) => void) {
+	let ko = true
+	while(ko) {
+		try {
+			const v = await askOpen(prompt, placeHolder, def)
+			validate(v)
+			ko = false
+		} catch (e) {
+			if (e instanceof InputError) {
+				vscode.window.showErrorMessage(e.message)
+				ko = true
+			}
+		}
+	}
+}
+
 export async function askClosed(prompt : string, options : string[]) : Promise<string | undefined> {
 	const value = await vscode.window.showQuickPick(options, {
 		placeHolder: prompt, // Texte à afficher pour guider l'utilisateur
@@ -362,12 +397,12 @@ export function executeCommand(command: string): Promise<string> {
 	return new Promise((resolve, reject) => {
 		child_process.exec(command, (error, stdout, stderr) => {
 			if (error) {
-				console.error(`exec error: ${error}`);
+				vscode.window.showErrorMessage(`exec error: ${error}`)
 				reject(error);
 				return;
 			}
 			if (stderr) {
-				console.error(`stderr: ${stderr}`);
+				vscode.window.showErrorMessage(`stderr: ${stderr}`);
 				reject(new Error(`Error executing command: ${stderr}`));
 				return;
 			}
@@ -406,4 +441,231 @@ export interface DebugData {
     }>;
   };
   contract: any
+}
+
+class InputError extends Error {
+	constructor(errorTyp: string, detail : string) {
+			// Appel du constructeur de la classe parent `Error`
+			super("Invalid " + errorTyp + " value: " + detail);
+
+			// Rétablissement du prototype, une correction nécessaire pour faire fonctionner `instanceof` avec les classes personnalisées d'erreur étendant Error en TypeScript
+			Object.setPrototypeOf(this, new.target.prototype);
+
+			// Préservation du nom de la classe
+			this.name = InputError.name; // ou hard-codez le nom si la minification du code est un problème
+
+			// Capturer la trace de la pile si disponible
+			if (Error.captureStackTrace) {
+					Error.captureStackTrace(this, InputError);
+			}
+	}
+}
+
+function isNat(value: string): boolean {
+	// Vérifie d'abord si la chaîne est un nombre valide
+	const number = Number(value);
+
+	// Ensuite, vérifie si c'est un entier et s'il est non négatif
+	return Number.isInteger(number) && number >= 0;
+}
+
+function isInteger(value: string) : boolean {
+	const number = Number(value);
+	return  Number.isInteger(number)
+}
+
+function isAddress(address: string): boolean {
+	// Les préfixes valides pour les adresses Tezos
+	const validPrefixes = ['tz1', 'tz2', 'tz3', 'KT1', 'KT2'];
+
+	// La longueur typique d'une adresse Tezos
+	const addressLength = 36;
+
+	// Vérifie si l'adresse a la bonne longueur
+	if (address.length !== addressLength) {
+			return false;
+	}
+
+	// Vérifie si l'adresse commence par l'un des préfixes valides
+	for (const prefix of validPrefixes) {
+			if (address.startsWith(prefix)) {
+					return true;
+			}
+	}
+
+	// Si l'adresse n'a pas passé les vérifications, retourne false
+	return false;
+}
+
+function isDate(dateTimeString: string): boolean {
+	// Expression régulière pour vérifier le format "YYYY-MM-DD hh:mm:ss"
+	const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+
+	// Vérifier si la chaîne correspond au format
+	if (!regex.test(dateTimeString)) {
+			return false;
+	}
+
+	// Vérifier si la chaîne représente une date valide
+	const date = new Date(dateTimeString);
+	return date instanceof Date && !isNaN(date.getTime());
+}
+
+export function getCurrentDateTime(): string {
+	const date = new Date();
+
+	// Fonction d'aide pour ajouter un zéro devant les nombres < 10
+	const pad = (num: number) => (num < 10 ? `0${num}` : num);
+
+	const year = date.getFullYear();
+	const month = pad(date.getMonth() + 1); // Les mois vont de 0 à 11, donc on ajoute 1
+	const day = pad(date.getDate());
+	const hours = pad(date.getHours());
+	const minutes = pad(date.getMinutes());
+	const seconds = pad(date.getSeconds());
+
+	// Construction de la chaîne de date au format "YYYY-MM-DD hh:mm:ss"
+	const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+	return formattedDate;
+}
+
+export function dateStringToSeconds(dateString: string): number | null {
+	// Vérifier le format de la chaîne de date
+	const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+	if (!regex.test(dateString)) {
+			console.error("Invalid date. Use 'YYYY-MM-DD hh:mm:ss'.");
+			return null;
+	}
+
+	// Convertir la chaîne de date en objet Date
+	const date = new Date(dateString);
+
+	// Vérifier si la date est valide
+	if (isNaN(date.getTime())) {
+			console.error("Invalid date");
+			return null;
+	}
+
+	// Convertir l'objet Date en nombre de secondes depuis l'époque Unix
+	const seconds = Math.floor(date.getTime() / 1000);
+	return seconds;
+}
+
+function secondsToDateString(seconds: number): string {
+	// Convertir les secondes en millisecondes (car JavaScript utilise des millisecondes pour les dates)
+	const date = new Date(seconds * 1000);
+
+	// Fonction d'aide pour ajouter un zéro devant les nombres < 10
+	const pad = (num: number) => (num < 10 ? `0${num}` : num);
+
+	const year = date.getFullYear();
+	const month = pad(date.getMonth() + 1); // Les mois vont de 0 à 11, donc on ajoute 1
+	const day = pad(date.getDate());
+	const hours = pad(date.getHours());
+	const minutes = pad(date.getMinutes());
+	const secondsString = pad(date.getSeconds());
+
+	// Construction de la chaîne de date au format "YYYY-MM-DD hh:mm:ss"
+	const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${secondsString}`;
+
+	return formattedDate;
+}
+
+export class CallParameters {
+	private _transferred : string = ""
+	private _caller : string = ""
+	private _source : string = ""
+	private _now : string = ""
+	private _level : string = ""
+	private _balance : string = ""
+	private _sefladdress : string = ""
+	constructor() {
+		this._now = getCurrentDateTime()
+		this._transferred = "0"
+		this._balance = "0"
+		this._level = "0"
+		this._caller = "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
+		this._source = "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
+		this._sefladdress = "KT1BEqzn5Wx8uJrZNvuS9DVHmLvG9td3fDLi"
+	}
+	/**
+	 * @throws Error when transferred amount is not a positive integer
+	 */
+	public setTransferred(v : string) {
+		if(isNat(v)) {
+			this._transferred = v
+		} else {
+			throw new InputError("transferred", "should be a positive integer value")
+		}
+	}
+	public setCaller(v : string) {
+		if(isAddress(v)) {
+			this._caller = v
+		} else {
+			throw new InputError("caller", "value is not a valid Tezos address")
+		}
+	}
+	public setSource(v : string) {
+		if(isAddress(v)) {
+			this._source = v
+		} else {
+			throw new InputError("caller", "value is not a valid Tezos address")
+		}
+	}
+	public setNow(v : string) {
+		if(isDate(v)) {
+			this._now = v
+		} else {
+			throw new InputError("now", "invalid date value (should not have milliseconds)")
+		}
+	}
+	public setLevel(v : string) {
+		if(isNat(v)) {
+			this._level = v
+		} else {
+			throw new InputError("level", "should be a positive integer")
+		}
+	}
+	public setBalance(v : string) {
+		if(isNat(v)) {
+			this._balance = v
+		} else {
+			throw new InputError("balance", "should be a positive integer")
+		}
+	}
+	public setSelfAddress(v : string) {
+		if(isAddress(v) && v.startsWith("KT1")) {
+			this._sefladdress = v
+		} else {
+			throw new InputError("self-address", "should be a valid contract address")
+		}
+	}
+	public get caller(): string {
+		return this._caller;
+	}
+
+	public get source(): any {
+		return this._source;
+	}
+
+	public get transferred(): any {
+		return this._transferred;
+	}
+
+	public get level(): any {
+		return this._level;
+	}
+
+	public get now(): any {
+		return this._now;
+	}
+
+	public get balance() : any {
+		return this._balance
+	}
+
+	public get selfaddress() : any {
+		return this._sefladdress
+	}
 }

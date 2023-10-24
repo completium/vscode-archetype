@@ -27,6 +27,7 @@ import { ArchetypeRuntime, FileAccessor, IRuntimeBreakpoint, RuntimeVariable } f
 interface ILaunchRequestArguments extends DebugProtocol.LaunchRequestArguments {
 	/** An absolute path to the "program" to debug. */
 	program: string;
+	args: string[];
 	/** Automatically stop target after launch. If not specified, target does not stop. */
 	stopOnEntry?: boolean;
 	/** enable logging the Debug Adapter Protocol */
@@ -48,7 +49,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 	// a Mock runtime (or debugger)
 	private _runtime: ArchetypeRuntime;
 
-	private _variableHandles = new Handles<'storage' | 'inputs' | 'locals' | RuntimeVariable>();
+	private _variableHandles = new Handles<'constants' | 'storage' | 'inputs' | 'locals' | RuntimeVariable>();
 
 	private _configurationDone = new Subject();
 
@@ -229,7 +230,8 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 			scopes: [
 				new Scope("Storage", this._variableHandles.create('storage'), false),
 				new Scope("Inputs", this._variableHandles.create('inputs'), true),
-				new Scope("Locals", this._variableHandles.create('locals'), true)
+				new Scope("Locals", this._variableHandles.create('locals'), true),
+				new Scope ("Constants", this._variableHandles.create('constants'), false),
 			]
 		};
 		this.sendResponse(response);
@@ -297,7 +299,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 		await this._configurationDone.wait(1000);
 
 		// start the program in the runtime
-		await this._runtime.start(args.program, !!args.stopOnEntry, !args.noDebug);
+		await this._runtime.start(args.program, args.args, !!args.stopOnEntry, !args.noDebug);
 
 		if (args.compileError) {
 			// simulate a compile/build error in "launch" request:
@@ -349,15 +351,18 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 		const v = this._variableHandles.get(args.variablesReference);
 		if (v === 'locals') {
 			vs = this._runtime.getLocalVariables();
-			console.log('Locals request')
+			//console.log('Locals request')
 		} else if (v === 'storage') {
 			vs = this._runtime.getStorageVariables();
-			console.log('Storage request')
+			//console.log('Storage request')
 		} else if (v === 'inputs') {
 			vs = this._runtime.getInputVariables();
-			console.log('Inputs request')
+			//console.log('Inputs request')
+		} else if (v === 'constants') {
+			vs = this._runtime.getConstantVariables();
+			//console.log('constant request')
 		} else {
-			console.log('Other variables request')
+			//console.log('Other variables request')
 		}
 		response.body = {
 			variables: vs.map(v => this.convertFromRuntime(v))
