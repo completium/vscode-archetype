@@ -131,6 +131,7 @@ export class ArchetypeRuntime extends EventEmitter {
 	private _operationDetails : Map<string, Operation> = new Map<string, Operation>()
 	private _operationChunk = 100
 	private _gasInfo : Map<number, Array<GasInfo>> = new Map<number, Array<GasInfo>>()
+	private _decorations : vscode.TextEditorDecorationType[] = []
 
 	public async generateDebugData(arlFilePath: string): Promise<DebugData> {
 		try {
@@ -236,6 +237,7 @@ export class ArchetypeRuntime extends EventEmitter {
 
 	private setGasDecoration() {
 		const activeEditor = vscode.window.activeTextEditor;
+		let decorations = []
 		if (activeEditor) {
 			const colorTheme = vscode.workspace.getConfiguration('editor.tokenColorCustomizations');
 			const lineNumberColor = colorTheme.textMateRules?.find(rule => rule.scope === 'lineNumber')?.settings.foreground;
@@ -243,7 +245,7 @@ export class ArchetypeRuntime extends EventEmitter {
 			for (const [line, infos] of this._gasInfo.entries()) {
 				if (infos.length > 0) {
 					const info = infos[0]
-					const decorationType = vscode.window.createTextEditorDecorationType({
+					const decoration = vscode.window.createTextEditorDecorationType({
 						// Configuration de votre décoration ici. Par exemple, style de bordure, couleur, etc.
 						// Vous pouvez également définir des after ou before properties pour afficher du texte additionnel à côté de la ligne.
 						after: {
@@ -251,13 +253,25 @@ export class ArchetypeRuntime extends EventEmitter {
 							color: lineNumberColor || 'dimgrey'
 						}
 					});
-					activeEditor.setDecorations(decorationType, [
+					decorations.push(decoration)
+					activeEditor.setDecorations(decoration, [
 						{
 							range: new vscode.Range(new vscode.Position(line - 1, 0), new vscode.Position(line - 1, 50)),
 						}
 					]);
 				}
 			}
+		}
+		this._decorations = decorations
+	}
+
+	private clearDecorations() {
+		const activeEditor = vscode.window.activeTextEditor;
+		if (activeEditor) {
+			this._decorations.forEach(decoration => {
+				activeEditor.setDecorations(decoration, [])
+			})
+			this._decorations = []
 		}
 	}
 
@@ -471,6 +485,7 @@ export class ArchetypeRuntime extends EventEmitter {
 			//console.log(JSON.stringify(this._step, null,2))
 			this.sendEvent('stopOnEntry')
 		} else if (this.instruction >= this._debugTrace.steps.length - 1) {
+			this.clearDecorations()
 			this.sendEvent('end');
 		}
 
