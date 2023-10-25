@@ -84,6 +84,7 @@ export type StackItemValue = {
 
 export type Step = {
 	"stack": Array<StackItemValue>
+	"gas" : number
   "range"?: RangeItem
 	"decl_bound"?: DeclBound
 }
@@ -213,17 +214,57 @@ function compute_stack_value (stack: Array<StackItem>, values: Array<string>) : 
 	return res
 }
 
+export type GasInfo = {
+  gas: number;
+  totalgas: number;
+};
+
+export function extractGasInfoFromTrace(trace: ArchetypeTrace): Map<number, Array<GasInfo>> {
+  const gasMap = new Map<number, Array<GasInfo>>();
+
+	let totalgas = 0
+  trace.steps.forEach(step => {
+    if (step.range) {
+      const lineNumber = step.range.begin.line;
+			totalgas += step.gas
+      const gasInfo: GasInfo = {
+        gas: step.gas / 1000,
+        totalgas: totalgas / 1000
+      };
+
+      // Si le numéro de ligne existe déjà dans la Map, ajoutez le nouvel GasInfo à la liste existante.
+      // Sinon, créez une nouvelle liste avec GasInfo.
+      if (gasMap.has(lineNumber)) {
+        gasMap.get(lineNumber)!.push(gasInfo);
+      } else {
+        gasMap.set(lineNumber, [gasInfo]);
+      }
+    }
+  });
+
+  return gasMap;
+}
+
+
 export function build_execution(contract_map_source: ContractMapSource, trace: Trace): ArchetypeTrace {
 	let res: ArchetypeTrace = { steps: [] }
 	const map_ext_micheline: Map<number, ExtMicheline> = build_map_ext_micheline(contract_map_source.contract);
 	// console.log(map_ext_micheline);
+	let stepgas = 0
 	for (let i = 0; i < trace.items.length; ++i) {
 		const trace_item = trace.items[i];
 		const ext_micheline: ExtMicheline = map_ext_micheline.get(trace_item.location);
+		stepgas += trace_item.gas * 1000
 		if ((ext_micheline as Mprim).debug !== undefined) {
 			const debug = (ext_micheline as Mprim).debug;
 			const stack_value : Array<StackItemValue> = compute_stack_value(debug.stack, trace_item.stack)
-			res.steps.push({stack: stack_value, range: debug.range, decl_bound: debug.decl_bound});
+			res.steps.push({
+				stack: stack_value,
+				gas: stepgas,
+				range: debug.range,
+				decl_bound: debug.decl_bound
+			});
+			stepgas = 0
 		}
 	}
 	return res

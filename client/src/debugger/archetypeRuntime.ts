@@ -4,8 +4,8 @@ import * as os from 'os';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, CallParameters, dateStringToSeconds, DebugData, EntryArg, EntryPoint, getCurrentDateTime, Operation, removeDoubleQuotes, Step, Storage } from './utils';
-import { build_execution, executeCommand, extract_trace, gen_contract_map_source } from './utils';
+import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, CallParameters, dateStringToSeconds, DebugData, EntryArg, EntryPoint, extractGasInfoFromTrace, getCurrentDateTime, Operation, removeDoubleQuotes, Step, Storage } from './utils';
+import { build_execution, executeCommand, extract_trace, gen_contract_map_source, GasInfo } from './utils';
 
 export interface FileAccessor {
 	isWindows: boolean;
@@ -130,6 +130,7 @@ export class ArchetypeRuntime extends EventEmitter {
 	private _parameters : CallParameters = null
 	private _operationDetails : Map<string, Operation> = new Map<string, Operation>()
 	private _operationChunk = 100
+	private _gasInfo : Map<number, Array<GasInfo>> = new Map<number, Array<GasInfo>>()
 
 	public async generateDebugData(arlFilePath: string): Promise<DebugData> {
 		try {
@@ -233,6 +234,33 @@ export class ArchetypeRuntime extends EventEmitter {
 		}
 	}
 
+	private setGasDecoration() {
+		const activeEditor = vscode.window.activeTextEditor;
+		if (activeEditor) {
+			const colorTheme = vscode.workspace.getConfiguration('editor.tokenColorCustomizations');
+			const lineNumberColor = colorTheme.textMateRules?.find(rule => rule.scope === 'lineNumber')?.settings.foreground;
+
+			for (const [line, infos] of this._gasInfo.entries()) {
+				if (infos.length > 0) {
+					const info = infos[0]
+					const decorationType = vscode.window.createTextEditorDecorationType({
+						// Configuration de votre décoration ici. Par exemple, style de bordure, couleur, etc.
+						// Vous pouvez également définir des after ou before properties pour afficher du texte additionnel à côté de la ligne.
+						after: {
+							contentText: '    (gas: ' + info.gas + ')',
+							color: lineNumberColor || 'dimgrey'
+						}
+					});
+					activeEditor.setDecorations(decorationType, [
+						{
+							range: new vscode.Range(new vscode.Position(line - 1, 0), new vscode.Position(line - 1, 50)),
+						}
+					]);
+				}
+			}
+		}
+	}
+
 	/**
 	 * Start executing the given program.
 	 */
@@ -275,7 +303,9 @@ export class ArchetypeRuntime extends EventEmitter {
 			await askOpenValidate("Set level value", 'level', this._parameters.level, (x) => { this._parameters.setLevel(x) })
 		}
 		this._debugTrace = await this.getDebugTrace(program)
-		//console.log(JSON.stringify(this._debugTrace))
+		this._gasInfo = extractGasInfoFromTrace(this._debugTrace)
+		this.setGasDecoration()
+		//console.log(this._gasInfo)
 		this.sendEvent('stopOnEntry')
 	}
 
