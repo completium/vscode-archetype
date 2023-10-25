@@ -118,7 +118,8 @@ function countCharOccurrences(inputString, charToCount) {
 }
 
 function is_micheline_valid(str : string) : boolean {
-	return countCharOccurrences(str, "{") - countCharOccurrences(str, "}") == 0
+	return (countCharOccurrences(str, "{") - countCharOccurrences(str, "}") == 0)
+	  && (countCharOccurrences(str, "(") - countCharOccurrences(str, ")") == 0)
 }
 
 export function extract_trace(input: string): Trace {

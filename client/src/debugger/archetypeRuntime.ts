@@ -191,7 +191,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		const octez_client_exec = config.get('octezClientBin');
 		const base_dir = config.get('mockupBaseDir');
 
-		const parameters = `--amount '${this._parameters.transferred}' --source '${this._parameters.caller}' --self-address '${this._parameters.selfaddress}' --now '${dateStringToSeconds(this._parameters.now)}' --level '${this._parameters.level}' --balance '${this._parameters.balance}'`
+		const parameters = `--amount '${this._parameters.transferred}' --source '${this._parameters.caller}' --now '${dateStringToSeconds(this._parameters.now)}' --level '${this._parameters.level}' --balance '${this._parameters.balance}'`
     const command = `${octez_client_exec} --mode mockup --base-dir ${base_dir} run script ${tzSource} on storage '${storage}' and input '${input}' --entrypoint '${entrypoint}' ${parameters} --trace-stack`;
     // Use the generic executeCommand function to run the command
     return executeCommand(command)
