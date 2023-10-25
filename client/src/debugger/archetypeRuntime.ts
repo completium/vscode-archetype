@@ -4,7 +4,7 @@ import * as os from 'os';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, CallParameters, dateStringToSeconds, DebugData, EntryArg, EntryPoint, extractGasInfoFromTrace, getCurrentDateTime, Operation, removeDoubleQuotes, Step, Storage } from './utils';
+import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, CallParameters, dateStringToSeconds, DebugData, EntryArg, EntryPoint, extractGasInfoFromTrace, getCurrentDateTime, Operation, parseToOperation, removeDoubleQuotes, Step, Storage } from './utils';
 import { build_execution, executeCommand, extract_trace, gen_contract_map_source, GasInfo } from './utils';
 
 export interface FileAccessor {
@@ -256,7 +256,7 @@ export class ArchetypeRuntime extends EventEmitter {
 					decorations.push(decoration)
 					activeEditor.setDecorations(decoration, [
 						{
-							range: new vscode.Range(new vscode.Position(line - 1, 0), new vscode.Position(line - 1, 50)),
+							range: new vscode.Range(new vscode.Position(line - 1, 0), new vscode.Position(line - 1, 100)),
 						}
 					]);
 				}
@@ -377,7 +377,7 @@ export class ArchetypeRuntime extends EventEmitter {
 			const h = hashes[i]
 			try {
 				const res = await this.executeDecode(h)
-				const op : Operation = JSON.parse(res)
+				const op : Operation = parseToOperation(res)
 				this._operationDetails.set(h, op)
 				// set reference
 				ops[i].reference = this._operationChunk + i
@@ -395,18 +395,40 @@ export class ArchetypeRuntime extends EventEmitter {
 		const opDetail = this._operationDetails.get(opHash)
 		const displayLevel = Math.floor(variableReference / this._operationChunk);
 		if (displayLevel == 1) {
-			let base = [
-				new RuntimeVariable("kind", opDetail.kind),
-				new RuntimeVariable("amount", Number.parseInt(opDetail.amount)),
-				new RuntimeVariable("destination", opDetail.destination)
-			]
-			if (opDetail.parameters != undefined) {
-				let params = new RuntimeVariable("parameters", "")
-				params.reference = 2 * this._operationChunk + opIdx
-				base = base.concat([ params ])
+			let base = [new RuntimeVariable("kind", opDetail.kind)]
+			switch(opDetail.kind) {
+				case 'transaction' : {
+					base = base.concat([
+						new RuntimeVariable("amount", Number.parseInt(opDetail.amount)),
+						new RuntimeVariable("destination", opDetail.destination)
+					])
+					if (opDetail.parameters != undefined) {
+						let params = new RuntimeVariable("parameters", "")
+						params.reference = 2 * this._operationChunk + opIdx
+						base = base.concat([ params ])
+					}
+				}; break;
+				case 'delegation' : {
+					base = base.concat([
+						new RuntimeVariable("delegate", opDetail.delegate)
+					])
+				}; break;
+				case 'event' : {
+					base = base.concat([
+						new RuntimeVariable("type", opDetail.type),
+						new RuntimeVariable("payload", opDetail.payload)
+					])
+				}; break;
+				case 'origination' : {
+					base = base.concat([
+						new RuntimeVariable("balance", opDetail.balance),
+						new RuntimeVariable("script", opDetail.script),
+						new RuntimeVariable("storage", opDetail.storage)
+					])
+				}
 			}
 			return base
-		} else if (displayLevel == 2) {
+		} else if (displayLevel == 2 && opDetail.kind == 'transaction') {
 			return [
 				new RuntimeVariable("entrypoint", opDetail.parameters.entrypoint),
 				new RuntimeVariable("value", opDetail.parameters.value)

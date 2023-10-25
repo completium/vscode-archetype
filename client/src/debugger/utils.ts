@@ -738,10 +738,10 @@ export class CallParameters {
 	}
 }
 
-export type Operation = {
-	source: string;
+export type Transaction = {
+	kind: 'transaction';
+	source : string;
 	nonce: number;
-	kind: string;
 	amount: string;
 	destination: string;
 	parameters?: {
@@ -749,3 +749,103 @@ export type Operation = {
 		value: string;
 	};
 };
+
+export type TzEvent = {
+	kind: 'event';
+	source: string;
+	nonce: number;
+	type: string;
+	payload: string
+}
+
+export type Delegation = {
+	kind: 'delegation';
+	source: string;
+	nonce: number;
+	delegate: string
+}
+
+export type Origination = {
+	kind: 'origination';
+	source: string;
+	nonce: number;
+	balance: number;
+	script: string;
+	storage : string
+}
+
+export type Operation = Transaction | Delegation | TzEvent | Origination
+
+export function parseToOperation(data: string): Operation {
+	const parsedObject = JSON.parse(data);
+
+	// Vérifier la validité de l'objet en fonction du type d'opération
+	switch (parsedObject.kind) {
+			case "transaction":
+					if (
+							"source" in parsedObject &&
+							"nonce" in parsedObject &&
+							"amount" in parsedObject &&
+							"destination" in parsedObject
+					) {
+							return {
+								kind : 'transaction',
+								nonce : parsedObject.nonce,
+								source : parsedObject.source,
+								amount : parsedObject.amount,
+								destination : parsedObject.destination,
+								parameters : parsedObject.parameters ? {
+									entrypoint : parsedObject.parameters.entrypoint,
+									value : JSON.stringify(parsedObject.parameters.value)
+								} : undefined
+							} as Transaction;
+					}
+					break;
+			case "event":
+					if (
+							"source" in parsedObject &&
+							"nonce" in parsedObject &&
+							"type" in parsedObject &&
+							"payload" in parsedObject
+					) {
+							return {
+								kind : 'event',
+								nonce : parsedObject.nonce,
+								type : JSON.stringify(parsedObject.type),
+								payload : JSON.stringify(parsedObject.payload)
+							} as TzEvent;
+					}
+					break;
+			case "delegation":
+					if (
+							"source" in parsedObject &&
+							"nonce" in parsedObject &&
+							"delegate" in parsedObject
+					) {
+							return parsedObject as Delegation;
+					}
+					break;
+			case "origination":
+					if (
+							"source" in parsedObject &&
+							"nonce" in parsedObject &&
+							"balance" in parsedObject &&
+							"script" in parsedObject &&
+							"storage" in parsedObject
+					) {
+							return {
+								kind : 'origination',
+								source : parsedObject.source,
+								nonce : parsedObject.nonce,
+								balance : parsedObject.balance,
+								script : JSON.stringify(parsedObject.script),
+								storage : JSON.stringify(parsedObject.storage)
+							} as Origination;
+					}
+					break;
+			default:
+					throw new Error("Type d'opération invalide");
+	}
+
+	throw new Error("Not a tezos operation");
+}
