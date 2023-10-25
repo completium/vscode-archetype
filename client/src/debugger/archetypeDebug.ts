@@ -380,7 +380,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 			vs = this._runtime.getConstantVariables();
 			//console.log('constant request')
 		} else if (v === 'operations') {
-			vs = this._runtime.getOperations();
+			vs = await this._runtime.getOperations();
 			//console.log('constant request')
 		}else {
 			console.log('Other variables request')

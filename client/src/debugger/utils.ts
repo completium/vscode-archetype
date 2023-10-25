@@ -146,7 +146,7 @@ export function extract_trace(input: string): Trace {
 				const stack: Array<string> = [];
 				let accu = "";
 				for (const cl of s2) {
-					accu += cl
+					accu += cl.trim()
 					if (is_micheline_valid(accu)) {
 						stack.push(accu)
 						accu = "";
@@ -696,3 +696,15 @@ export class CallParameters {
 		return this._sefladdress
 	}
 }
+
+export type Operation = {
+	source: string;
+	nonce: number;
+	kind: string;
+	amount: string;
+	destination: string;
+	parameters?: {
+		entrypoint: string;
+		value: string;
+	};
+};

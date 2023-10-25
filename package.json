@@ -75,6 +75,11 @@
           "default": "octez-client",
           "description": "Path to octez-client binary."
         },
+        "archetype.octezCodecBin": {
+          "type": "string",
+          "default": "octez-codec",
+          "description": "Path to octez-codec binary."
+        },
         "archetype.mockupBaseDir": {
           "type": "string",
           "default": "${HOME}/.completium/mockup",

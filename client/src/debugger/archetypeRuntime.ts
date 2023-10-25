@@ -4,7 +4,7 @@ import * as os from 'os';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, CallParameters, dateStringToSeconds, DebugData, EntryArg, EntryPoint, getCurrentDateTime, removeDoubleQuotes, Step, Storage } from './utils';
+import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, CallParameters, dateStringToSeconds, DebugData, EntryArg, EntryPoint, getCurrentDateTime, Operation, removeDoubleQuotes, Step, Storage } from './utils';
 import { build_execution, executeCommand, extract_trace, gen_contract_map_source } from './utils';
 
 export interface FileAccessor {
@@ -128,6 +128,8 @@ export class ArchetypeRuntime extends EventEmitter {
 	private _debugTrace : ArchetypeTrace = null
 	private _step : Step = null
 	private _parameters : CallParameters = null
+	private _operationDetails : Map<string, Operation> = new Map<string, Operation>()
+	private _operationChunk = 100
 
 	public async generateDebugData(arlFilePath: string): Promise<DebugData> {
 		try {
@@ -193,6 +195,14 @@ export class ArchetypeRuntime extends EventEmitter {
     return executeCommand(command)
   }
 
+	private executeDecode(v: string) : Promise<string> {
+		const config = vscode.workspace.getConfiguration('archetype');
+		const octez_codec_exec = config.get('octezCodecBin');
+		// TODO: make protocol a parameter
+		const command = `${octez_codec_exec} decode 018-Proxford.operation.internal from ${v.slice(2)}`
+		return executeCommand(command)
+	}
+
 	private async getDebugTrace(program : string) : Promise<ArchetypeTrace> {
 		const tzSource = await this.compile(program)
 		const entry = this._entrypoint
@@ -214,6 +224,15 @@ export class ArchetypeRuntime extends EventEmitter {
 		return entries
 	}
 
+	private getDefaultValue(arg: { name :string; type_ : string}) : string {
+		switch(arg.type_) {
+			case 'int' : case 'nat' : return '0';
+			case 'timestamp': return getCurrentDateTime();
+			case 'bool' : return 'True';
+			default: return ""
+		}
+	}
+
 	/**
 	 * Start executing the given program.
 	 */
@@ -230,7 +249,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		const args = this._debugData.interface.entrypoints[entries[entryname]].args
 		for(let i=0; i < args.length; i++) {
 			const prompt = `Argument '${args[i].name}' value:`
-			await askOpenValidate(prompt, 'Argument value', '', (x) => entrypoint.addArg(args[i].name, x, args[i].type_))
+			await askOpenValidate(prompt, 'Argument value', this.getDefaultValue(args[i]), (x) => entrypoint.addArg(args[i].name, x, args[i].type_))
 		}
 		const storage = new Storage()
 		for(let i=0; i<this._debugData.interface.storage.length; i++) {
@@ -295,27 +314,61 @@ export class ArchetypeRuntime extends EventEmitter {
 		]
 	}
 
-	public getOperations() : RuntimeVariable[] {
+	private getOperationHashes() : string[] {
 		const l = this._step.stack.filter(x => x.name == '_ops')
 		if (l.length > 0) {
 			const ops = l[0].value
 			const regex = /0x[0-9a-fA-F]+/g;
-    	const matches = ops.match(regex);
-			return matches.map((x,i) => {
-				let op = new RuntimeVariable(i+"", x)
-				op.reference = i+1
-				return op
-			})
+    	return ops.match(regex);
 		}
 		return []
 	}
 
+	public async getOperations() : Promise<RuntimeVariable[]> {
+		const hashes = this.getOperationHashes()
+		let ops = hashes.map((h, i) => {
+			return new RuntimeVariable(i + "", h)
+		})
+		for (let i=0; i < hashes.length; i++) {
+			const h = hashes[i]
+			try {
+				const res = await this.executeDecode(h)
+				const op : Operation = JSON.parse(res)
+				this._operationDetails.set(h, op)
+				// set reference
+				ops[i].reference = this._operationChunk + i
+			} catch (e) {
+
+			}
+		}
+		return ops
+	}
+
 	public getOperationDetail(variableReference : number) : RuntimeVariable[] {
-		//const l = this._step.stack.filter(x => x.name == '_ops')
-		return [
-			new RuntimeVariable("destination", "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"),
-			new RuntimeVariable("amount", 0)
-		]
+		const hashes = this.getOperationHashes()
+		const opIdx = variableReference % this._operationChunk
+		const opHash = hashes[opIdx]
+		const opDetail = this._operationDetails.get(opHash)
+		const displayLevel = Math.floor(variableReference / this._operationChunk);
+		if (displayLevel == 1) {
+			let base = [
+				new RuntimeVariable("kind", opDetail.kind),
+				new RuntimeVariable("amount", Number.parseInt(opDetail.amount)),
+				new RuntimeVariable("destination", opDetail.destination)
+			]
+			if (opDetail.parameters != undefined) {
+				let params = new RuntimeVariable("parameters", "")
+				params.reference = 2 * this._operationChunk + opIdx
+				base = base.concat([ params ])
+			}
+			return base
+		} else if (displayLevel == 2) {
+			return [
+				new RuntimeVariable("entrypoint", opDetail.parameters.entrypoint),
+				new RuntimeVariable("value", opDetail.parameters.value)
+			]
+		}
+		return []
 	}
 
 	private parseString(input: string): string | number {
