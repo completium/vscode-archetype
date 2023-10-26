@@ -648,7 +648,7 @@ export class CallParameters {
 	private _now : string = ""
 	private _level : string = ""
 	private _balance : string = ""
-	private _sefladdress : string = ""
+	//private _sefladdress : string = ""
 	constructor() {
 		this._now = getCurrentDateTime()
 		this._transferred = "0"
@@ -656,7 +656,7 @@ export class CallParameters {
 		this._level = "0"
 		this._caller = "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
 		this._source = "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
-		this._sefladdress = "KT1BEqzn5Wx8uJrZNvuS9DVHmLvG9td3fDLi"
+		//this._sefladdress = "KT1BEqzn5Wx8uJrZNvuS9DVHmLvG9td3fDLi"
 	}
 	/**
 	 * @throws Error when transferred amount is not a positive integer
@@ -703,13 +703,13 @@ export class CallParameters {
 			throw new InputError("balance", "should be a positive integer")
 		}
 	}
-	public setSelfAddress(v : string) {
-		if(isAddress(v) && v.startsWith("KT1")) {
-			this._sefladdress = v
-		} else {
-			throw new InputError("self-address", "should be a valid contract address")
-		}
-	}
+	//public setSelfAddress(v : string) {
+	//	if(isAddress(v) && v.startsWith("KT1")) {
+	//		this._sefladdress = v
+	//	} else {
+	//		throw new InputError("self-address", "should be a valid contract address")
+	//	}
+	//}
 	public get caller(): string {
 		return this._caller;
 	}
@@ -734,9 +734,9 @@ export class CallParameters {
 		return this._balance
 	}
 
-	public get selfaddress() : any {
-		return this._sefladdress
-	}
+	//public get selfaddress() : any {
+	//	return this._sefladdress
+	//}
 }
 
 export type Transaction = {

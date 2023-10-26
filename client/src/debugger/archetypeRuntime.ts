@@ -313,7 +313,7 @@ export class ArchetypeRuntime extends EventEmitter {
 			await askOpenValidate("Set transferred amount value", 'Amount value', this._parameters.transferred, (x) => { this._parameters.setTransferred(x) })
 			await askOpenValidate("Set balance value", 'Amount value', this._parameters.balance, (x) => { this._parameters.setBalance(x) })
 			await askOpenValidate("Set now value", 'now date', this._parameters.now, (x) => { this._parameters.setNow(x) })
-			await askOpenValidate("Set self address", 'Self address', this._parameters.selfaddress, (x) => { this._parameters.setSelfAddress(x) })
+			//await askOpenValidate("Set self address", 'Self address', this._parameters.selfaddress, (x) => { this._parameters.setSelfAddress(x) })
 			await askOpenValidate("Set level value", 'level', this._parameters.level, (x) => { this._parameters.setLevel(x) })
 		}
 		this._debugTrace = await this.getDebugTrace(program)
@@ -353,7 +353,7 @@ export class ArchetypeRuntime extends EventEmitter {
 			new RuntimeVariable("transferred", transferred),
 			new RuntimeVariable("balance", balance + transferred),
 			new RuntimeVariable("now", this._parameters.now),
-			new RuntimeVariable("self_address", this._parameters.selfaddress),
+			//new RuntimeVariable("self_address", this._parameters.selfaddress),
 			new RuntimeVariable("level", level),
 		]
 	}
