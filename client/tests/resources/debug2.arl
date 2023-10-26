@@ -27,11 +27,11 @@ entry exec2() {
 	const op_delegate : operation = set_delegate(delegate);
 	operations.prepend(op_delegate);
 
-  // const op_create_contract : (operation * address) = create_contract (
-  //   michelson { storage nat ;
-  //     parameter (unit %exec) ;
-  //     code { DROP; PUSH nat 2; NIL operation; PAIR } }, none, 0tz, 2);
-	// operations.prepend(op_create_contract[0]);
+  const op_create_contract : (operation * address) = create_contract (
+    michelson { storage nat ;
+      parameter (unit %exec) ;
+      code { DROP; PUSH nat 2; NIL operation; PAIR } }, none, 0tz, 2);
+	operations.prepend(op_create_contract[0]);
 
 	var v = 4;
 	a += v

@@ -382,7 +382,7 @@ export class ArchetypeRuntime extends EventEmitter {
 				// set reference
 				ops[i].reference = this._operationChunk + i
 			} catch (e) {
-
+				console.log(e)
 			}
 		}
 		return ops
@@ -422,8 +422,7 @@ export class ArchetypeRuntime extends EventEmitter {
 				case 'origination' : {
 					base = base.concat([
 						new RuntimeVariable("balance", opDetail.balance),
-						new RuntimeVariable("script", opDetail.script),
-						new RuntimeVariable("storage", opDetail.storage)
+						new RuntimeVariable("script", opDetail.script)
 					])
 				}
 			}

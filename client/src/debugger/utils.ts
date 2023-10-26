@@ -772,7 +772,6 @@ export type Origination = {
 	nonce: number;
 	balance: number;
 	script: string;
-	storage : string
 }
 
 export type Operation = Transaction | Delegation | TzEvent | Origination
@@ -831,8 +830,7 @@ export function parseToOperation(data: string): Operation {
 							"source" in parsedObject &&
 							"nonce" in parsedObject &&
 							"balance" in parsedObject &&
-							"script" in parsedObject &&
-							"storage" in parsedObject
+							"script" in parsedObject
 					) {
 							return {
 								kind : 'origination',
@@ -840,7 +838,6 @@ export function parseToOperation(data: string): Operation {
 								nonce : parsedObject.nonce,
 								balance : parsedObject.balance,
 								script : JSON.stringify(parsedObject.script),
-								storage : JSON.stringify(parsedObject.storage)
 							} as Origination;
 					}
 					break;
