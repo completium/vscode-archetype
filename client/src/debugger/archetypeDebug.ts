@@ -16,7 +16,7 @@ import { Subject } from 'await-notify';
 import * as base64 from 'base64-js';
 import { basename } from 'path-browserify';
 
-import { ArchetypeRuntime, FileAccessor, IRuntimeBreakpoint, RuntimeVariable } from './archetypeRuntime';
+import { ArchetypeRuntime, FileAccessor, IRuntimeBreakpoint, RuntimeVariable, IContractEnv } from './archetypeRuntime';
 
 /**
  * This interface describes the mock-debug specific launch attributes
@@ -27,7 +27,8 @@ import { ArchetypeRuntime, FileAccessor, IRuntimeBreakpoint, RuntimeVariable } f
 interface ILaunchRequestArguments extends DebugProtocol.LaunchRequestArguments {
 	/** An absolute path to the "program" to debug. */
 	program: string;
-	args: string[];
+	/** Contract environement constants */
+	env: IContractEnv;
 	/** Automatically stop target after launch. If not specified, target does not stop. */
 	stopOnEntry?: boolean;
 	/** enable logging the Debug Adapter Protocol */
@@ -49,7 +50,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 	// a Mock runtime (or debugger)
 	private _runtime: ArchetypeRuntime;
 
-	private _variableHandles = new Handles<'operations' | 'constants' | 'storage' | 'inputs' | 'locals' | RuntimeVariable>();
+	private _variableHandles = new Handles<'operations' | 'storage' | 'inputs' | 'locals' | RuntimeVariable>();
 
 	private _configurationDone = new Subject();
 
@@ -72,7 +73,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 	public constructor(fileAccessor: FileAccessor) {
   	console.log(`ArchetypeDebugSession constructor`)
 
-		super("mock-debug.txt");
+		super("archetype-debug.txt");
 
 		// this debugger uses zero-based lines and columns
 		this.setDebuggerLinesStartAt1(false);
@@ -232,7 +233,6 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 				new Scope("Inputs", this._variableHandles.create('inputs'), true),
 				new Scope("Locals", this._variableHandles.create('locals'), true),
 				new Scope("Operations", this._variableHandles.create('operations'), true),
-				new Scope ("Constants", this._variableHandles.create('constants'), false),
 			]
 		};
 		this.sendResponse(response);
@@ -277,6 +277,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 	}
 
 	protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments, request?: DebugProtocol.Request): void {
+		this._runtime.clearDecorations()
 		console.log(`disconnectRequest suspend: ${args.suspendDebuggee}, terminate: ${args.terminateDebuggee}`);
 	}
 
@@ -316,7 +317,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 		await this._configurationDone.wait(1000);
 
 		// start the program in the runtime
-		await this._runtime.start(args.program, args.args, !!args.stopOnEntry, !args.noDebug);
+		await this._runtime.start(args.program, args.env, !!args.stopOnEntry, !args.noDebug);
 
 		if (args.compileError) {
 			// simulate a compile/build error in "launch" request:
@@ -376,9 +377,6 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 		} else if (v === 'inputs') {
 			vs = this._runtime.getInputVariables();
 			//console.log('Inputs request')
-		} else if (v === 'constants') {
-			vs = this._runtime.getConstantVariables();
-			//console.log('constant request')
 		} else if (v === 'operations') {
 			vs = await this._runtime.getOperations();
 			//console.log('constant request')
@@ -448,7 +446,7 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 	}
 
 	private createSource(filePath: string): Source {
-		return new Source(basename(filePath), this.convertDebuggerPathToClient(filePath), undefined, undefined, 'mock-adapter-data');
+		return new Source(basename(filePath), this.convertDebuggerPathToClient(filePath), undefined, undefined, 'archetype-adapter-data');
 	}
 }
 

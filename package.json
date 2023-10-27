@@ -205,11 +205,11 @@
     ],
     "debuggers": [
       {
-        "type": "mock",
+        "type": "archetype",
         "languages": [
           "archetype"
         ],
-        "label": "Archetype Debug",
+        "label": "Archetype : debug",
         "program": "./client/out/debugAdapter.js",
         "runtime": "node",
         "configurationAttributes": {
@@ -220,20 +220,38 @@
             "properties": {
               "program": {
                 "type": "string",
-                "description": "Absolute path to a text file.",
+                "description": "Absolute path to an archetype source file.",
                 "default": "${workspaceFolder}/${command:AskForProgramName}"
-              }
-            }
-          },
-          "attach": {
-            "required": [
-              "program"
-            ],
-            "properties": {
-              "program": {
-                "type": "string",
-                "description": "Absolute path to a text file.",
-                "default": "${workspaceFolder}/${command:AskForProgramName}"
+              },
+              "env": {
+                "type": "object",
+                "description": "Environment variables.",
+                "properties": {
+                  "now": {
+                    "type": "string",
+                    "description": "Current date and time."
+                  },
+                  "level": {
+                    "type": "string",
+                    "description": "Current block level."
+                  },
+                  "caller": {
+                    "type": "string",
+                    "description": "Address calling the contract. It may be an account or another smart contract."
+                  },
+                  "source": {
+                    "type": "string",
+                    "description": "Address of the account at the origin of the call to the entrypoint."
+                  },
+                  "transferred": {
+                    "type": "string",
+                    "description": "Amount of tez sent to current entrypoint execution."
+                  },
+                  "balance": {
+                    "type": "string",
+                    "description": "Number of tez held by the contract."
+                  }
+                }
               }
             }
           }
@@ -242,25 +260,19 @@
           {
             "type": "archetype",
             "request": "launch",
-            "name": "Debug Archetype",
-            "program": "${workspaceFolder}/${command:AskForProgramName}"
-          }
-        ],
-        "configurationSnippets": [
-          {
-            "label": "Archetype Debug: Launch",
-            "description": "A new configuration for 'debugging' a user selected archetype file.",
-            "body": {
-              "type": "archetype",
-              "request": "launch",
-              "name": "Debug Archetype",
-              "program": "^\"\\${workspaceFolder}/\\${command:AskForProgramName}\""
+            "name": "Archetype : debug",
+            "program": "${file}",
+            "env": {
+              "now": "2023-10-27 09:25:11",
+              "level": "10000",
+              "caller": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+              "source": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+              "transferred": "0",
+              "balance": "1000000"
             }
           }
         ],
-        "variables": {
-          "AskForProgramName": "extension.mock-debug.getProgramName"
-        }
+        "configurationSnippets": []
       }
     ],
     "viewsContainers": {

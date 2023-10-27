@@ -1,18 +1,22 @@
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "mock",
-			"request": "launch",
-			"name": "Debug Archetype (simple)",
-			"program": "${file}",
-		},
-		{
-			"type": "mock",
-			"request": "launch",
-			"name": "Debug Archetype (all parameters)",
-			"program": "${file}",
-			"args": [	"--all" ]
-		}
-	]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "archetype",
+      "request": "launch",
+      "name": "Archetype : debug",
+      "program": "${file}",
+      "env": {
+        "now": "2023-10-27 09:25:11",
+        "level": "10000",
+        "caller": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+        "source": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+        "transferred": "0",
+        "balance": "1000000"
+      }
+    }
+  ]
 }

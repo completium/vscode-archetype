@@ -1,6 +1,7 @@
 import * as child_process from 'child_process';
 import { isNumber } from 'util';
 import * as vscode from 'vscode';
+import { IContractEnv } from './archetypeRuntime';
 
 interface ExecutionParams {
 	entrypoint: string,
@@ -226,7 +227,7 @@ export function extractGasInfoFromTrace(trace: ArchetypeTrace): Map<number, Arra
 	let totalgas = 0
   trace.steps.forEach(step => {
     if (step.range) {
-      const lineNumber = step.range.begin.line;
+      const lineNumber = step.range.end.line;
 			totalgas += step.gas
       const gasInfo: GasInfo = {
         gas: step.gas / 1000,
@@ -641,7 +642,7 @@ function secondsToDateString(seconds: number): string {
 	return formattedDate;
 }
 
-export class CallParameters {
+export class ContractEnv implements IContractEnv {
 	private _transferred : string = ""
 	private _caller : string = ""
 	private _source : string = ""
@@ -649,13 +650,13 @@ export class CallParameters {
 	private _level : string = ""
 	private _balance : string = ""
 	//private _sefladdress : string = ""
-	constructor() {
-		this._now = getCurrentDateTime()
-		this._transferred = "0"
-		this._balance = "0"
-		this._level = "0"
-		this._caller = "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
-		this._source = "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
+	constructor(now, transferred, balance, level, caller, source) {
+		this._now = now
+		this._transferred = transferred
+		this._balance = balance
+		this._level = level
+		this._caller = caller
+		this._source = source
 		//this._sefladdress = "KT1BEqzn5Wx8uJrZNvuS9DVHmLvG9td3fDLi"
 	}
 	/**
@@ -771,7 +772,10 @@ export type Origination = {
 	source: string;
 	nonce: number;
 	balance: number;
-	script: string;
+	script: {
+		code: string;
+		storage: string
+	};
 }
 
 export type Operation = Transaction | Delegation | TzEvent | Origination
@@ -837,7 +841,10 @@ export function parseToOperation(data: string): Operation {
 								source : parsedObject.source,
 								nonce : parsedObject.nonce,
 								balance : parsedObject.balance,
-								script : JSON.stringify(parsedObject.script),
+								script : {
+									code: JSON.stringify(parsedObject.script.code),
+									storage : JSON.stringify(parsedObject.script.storage)
+								},
 							} as Origination;
 					}
 					break;

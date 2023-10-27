@@ -4,8 +4,17 @@ import * as os from 'os';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, CallParameters, dateStringToSeconds, DebugData, EntryArg, EntryPoint, extractGasInfoFromTrace, getCurrentDateTime, Operation, parseToOperation, removeDoubleQuotes, Step, Storage } from './utils';
+import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, ContractEnv as ContractEnv, dateStringToSeconds, DebugData, EntryArg, EntryPoint, extractGasInfoFromTrace, getCurrentDateTime, Operation, parseToOperation, removeDoubleQuotes, Step, Storage } from './utils';
 import { build_execution, executeCommand, extract_trace, gen_contract_map_source, GasInfo } from './utils';
+
+export interface IContractEnv {
+	now: string;
+	level: string;
+	transferred: string;
+	balance: string;
+	caller: string;
+	source: string;
+}
 
 export interface FileAccessor {
 	isWindows: boolean;
@@ -127,7 +136,7 @@ export class ArchetypeRuntime extends EventEmitter {
 	private _initStorage : Storage = null
 	private _debugTrace : ArchetypeTrace = null
 	private _step : Step = null
-	private _parameters : CallParameters = null
+	private _env : ContractEnv = null
 	private _operationDetails : Map<string, Operation> = new Map<string, Operation>()
 	private _operationChunk = 100
 	private _gasInfo : Map<number, Array<GasInfo>> = new Map<number, Array<GasInfo>>()
@@ -191,7 +200,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		const octez_client_exec = config.get('octezClientBin');
 		const base_dir = config.get('mockupBaseDir');
 
-		const parameters = `--amount '${this._parameters.transferred}' --source '${this._parameters.caller}' --now '${dateStringToSeconds(this._parameters.now)}' --level '${this._parameters.level}' --balance '${this._parameters.balance}'`
+		const parameters = `--amount '${this._env.transferred}' --source '${this._env.caller}' --now '${dateStringToSeconds(this._env.now)}' --level '${this._env.level}' --balance '${this._env.balance}'`
     const command = `${octez_client_exec} --mode mockup --base-dir ${base_dir} run script ${tzSource} on storage '${storage}' and input '${input}' --entrypoint '${entrypoint}' ${parameters} --trace-stack`;
     // Use the generic executeCommand function to run the command
     return executeCommand(command)
@@ -242,14 +251,16 @@ export class ArchetypeRuntime extends EventEmitter {
 			const colorTheme = vscode.workspace.getConfiguration('editor.tokenColorCustomizations');
 			const lineNumberColor = colorTheme.textMateRules?.find(rule => rule.scope === 'lineNumber')?.settings.foreground;
 
+			let total = 0
 			for (const [line, infos] of this._gasInfo.entries()) {
 				if (infos.length > 0) {
 					const info = infos[0]
+					total += info.gas
 					const decoration = vscode.window.createTextEditorDecorationType({
 						// Configuration de votre décoration ici. Par exemple, style de bordure, couleur, etc.
 						// Vous pouvez également définir des after ou before properties pour afficher du texte additionnel à côté de la ligne.
 						after: {
-							contentText: '    (gas: ' + info.gas + ')',
+							contentText: '    (gas: ' + total + ((total != info.gas) ? ', delta: ' + info.gas : '') + ')',
 							color: lineNumberColor || 'dimgrey'
 						}
 					});
@@ -265,7 +276,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		this._decorations = decorations
 	}
 
-	private clearDecorations() {
+	public clearDecorations() {
 		const activeEditor = vscode.window.activeTextEditor;
 		if (activeEditor) {
 			this._decorations.forEach(decoration => {
@@ -278,7 +289,7 @@ export class ArchetypeRuntime extends EventEmitter {
 	/**
 	 * Start executing the given program.
 	 */
-	public async start(program: string, pargs: string[], stopOnEntry: boolean, debug: boolean): Promise<void> {
+	public async start(program: string, env: IContractEnv, stopOnEntry: boolean, debug: boolean): Promise<void> {
 		//console.log(`program: ${program}`)
 		//console.log(`stopOnEntry: ${stopOnEntry}`)
 		//console.log(`debug: ${debug}`)
@@ -305,17 +316,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		//console.log(storage.toString())
 		this._initStorage = storage
 		this._inputs = entrypoint.args
-		this._parameters = new CallParameters()
-		if (pargs != undefined && pargs.find(x => x == '--all')) {
-			this._parameters = new CallParameters()
-			// caller
-			await askOpenValidate("Set caller's address", 'Caller address', this._parameters.caller, (x) => { this._parameters.setCaller(x) })
-			await askOpenValidate("Set transferred amount value", 'Amount value', this._parameters.transferred, (x) => { this._parameters.setTransferred(x) })
-			await askOpenValidate("Set balance value", 'Amount value', this._parameters.balance, (x) => { this._parameters.setBalance(x) })
-			await askOpenValidate("Set now value", 'now date', this._parameters.now, (x) => { this._parameters.setNow(x) })
-			//await askOpenValidate("Set self address", 'Self address', this._parameters.selfaddress, (x) => { this._parameters.setSelfAddress(x) })
-			await askOpenValidate("Set level value", 'level', this._parameters.level, (x) => { this._parameters.setLevel(x) })
-		}
+		this._env = new ContractEnv(env.now, env.transferred, env.balance, env.level, env.caller, env.source)
 		this._debugTrace = await this.getDebugTrace(program)
 		this._gasInfo = extractGasInfoFromTrace(this._debugTrace)
 		this.setGasDecoration()
@@ -345,14 +346,14 @@ export class ArchetypeRuntime extends EventEmitter {
 	}
 
 	public getConstantVariables() : RuntimeVariable[] {
-		const transferred = Number.parseInt(this._parameters.transferred)
-		const balance = Number.parseInt(this._parameters.balance)
-		const level = Number.parseInt(this._parameters.level)
+		const transferred = Number.parseInt(this._env.transferred)
+		const balance = Number.parseInt(this._env.balance)
+		const level = Number.parseInt(this._env.level)
 		return [
-			new RuntimeVariable("caller", this._parameters.caller),
+			new RuntimeVariable("caller", this._env.caller),
 			new RuntimeVariable("transferred", transferred),
 			new RuntimeVariable("balance", balance + transferred),
-			new RuntimeVariable("now", this._parameters.now),
+			new RuntimeVariable("now", this._env.now),
 			//new RuntimeVariable("self_address", this._parameters.selfaddress),
 			new RuntimeVariable("level", level),
 		]
@@ -420,18 +421,28 @@ export class ArchetypeRuntime extends EventEmitter {
 					])
 				}; break;
 				case 'origination' : {
+					let script = new RuntimeVariable("script", JSON.stringify(opDetail.script))
+					script.reference = 2 * this._operationChunk + opIdx
 					base = base.concat([
 						new RuntimeVariable("balance", opDetail.balance),
-						new RuntimeVariable("script", opDetail.script)
+						script
 					])
 				}
 			}
 			return base
-		} else if (displayLevel == 2 && opDetail.kind == 'transaction') {
-			return [
-				new RuntimeVariable("entrypoint", opDetail.parameters.entrypoint),
-				new RuntimeVariable("value", opDetail.parameters.value)
-			]
+		} else if (displayLevel == 2) {
+			switch(opDetail.kind) {
+				case 'transaction':
+					return [
+						new RuntimeVariable("entrypoint", opDetail.parameters.entrypoint),
+						new RuntimeVariable("value", opDetail.parameters.value)
+					]
+				case 'origination':
+					return [
+						new RuntimeVariable("code", opDetail.script.code),
+						new RuntimeVariable("storage", opDetail.script.storage)
+					]
+			}
 		}
 		return []
 	}
@@ -506,7 +517,7 @@ export class ArchetypeRuntime extends EventEmitter {
 			//console.log(JSON.stringify(this._step, null,2))
 			this.sendEvent('stopOnEntry')
 		} else if (this.instruction >= this._debugTrace.steps.length - 1) {
-			this.clearDecorations()
+			this.clearDecorations();
 			this.sendEvent('end');
 		}
 

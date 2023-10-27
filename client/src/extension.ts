@@ -11,7 +11,7 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { platform } from 'process';
 import { ProviderResult } from 'vscode';
-import { activateMockDebug, workspaceFileAccessor } from './debugger/activateArchetypeDebug';
+import { activateArchetypeDebug, workspaceFileAccessor } from './debugger/activateArchetypeDebug';
 
 import { ArchetypeNodeProvider, ArchetypeItem, ArchetypePropertiesExplorer } from './archetypePropertiesExplorer';
 import { registerCommands } from './commands';
@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 	switch (runMode) {
 		case 'server':
 			// run the debug adapter as a server inside the extension and communicate via a socket
-			activateMockDebug(context, new MockDebugAdapterServerDescriptorFactory());
+			activateArchetypeDebug(context, new MockDebugAdapterServerDescriptorFactory());
 			break;
 
 		// case 'namedPipeServer':
@@ -40,12 +40,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 		case 'external': default:
 			// run the debug adapter as a separate process
-			activateMockDebug(context, new DebugAdapterExecutableFactory());
+			activateArchetypeDebug(context, new DebugAdapterExecutableFactory());
 			break;
 
 		case 'inline':
 			// run the debug adapter inside the extension and directly talk to it
-			activateMockDebug(context);
+			activateArchetypeDebug(context);
 			break;
 	}
 
