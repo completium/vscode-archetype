@@ -1,6 +1,33 @@
 import { expect } from 'chai';
 import * as fs from 'fs';
-import { build_execution, extract_trace, gen_contract_map_source } from '../../src/debugger/utils';
+import { build_execution, extract_trace, gen_contract_map_source, processConstParams } from '../../src/debugger/utils';
+
+describe('utils', () => {
+  it('processConstParams', () => {
+    const params = [
+      { name: "initial_holder", value: '"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"' },
+      { name: "total_supply", value: '1000' },
+      { name: "metadata_coin", value: '"KT1R7G7Mv3MDB94dxxSebpiVd3zJUdxr5m2C"'},
+      { name: "complex", value: 'Pair 0 1' },
+
+    ]
+    const input0 = `{ Elt const_initial_holder__ (Pair const_total_supply__ {  }) }`
+    const expected0 = `{ Elt "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb" (Pair 1000 {  }) }`
+    const actual0 = processConstParams(input0, params)
+    expect(actual0).equal(expected0);
+
+    const input1 = `{ Elt 0 (Pair 0 { Elt \"\" const_metadata_coin__ }) }`
+    const expected1 = `{ Elt 0 (Pair 0 { Elt \"\" "KT1R7G7Mv3MDB94dxxSebpiVd3zJUdxr5m2C" }) }`
+    const actual1 = processConstParams(input1, params)
+    expect(actual1).equal(expected1);
+
+    const input2 = `Pair const_complex__ const_complex__`
+    const expected2 = `Pair (Pair 0 1) (Pair 0 1)`
+    const actual2 = processConstParams(input2, params)
+    expect(actual2).equal(expected2);
+  })
+})
+
 
 describe('extract_trace', () => {
   it('returns an array of ItemTrace objects', () => {

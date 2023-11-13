@@ -854,3 +854,28 @@ export function parseToOperation(data: string): Operation {
 
 	throw new Error("Not a tezos operation");
 }
+
+type ConstParam = {
+	"name": string
+	"value": string
+}
+
+function getConstName(name : string) : string {
+	return "const_" + name + "__"
+}
+
+function getConstValue(value : string) : string {
+	const res = value.trim()
+	return res.indexOf(" ") >= 0 ? "(" + res + ")" : res
+}
+
+export function processConstParams(input: string, params: Array<ConstParam>): string {
+	let res = input;
+	for (const param of params) {
+		const constName = getConstName(param.name);
+		const constValue = getConstValue(param.value)
+		const regex = new RegExp(constName, 'g');
+		res = res.replace(regex, constValue)
+	}
+	return res
+}
