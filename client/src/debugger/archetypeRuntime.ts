@@ -14,6 +14,9 @@ export interface IContractEnv {
 	balance: string;
 	caller: string;
 	source: string;
+	inputs?: any;
+	const_params?: any;
+	storage?: any;
 }
 
 export interface FileAccessor {
@@ -173,7 +176,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		}
 	}
 
-	public compile(sourceFile: string, const_params : Array<ConstParam>): Promise<string> {
+	public compile(sourceFile: string, const_params: Array<ConstParam>): Promise<string> {
 		return new Promise((resolve, reject) => {
 			const config = vscode.workspace.getConfiguration('archetype');
 			const archetypeMode: string = config.get('archetypeMode');
@@ -250,7 +253,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		return executeCommand(command)
 	}
 
-	private async getDebugTrace(program: string, const_params : Array<ConstParam>): Promise<ArchetypeTrace> {
+	private async getDebugTrace(program: string, const_params: Array<ConstParam>): Promise<ArchetypeTrace> {
 		const tzSource = await this.compile(program, const_params)
 		const entry = this._entrypoint
 		const storage = argsToMich(this._initStorage.elements())
@@ -326,9 +329,33 @@ export class ArchetypeRuntime extends EventEmitter {
 	 * Start executing the given program.
 	 */
 	public async start(program: string, env: IContractEnv, stopOnEntry: boolean, debug: boolean): Promise<void> {
-		//console.log(`program: ${program}`)
-		//console.log(`stopOnEntry: ${stopOnEntry}`)
-		//console.log(`debug: ${debug}`)
+		const buildObjectStorage = async (
+			data: Array<{ name: string; type_: string; value: string; }>,
+			prompt: ((a: string) => string),
+			default_values: (any | undefined),
+			const_params?: Storage
+		): Promise<Storage> => {
+			const res = new Storage()
+			for (let i = 0; i < data.length; i++) {
+				const name = data[i].name
+				const typ = data[i].type_
+				let value = data[i].value
+				if (const_params) {
+					value = processConstParams(value, const_params.toMichelsonValue())
+				}
+				if (default_values && default_values[name]) {
+					value = default_values[name]
+					if (const_params) {
+						value = processConstParams(value, const_params.toMichelsonValue())
+					}
+				} else {
+					await askOpenValidate(prompt(name), 'Element value', value == null ? "" : removeDoubleQuotes(value), x => value = x)
+				}
+				res.addElement(name, value, typ)
+			}
+			return res
+		};
+
 		this._filename = program
 		this._debugData = await this.generateDebugData(program)
 		const entries = this.getEntries()
@@ -337,35 +364,22 @@ export class ArchetypeRuntime extends EventEmitter {
 		const entrypoint = new EntryPoint(entryname)
 		const args = this._debugData.interface.entrypoints[entries[entryname]].args
 		for (let i = 0; i < args.length; i++) {
-			const prompt = `Argument '${args[i].name}' value:`
-			await askOpenValidate(prompt, 'Argument value', this.getDefaultValue(args[i]), (x) => entrypoint.addArg(args[i].name, x, args[i].type_))
+			if (env.inputs && env.inputs[args[i].name]) {
+				entrypoint.addArg(args[i].name, env.inputs[args[i].name], args[i].type_)
+			} else {
+				const prompt = `Argument '${args[i].name}' value:`
+				await askOpenValidate(prompt, 'Argument value', this.getDefaultValue(args[i]), (x) => entrypoint.addArg(args[i].name, x, args[i].type_))
+			}
 		}
-		const const_params = new Storage()
-		for (let i = 0; i < this._debugData.interface.const_params.length; i++) {
-			const name = this._debugData.interface.const_params[i].name
-			const typ = this._debugData.interface.const_params[i].type_
-			const def = this._debugData.interface.const_params[i].value
-			const prompt = `Storage element '${name}' value:`
-			await askOpenValidate(prompt, 'Element value', def == null ? "" : removeDoubleQuotes(def), x => const_params.addElement(name, x, typ))
-		}
-		const storage = new Storage()
-		for (let i = 0; i < this._debugData.interface.storage.length; i++) {
-			const name = this._debugData.interface.storage[i].name
-			const typ = this._debugData.interface.storage[i].type_
-			const def = processConstParams(this._debugData.interface.storage[i].value, const_params.toMichelsonValue())
+		const const_params = await buildObjectStorage(this._debugData.interface.const_params, ((name: string): string => { return `Constant parameter element '${name}' value:` }), env.const_params);
+		const storage = await buildObjectStorage(this._debugData.interface.storage, ((name: string): string => { return `Storage element '${name}' value:` }), env.storage, const_params);
 
-			const prompt = `Storage element '${name}' value:`
-			await askOpenValidate(prompt, 'Element value', removeDoubleQuotes(def), x => storage.addElement(name, x, typ))
-		}
-		//console.log(entrypoint.toString())
-		//console.log(storage.toString())
 		this._initStorage = storage
 		this._inputs = entrypoint.args
 		this._env = new ContractEnv(env.now, env.transferred, env.balance, env.level, env.caller, env.source)
 		this._debugTrace = await this.getDebugTrace(program, const_params.toMichelsonValue())
 		this._gasInfo = extractGasInfoFromTrace(this._debugTrace)
 		this.setGasDecoration()
-		//console.log(this._gasInfo)
 		this.sendEvent('stopOnEntry')
 	}
 

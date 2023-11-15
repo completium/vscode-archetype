@@ -15,7 +15,19 @@
         "caller": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
         "source": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
         "transferred": "0",
-        "balance": "1000000"
+        "balance": "1000000",
+        "inputs": {
+          "spender": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
+        },
+        "const_params": {
+          "initial_holder": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+          "total_supply": "1000",
+          "metadata_coin": "0x00"
+        },
+        "storage": {
+          "ledger": "{ Elt \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\" (Pair 1000 {  }) }",
+          "token_metadata": "{ Elt 0 (Pair 0 { Elt \"\" 0x00 }) }"
+        }
       }
     }
   ]
