@@ -9,7 +9,7 @@ describe('utils', () => {
       { name: "total_supply", value: '1000' },
       { name: "metadata_coin", value: '"KT1R7G7Mv3MDB94dxxSebpiVd3zJUdxr5m2C"'},
       { name: "complex", value: 'Pair 0 1' },
-
+      { name: "list", value: '{ 0 ; 1 ; 2 }' },
     ]
     const input0 = `{ Elt const_initial_holder__ (Pair const_total_supply__ {  }) }`
     const expected0 = `{ Elt "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb" (Pair 1000 {  }) }`
@@ -25,6 +25,11 @@ describe('utils', () => {
     const expected2 = `Pair (Pair 0 1) (Pair 0 1)`
     const actual2 = processConstParams(input2, params)
     expect(actual2).equal(expected2);
+
+    const input3 = `Pair const_complex__ const_list__`
+    const expected3 = `Pair (Pair 0 1) { 0 ; 1 ; 2 }`
+    const actual3 = processConstParams(input3, params)
+    expect(actual3).equal(expected3);
   })
 })
 

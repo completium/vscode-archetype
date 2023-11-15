@@ -864,9 +864,18 @@ function getConstName(name : string) : string {
 	return "const_" + name + "__"
 }
 
+function isParenthesisValue(input : string) : boolean {
+	if (input.length > 0) {
+		if (input[0] == '{' && input[input.length - 1] == '}') {
+			return false;
+		}
+	}
+	return input.indexOf(" ") > -1;
+}
+
 function getConstValue(value : string) : string {
 	const res = value.trim()
-	return res.indexOf(" ") >= 0 ? "(" + res + ")" : res
+	return isParenthesisValue(res) ? "(" + res + ")" : res
 }
 
 export function processConstParams(input: string, params: Array<ConstParam>): string {
