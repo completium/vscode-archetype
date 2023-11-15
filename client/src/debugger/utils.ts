@@ -393,6 +393,7 @@ export class Storage {
 		return `Storage([${this._args.map(arg => arg.toString()).join(', ')}])`;
 	}
 	public elements() : Array<EntryArg> { return this._args }
+	public toMichelsonValue() : Array<ConstParam> { return this._args.map(x => {return {"name" : x.name, "value" : toMichelson(x.value, x.typ)}}) }
 
 	public getType(name : string) : string {
 		for(let i=0; i<this._args.length; i++) {
@@ -453,9 +454,10 @@ export function toPair(elements : any[]) : string {
 
 function toMichelson(value : any, ty : string) : string {
 	switch (ty) {
-		case "string": return `"${value}"`
+		case "string":
+  	case "address": return `"${value}"`
 		case "bool": return value ? "True" : "False"
-		default: return value
+		default: return value.toString()
 	}
 }
 
@@ -505,6 +507,11 @@ export interface DebugData {
       };
     }>;
     storage: Array<{
+      name: string;
+      type_: string;
+      value: string;
+    }>;
+	  const_params: Array<{
       name: string;
       type_: string;
       value: string;
@@ -855,7 +862,7 @@ export function parseToOperation(data: string): Operation {
 	throw new Error("Not a tezos operation");
 }
 
-type ConstParam = {
+export type ConstParam = {
 	"name": string
 	"value": string
 }
@@ -879,6 +886,9 @@ function getConstValue(value : string) : string {
 }
 
 export function processConstParams(input: string, params: Array<ConstParam>): string {
+	if (input == null) {
+		return null
+	}
 	let res = input;
 	for (const param of params) {
 		const constName = getConstName(param.name);

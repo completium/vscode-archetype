@@ -4,8 +4,8 @@ import * as os from 'os';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, ContractEnv as ContractEnv, dateStringToSeconds, DebugData, EntryArg, EntryPoint, extractGasInfoFromTrace, getCurrentDateTime, Operation, parseToOperation, removeDoubleQuotes, Step, Storage } from './utils';
-import { build_execution, executeCommand, extract_trace, gen_contract_map_source, GasInfo } from './utils';
+import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, ConstParam, ContractEnv as ContractEnv, dateStringToSeconds, DebugData, EntryArg, EntryPoint, extractGasInfoFromTrace, getCurrentDateTime, Operation, parseToOperation, removeDoubleQuotes, Step, Storage } from './utils';
+import { build_execution, executeCommand, extract_trace, gen_contract_map_source, GasInfo, processConstParams } from './utils';
 
 export interface IContractEnv {
 	now: string;
@@ -173,7 +173,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		}
 	}
 
-	public compile(sourceFile: string): Promise<string> {
+	public compile(sourceFile: string, const_params : Array<ConstParam>): Promise<string> {
 		return new Promise((resolve, reject) => {
 			const config = vscode.workspace.getConfiguration('archetype');
 			const archetypeMode: string = config.get('archetypeMode');
@@ -191,7 +191,8 @@ export class ArchetypeRuntime extends EventEmitter {
 				const command = `${archetype_exec} -g ${sourceFile}`;
 
 				executeCommand(command)
-					.then((output) => {
+					.then((input) => {
+						const output = processConstParams(input, const_params);
 						// Write the command output to the temporary file
 						fs.writeFile(tmpFilePath, output, 'utf8', (err) => {
 							if (err) {
@@ -211,7 +212,8 @@ export class ArchetypeRuntime extends EventEmitter {
 				};
 				try {
 					const archetype = require('@completium/archetype');
-					const output = archetype.compile(sourceFile, settings);
+					const input = archetype.compile(sourceFile, settings);
+					const output = processConstParams(input, const_params);
 					const fs = require("fs");
 					fs.writeFile(tmpFilePath, output, 'utf8', (err) => {
 						if (err) {
@@ -248,8 +250,8 @@ export class ArchetypeRuntime extends EventEmitter {
 		return executeCommand(command)
 	}
 
-	private async getDebugTrace(program: string): Promise<ArchetypeTrace> {
-		const tzSource = await this.compile(program)
+	private async getDebugTrace(program: string, const_params : Array<ConstParam>): Promise<ArchetypeTrace> {
+		const tzSource = await this.compile(program, const_params)
 		const entry = this._entrypoint
 		const storage = argsToMich(this._initStorage.elements())
 		const input = argsToMich(this._inputs)
@@ -338,11 +340,20 @@ export class ArchetypeRuntime extends EventEmitter {
 			const prompt = `Argument '${args[i].name}' value:`
 			await askOpenValidate(prompt, 'Argument value', this.getDefaultValue(args[i]), (x) => entrypoint.addArg(args[i].name, x, args[i].type_))
 		}
+		const const_params = new Storage()
+		for (let i = 0; i < this._debugData.interface.const_params.length; i++) {
+			const name = this._debugData.interface.const_params[i].name
+			const typ = this._debugData.interface.const_params[i].type_
+			const def = this._debugData.interface.const_params[i].value
+			const prompt = `Storage element '${name}' value:`
+			await askOpenValidate(prompt, 'Element value', def == null ? "" : removeDoubleQuotes(def), x => const_params.addElement(name, x, typ))
+		}
 		const storage = new Storage()
 		for (let i = 0; i < this._debugData.interface.storage.length; i++) {
 			const name = this._debugData.interface.storage[i].name
 			const typ = this._debugData.interface.storage[i].type_
-			const def = this._debugData.interface.storage[i].value
+			const def = processConstParams(this._debugData.interface.storage[i].value, const_params.toMichelsonValue())
+
 			const prompt = `Storage element '${name}' value:`
 			await askOpenValidate(prompt, 'Element value', removeDoubleQuotes(def), x => storage.addElement(name, x, typ))
 		}
@@ -351,7 +362,7 @@ export class ArchetypeRuntime extends EventEmitter {
 		this._initStorage = storage
 		this._inputs = entrypoint.args
 		this._env = new ContractEnv(env.now, env.transferred, env.balance, env.level, env.caller, env.source)
-		this._debugTrace = await this.getDebugTrace(program)
+		this._debugTrace = await this.getDebugTrace(program, const_params.toMichelsonValue())
 		this._gasInfo = extractGasInfoFromTrace(this._debugTrace)
 		this.setGasDecoration()
 		//console.log(this._gasInfo)
