@@ -255,6 +255,9 @@ export function build_execution(contract_map_source: ContractMapSource, trace: T
 	let stepgas = 0
 	for (let i = 0; i < trace.items.length; ++i) {
 		const trace_item = trace.items[i];
+		if (trace_item.gas == 0) {
+			continue
+		}
 		const ext_micheline: ExtMicheline = map_ext_micheline.get(trace_item.location);
 		stepgas += trace_item.gas * 1000
 		if ((ext_micheline as Mprim).debug !== undefined) {
@@ -553,15 +556,7 @@ function isInteger(value: string) : boolean {
 
 function isAddress(address: string): boolean {
 	// Les préfixes valides pour les adresses Tezos
-	const validPrefixes = ['tz1', 'tz2', 'tz3', 'KT1', 'KT2'];
-
-	// La longueur typique d'une adresse Tezos
-	const addressLength = 36;
-
-	// Vérifie si l'adresse a la bonne longueur
-	if (address.length !== addressLength) {
-			return false;
-	}
+	const validPrefixes = ['tz', 'KT'];
 
 	// Vérifie si l'adresse commence par l'un des préfixes valides
 	for (const prefix of validPrefixes) {
