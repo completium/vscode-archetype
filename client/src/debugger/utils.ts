@@ -15,6 +15,7 @@ interface ItemTrace {
 }
 
 interface Trace {
+	fail ?: string,
 	items: Array<ItemTrace>
 }
 
@@ -123,7 +124,7 @@ function is_micheline_valid(str : string) : boolean {
 	  && (countCharOccurrences(str, "(") - countCharOccurrences(str, ")") == 0)
 }
 
-export function extract_trace(input: string): Trace {
+function extract_trace_simple(input: string): Trace {
 	if (!input || input.trim().length === 0) {
 		throw new Error("Invalid input, empty.");
 	}
@@ -165,6 +166,27 @@ export function extract_trace(input: string): Trace {
 		}
 	}
 	return { items: res }
+}
+
+function extract_trace_fail(input: string): Trace {
+	const rx = /FAILWITH instruction\nwith(\n)?(\s)+((.|\n)*)\ntrace*/g;
+	const arr = rx.exec(input);
+	let fail = undefined;
+	if (arr !== undefined && arr != null) {
+		fail = unescape(arr[3]);
+	}
+	const a = input.split("Fatal error:");
+	const input_trace = a.length > 0 ? a[0] : input;
+	const trace = extract_trace_simple(input_trace);
+	return { ...trace, fail: fail }
+}
+
+export function extract_trace(input: string): Trace {
+	if (input != null && input.indexOf("Fatal error:") > 0) {
+		return extract_trace_fail(input)
+	} else {
+		return extract_trace_simple(input)
+	}
 }
 
 export function gen_contract_map_source(input: string): ContractMapSource {
@@ -468,12 +490,16 @@ export function argsToMich(elements : EntryArg[]) : string {
 	return toPair(elements.map(x => toMichelson(x.value, x.typ)))
 }
 
-export function executeCommand(command: string): Promise<string> {
+export function executeCommand(command: string, escape ?: string): Promise<string> {
 	return new Promise((resolve, reject) => {
 		child_process.exec(command, (error, stdout, stderr) => {
 			if (error) {
-				vscode.window.showErrorMessage(`exec error: ${error}`)
-				reject(error);
+				if (escape !== undefined && stderr != null && stderr.indexOf(escape)) {
+					resolve(stderr);
+				} else {
+					vscode.window.showErrorMessage(`exec error: ${error}`)
+					reject(error);
+				}
 				return;
 			}
 			if (stderr) {

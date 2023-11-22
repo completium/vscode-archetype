@@ -17,7 +17,11 @@
         "transferred": "0",
         "balance": "1000000",
         "inputs": {
-          "spender": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
+          "spender": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+          "from": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+          "to": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6",
+          "value": "1"
+
         },
         "const_params": {
           "initial_holder": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",

@@ -178,6 +178,54 @@ trace
     const actualOutput = extract_trace(input);
     expect(actualOutput).to.deep.equal(expectedOutput);
   });
+
+  it('extract_trace_fail', () => {
+    const input = `
+    Runtime error in contract KT1BEqzn5Wx8uJrZNvuS9DVHmLvG9td3fDLi:
+  1: { storage unit ;
+  2:   parameter (unit %exec) ;
+  3:   code { UNPAIR ; DROP 1 ; PUSH nat 2 ; PUSH string "mystr" ; PAIR ; FAILWITH } }
+  4:
+At line 3 characters 69 to 77,
+script reached FAILWITH instruction
+with (Pair "mystr" 2)
+trace
+  - location: 7 (just consumed gas: 6.178)
+    [ (Pair Unit Unit) ]
+  - location: 7 (just consumed gas: 0.010)
+    [ Unit
+      Unit ]
+  - location: 8 (just consumed gas: 0.032)
+    [ Unit ]
+  - location: 10 (just consumed gas: 0.010)
+    [ 2
+      Unit ]
+  - location: 13 (just consumed gas: 0.010)
+    [ "mystr"
+      2
+      Unit ]
+  - location: 16 (just consumed gas: 0.010)
+    [ (Pair "mystr" 2)
+      Unit ]
+Fatal error:
+  error running script
+`
+
+    const expectedOutput = {
+      fail: "(Pair \"mystr\" 2)",
+      items: [
+        { location: 7, gas: 6.178, stack: ["(Pair Unit Unit)"] },
+        { location: 7, gas: 0.010, stack: ["Unit", "Unit"] },
+        { location: 8, gas: 0.032, stack: ["Unit"] },
+        { location: 10, gas: 0.010, stack: ["2", "Unit"] },
+        { location: 13, gas: 0.010, stack: ["\"mystr\"", "2", "Unit"] },
+        { location: 16, gas: 0.010, stack: ["(Pair \"mystr\" 2)", "Unit"] },
+      ]
+    };
+    const actualOutput = extract_trace(input);
+    console.log(JSON.stringify(actualOutput, null, 2))
+    expect(actualOutput).to.deep.equal(expectedOutput);
+  })
 });
 
 describe('generate_steps', () => {
