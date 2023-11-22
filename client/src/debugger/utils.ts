@@ -92,6 +92,7 @@ export type Step = {
 }
 
 export type ArchetypeTrace = {
+	fail ?: string,
 	steps: Array<Step>
 }
 
@@ -271,7 +272,7 @@ export function extractGasInfoFromTrace(trace: ArchetypeTrace): Map<number, Arra
 
 
 export function build_execution(contract_map_source: ContractMapSource, trace: Trace): ArchetypeTrace {
-	let res: ArchetypeTrace = { steps: [] }
+	let res: ArchetypeTrace = { fail: trace.fail, steps: [] }
 	const map_ext_micheline: Map<number, ExtMicheline> = build_map_ext_micheline(contract_map_source.contract);
 	// console.log(map_ext_micheline);
 	let stepgas = 0

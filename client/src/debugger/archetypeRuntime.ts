@@ -576,6 +576,10 @@ export class ArchetypeRuntime extends EventEmitter {
 			//console.log(JSON.stringify(this._step, null,2))
 			this.sendEvent('stopOnEntry')
 		} else if (this.instruction >= this._debugTrace.steps.length - 1) {
+			if (this._debugTrace.fail !== undefined) {
+				const msg = `Contract failed with: ${this._debugTrace.fail}`
+				vscode.window.showErrorMessage(msg)
+			}
 			this.clearDecorations();
 			this.sendEvent('end');
 		}
