@@ -156,7 +156,7 @@ function extract_trace_simple(input: string): Trace {
 						stack.push(accu)
 						accu = "";
 					} else {
-						accu += "\n"
+						accu += " "
 					}
 				}
 				res.push({ location: location, gas: gas, stack: stack });

@@ -520,7 +520,7 @@ export class ArchetypeRuntime extends EventEmitter {
 	public getLocalVariables(): RuntimeVariable[] {
 		if (this.instruction >= 0) {
 			return this._step.stack.filter(x => {
-				return x.name != '_ops' && !this._initStorage.elements().some(item => item.name == x.name) && !this._inputs.some(item => item.name == x.name)
+				return !x.name.startsWith("_") && !this._initStorage.elements().some(item => item.name == x.name) && !this._inputs.some(item => item.name == x.name)
 			}).map(x => {
 				return new RuntimeVariable(x.name, this.parseString(removeDoubleQuotes(x.value)))
 			})
