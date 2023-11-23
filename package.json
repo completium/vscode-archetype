@@ -26,7 +26,7 @@
   },
   "version": "0.75.0",
   "engines": {
-    "vscode": "^1.56.0"
+    "vscode": "^1.38.0"
   },
   "categories": [
     "Programming Languages",
@@ -125,6 +125,10 @@
       }
     ],
     "commands": [
+      {
+        "command": "archetype.helloWorld",
+        "title": "Hello World"
+      },
       {
         "command": "archetypePropertiesExplorer.refreshEntry",
         "title": "Refresh",

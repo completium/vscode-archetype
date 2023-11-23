@@ -6,17 +6,13 @@
 
 import * as Net from 'net';
 import * as vscode from 'vscode';
-import { randomBytes } from 'crypto';
-import { tmpdir } from 'os';
-import { join } from 'path';
-import { platform } from 'process';
 import { ProviderResult } from 'vscode';
-import { activateArchetypeDebug, workspaceFileAccessor } from './debugger/activateArchetypeDebug';
+import { activateArchetypeDebug, workspaceFileAccessor } from './activateArchetypeDebug';
 
-import { ArchetypeNodeProvider, ArchetypeItem, ArchetypePropertiesExplorer } from './archetypePropertiesExplorer';
+import { ArchetypePropertiesExplorer } from './archetypePropertiesExplorer';
 import { registerCommands } from './commands';
 import { startClient, stopClient } from './lsp';
-import { ArchetypeDebugSession } from './debugger/archetypeDebug';
+import { ArchetypeDebugSession } from './archetypeDebug';
 
 /*
  * The compile time flag 'runMode' controls how the debug adapter is run.
