@@ -162,7 +162,8 @@ export class ArchetypeRuntime extends EventEmitter {
 			} else {
 				const archetype = require('@completium/archetype');
 				const settings = {
-					target: 'debug-trace'
+					target: 'debug-trace',
+					g: true
 				};
 				output = archetype.compile(arlFilePath, settings);
 			}
@@ -217,7 +218,6 @@ export class ArchetypeRuntime extends EventEmitter {
 					const archetype = require('@completium/archetype');
 					const input = archetype.compile(sourceFile, settings);
 					const output = processConstParams(input, const_params);
-					const fs = require("fs");
 					fs.writeFile(tmpFilePath, output, 'utf8', (err) => {
 						if (err) {
 							console.error(`Failed to write to temp file: ${err}`);

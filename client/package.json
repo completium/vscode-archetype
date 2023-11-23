@@ -16,7 +16,7 @@
 		"test": "ts-mocha --timeout 0 --slow 99999999999999999 ./tests/debugger/*.spec.ts"
 	},
 	"dependencies": {
-		"@completium/archetype": "0.4.14",
+		"@completium/archetype": "1.0.0",
 		"@vscode/debugadapter": "^1.56.0",
 		"@vscode/debugadapter-testsupport": "^1.56.0",
 		"await-notify": "^1.0.1",
