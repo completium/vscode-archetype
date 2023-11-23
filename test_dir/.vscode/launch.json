@@ -5,7 +5,7 @@
 			"type": "mock",
 			"request": "launch",
 			"name": "Debug Archetype",
-			"program": "/Users/benoitrognier/Projects/completium/vscode-archetype/test_dir/contracts/debug.arl"
+			"program": "./test_dir/contracts/debug.arl"
 		}
 	]
 }
