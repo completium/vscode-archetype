@@ -4,8 +4,12 @@ import * as os from 'os';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-import { ArchetypeTrace, argsToMich, askClosed, askOpen, askOpenValidate, ConstParam, ContractEnv as ContractEnv, dateStringToSeconds, DebugData, EntryArg, EntryPoint, extractGasInfoFromTrace, getCurrentDateTime, Operation, parseToOperation, removeDoubleQuotes, Step, Storage } from './utils';
-import { build_execution, executeCommand, extract_trace, gen_contract_map_source, GasInfo, processConstParams } from './utils';
+import {
+	ArchetypeTrace, argsToMich, askClosed, askOpenValidate, ConstParam, ContractEnv as ContractEnv,
+	dateStringToSeconds, DebugData, EntryArg, EntryPoint, extractGasInfoFromTrace, getCurrentDateTime,
+	Operation, parseToOperation, removeDoubleQuotes, Step, Storage, build_execution, executeCommand, extract_trace,
+	gen_contract_map_source, GasInfo, processConstParams
+} from './utils';
 
 export interface IContractEnv {
 	now: string;

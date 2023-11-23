@@ -1,19 +1,6 @@
-/*---------------------------------------------------------
- * Copyright (C) Microsoft Corporation. All rights reserved.
- *--------------------------------------------------------*/
-/*
- * mockDebug.ts implements the Debug Adapter that "adapts" or translates the Debug Adapter Protocol (DAP) used by the client (e.g. VS Code)
- * into requests and events of the real "execution engine" or "debugger" (here: class MockRuntime).
- * When implementing your own debugger extension for VS Code, most of the work will go into the Debug Adapter.
- * Since the Debug Adapter is independent from VS Code, it can be used in any client (IDE) supporting the Debug Adapter Protocol.
- *
- * The most important class of the Debug Adapter is the MockDebugSession which implements many DAP requests by talking to the MockRuntime.
- */
-
-import { Breakpoint, BreakpointEvent, Handles, InitializedEvent, InvalidatedEvent, logger, Logger, LoggingDebugSession, MemoryEvent, OutputEvent, ProgressEndEvent, ProgressStartEvent, ProgressUpdateEvent, Scope, Source, StackFrame, StoppedEvent, TerminatedEvent, Thread } from '@vscode/debugadapter';
+import { BreakpointEvent, Handles, InitializedEvent, logger, Logger, LoggingDebugSession, OutputEvent, Scope, Source, StackFrame, StoppedEvent, TerminatedEvent, Thread } from '@vscode/debugadapter';
 import { DebugProtocol } from '@vscode/debugprotocol';
 import { Subject } from 'await-notify';
-import * as base64 from 'base64-js';
 import { basename } from 'path-browserify';
 
 import { ArchetypeRuntime, FileAccessor, IRuntimeBreakpoint, RuntimeVariable, IContractEnv } from './archetypeRuntime';
