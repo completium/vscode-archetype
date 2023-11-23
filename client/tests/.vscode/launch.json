@@ -31,6 +31,18 @@
         "storage": {
           "ledger": "{ Elt \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\" (Pair 1000 {  }) }",
           "token_metadata": "{ Elt 0 (Pair 0 { Elt \"\" 0x00 }) }"
+        },
+        "storage_fa2": {
+          "owner": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+          "permits": "KT1EZQEzgkeV4yyqz8G86xTK2YPboHcDqcLV",
+          "owner_candidate": "None",
+          "paused": "False",
+          "royalties": "{  }",
+          "operator": "{  }",
+          "operator_for_all": "{  }",
+          "metadata": "{ Elt \"\" 0x }",
+          "ledger": "{ Elt 0 \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\" }",
+          "token_metadata": "{ Elt 0 (Pair 0 { Elt \"\" 0x00 }) }"
         }
       }
     }
