@@ -13,7 +13,7 @@
 		"vscode": "^1.38.0"
 	},
 	"scripts": {
-		"test": "ts-mocha --timeout 0 --slow 99999999999999999 ./tests/debugger/*.spec.ts"
+		"test": "ts-mocha --timeout 0 --slow 99999999999999999 ./tests/*.spec.ts"
 	},
 	"dependencies": {
 		"@completium/archetype": "1.0.0",

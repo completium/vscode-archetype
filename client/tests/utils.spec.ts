@@ -1,6 +1,5 @@
 import { expect } from 'chai';
-import * as fs from 'fs';
-import { build_execution, extract_trace, gen_contract_map_source, processConstParams } from '../../src/debugger/utils';
+import { build_execution, extract_trace, gen_contract_map_source, processConstParams } from '../src/utils';
 
 describe('utils', () => {
   it('processConstParams', () => {
@@ -223,15 +222,131 @@ Fatal error:
       ]
     };
     const actualOutput = extract_trace(input);
-    console.log(JSON.stringify(actualOutput, null, 2))
+    // console.log(JSON.stringify(actualOutput, null, 2))
     expect(actualOutput).to.deep.equal(expectedOutput);
   })
 });
 
 describe('generate_steps', () => {
   it('build_execution', () => {
-    const exec_trace_input = fs.readFileSync('./tests/resources/debug.input', 'utf-8');
-    const debug_json = fs.readFileSync('./tests/resources/debug.json', 'utf-8');
+    const exec_trace_input = `storage
+  2
+emitted operations
+
+big_map diff
+
+trace
+  - location: 7 (just consumed gas: 10.117)
+    [ (Pair Unit 0) ]
+  - location: 7 (just consumed gas: 0.010)
+    [ Unit
+      0 ]
+  - location: 8 (just consumed gas: 0.032)
+    [ 0 ]
+  - location: 10 (just consumed gas: 0.010)
+    [ 2
+      0 ]
+  - location: 13 (just consumed gas: 0.010)
+    [ 2
+      2
+      0 ]
+  - location: 14 (just consumed gas: 0)
+    [ 2
+      0 ]
+  - location: 17 (just consumed gas: 0.036)
+    [ 0
+      2 ]
+  - location: 19 (just consumed gas: 0.032)
+    [ 2 ]
+  - location: 14 (just consumed gas: 0.025)
+    [ 2
+      2 ]
+  - location: 14 (just consumed gas: 0)
+    [ 2
+      2 ]
+  - location: 21 (just consumed gas: 0.041)
+    [ 2
+      2 ]
+  - location: 23 (just consumed gas: 0.032)
+    [ 2 ]
+  - location: 25 (just consumed gas: 0.010)
+    [ {}
+      2 ]
+  - location: 27 (just consumed gas: 0.010)
+    [ (Pair {} 2) ]
+    `;
+    const debug_json = `{
+  "contract": [
+    { "prim": "storage", "args": [{ "prim": "nat" }] },
+    { "prim": "parameter", "args": [{ "prim": "unit", "annots": ["%exec"] }] },
+    {
+      "prim": "code",
+      "args": [
+        [
+          { "prim": "UNPAIR" },
+          {
+            "prim": "DROP",
+            "args": [{ "int": "1" }],
+            "debug": {
+              "stack": [{ "name": "a" }],
+              "decl_bound": {
+                "kind": "entry",
+                "name": "exec",
+                "bound": "begin"
+              }
+            }
+          },
+          {
+            "prim": "PUSH",
+            "args": [{ "prim": "nat" }, { "int": "2" }],
+            "debug": {
+              "stack": [{ "name": "v" }, { "name": "a" }],
+              "range": {
+                "name": "./client/tests/resources/debug.arl",
+                "begin": { "line": 6, "col": 1, "char": 55 },
+                "end": { "line": 6, "col": 10, "char": 64 }
+              }
+            }
+          },
+          { "prim": "DUP" },
+          {
+            "prim": "DIP",
+            "args": [
+              { "int": "1" },
+              [
+                { "prim": "DIG", "args": [{ "int": "1" }] },
+                { "prim": "DROP", "args": [{ "int": "1" }] }
+              ]
+            ]
+          },
+          {
+            "prim": "DUG",
+            "args": [{ "int": "1" }],
+            "debug": {
+              "stack": [{ "name": "v" }, { "name": "a" }],
+              "range": {
+                "name": "./client/tests/resources/debug.arl",
+                "begin": { "line": 7, "col": 1, "char": 67 },
+                "end": { "line": 7, "col": 7, "char": 73 }
+              }
+            }
+          },
+          {
+            "prim": "DROP",
+            "args": [{ "int": "1" }],
+            "debug": {
+              "stack": [{ "name": "a" }],
+              "decl_bound": { "kind": "entry", "name": "exec", "bound": "end" }
+            }
+          },
+          { "prim": "NIL", "args": [{ "prim": "operation" }] },
+          { "prim": "PAIR" }
+        ]
+      ]
+    }
+  ]
+}
+`;
     const exec_trace = extract_trace(exec_trace_input);
     const contract_map_source = gen_contract_map_source(debug_json);
     const actualOutput = build_execution(contract_map_source, exec_trace);
@@ -315,7 +430,7 @@ describe('generate_steps', () => {
         }
       ]
     };
-    console.log(JSON.stringify(actualOutput))
+    // console.log(JSON.stringify(actualOutput))
     // expect(actualOutput).to.deep.equal(expectedOutput);
   })
 })
