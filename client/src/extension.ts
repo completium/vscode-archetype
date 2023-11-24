@@ -6,7 +6,7 @@ import { registerCommands } from './commands';
 import { startClient, stopClient } from './lsp';
 
 export function activate(context: vscode.ExtensionContext) {
-	// activateArchetypeDebug(context);
+	activateArchetypeDebug(context);
 	new ArchetypePropertiesExplorer(context);
 	registerCommands(context);
 	startClient(context);
