@@ -41,26 +41,14 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 
 	private _configurationDone = new Subject();
 
-	private _cancellationTokens = new Map<number, boolean>();
-
-	private _reportProgress = false;
-	private _progressId = 10000;
-	private _cancelledProgressId: string | undefined = undefined;
-	private _isProgressCancellable = true;
-
 	private _valuesInHex = false;
-	private _useInvalidatedEvent = false;
-
-	private _addressesInHex = true;
 
 	/**
 	 * Creates a new debug adapter that is used for one debug session.
 	 * We configure the default implementation of a debug adapter here.
 	 */
 	public constructor(fileAccessor: FileAccessor) {
-  	console.log(`ArchetypeDebugSession constructor`)
-
-		super("archetype-debug.txt");
+		super();
 
 		// this debugger uses zero-based lines and columns
 		this.setDebuggerLinesStartAt1(false);
@@ -125,13 +113,6 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 	 * to interrogate the features the debug adapter provides.
 	 */
 	protected initializeRequest(response: DebugProtocol.InitializeResponse, args: DebugProtocol.InitializeRequestArguments): void {
-
-		if (args.supportsProgressReporting) {
-			this._reportProgress = true;
-		}
-		if (args.supportsInvalidatedEvent) {
-			this._useInvalidatedEvent = true;
-		}
 
 		// build and return the capabilities of this debug adapter:
 		response.body = response.body || {};
@@ -417,10 +398,6 @@ export class ArchetypeDebugSession extends LoggingDebugSession {
 			}
 		}
 
-		//if (v.memory) {
-		//	v.reference ??= this._variableHandles.create(v);
-		//	dapVariable.memoryReference = String(v.reference);
-		//}
 		if (v.reference != undefined) {
 			dapVariable.variablesReference = v.reference;
 		}

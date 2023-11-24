@@ -209,7 +209,7 @@
     ],
     "debuggers": [
       {
-        "type": "archetype",
+        "type": "mock",
         "languages": [
           "archetype"
         ],
@@ -262,7 +262,7 @@
         },
         "initialConfigurations": [
           {
-            "type": "archetype",
+            "type": "mock",
             "request": "launch",
             "name": "Archetype : debug",
             "program": "${file}",
