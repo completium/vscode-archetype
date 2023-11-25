@@ -1,24 +1,20 @@
 {
 	"name": "archetype-server",
-	"description": "Example implementation of a language server in node.",
+	"description": "Archetype extension server side.",
 	"version": "1.0.0",
-	"author": "Microsoft Corporation",
+	"author": "edukera",
 	"license": "MIT",
 	"engines": {
 		"node": "*"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Microsoft/vscode-extension-samples"
+		"url": "https://github.com/completium/vscode-archetype"
 	},
 	"dependencies": {
-		"vscode-languageserver": "^4.1.3",
 		"@completium/archetype": "1.0.0",
- 		"nth-check": ">=2.0.1"
+		"vscode-languageserver": "^8.1.0",
+		"vscode-languageserver-textdocument": "^1.0.8"
 	},
-	"scripts": {},
-	"devDependencies": {
-		"@types/node": "^12.7.2",
-		"tar": ">=5.0.10"
-	}
+	"scripts": {}
 }

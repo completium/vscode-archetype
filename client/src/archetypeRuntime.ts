@@ -12,6 +12,7 @@ import {
 } from './utils';
 
 import { askClosed, askOpenValidate, executeCommand } from './tools';
+import { TextDecoder, TextEncoder } from 'util';
 
 export interface IContractEnv {
 	now: string;

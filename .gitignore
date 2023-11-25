@@ -1,8 +1,6 @@
-client/node_modules/
-client/out/
-node_modules/
-server/node_modules/
-server/out/
+out
+node_modules
+client/server
+.vscode-test
 *.vsix
 .history/
-

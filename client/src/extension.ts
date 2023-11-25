@@ -1,13 +1,10 @@
-import * as vscode from 'vscode';
-import { activateArchetypeDebug, workspaceFileAccessor } from './activateArchetypeDebug';
-
-import { ArchetypePropertiesExplorer } from './archetypePropertiesExplorer';
+import { ExtensionContext } from 'vscode';
+import { stopClient, startClient } from './lsp';
 import { registerCommands } from './commands';
-import { startClient, stopClient } from './lsp';
+import { activateArchetypeDebug } from './activateArchetypeDebug';
 
-export function activate(context: vscode.ExtensionContext) {
-	// activateArchetypeDebug(context);
-	new ArchetypePropertiesExplorer(context);
+export function activate(context: ExtensionContext) {
+	activateArchetypeDebug(context);
 	registerCommands(context);
 	startClient(context);
 }

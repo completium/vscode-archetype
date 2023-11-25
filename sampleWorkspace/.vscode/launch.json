@@ -1,0 +1,58 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "archetype",
+      "request": "launch",
+      "name": "Archetype : debug",
+      "program": "${file}",
+      "env": {
+        "now": "2023-10-27 09:25:11",
+        "level": "10000",
+        "caller": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+        "source": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+        "transferred": "0",
+        "balance": "1000000",
+        "inputs": {
+          "spender": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+          "from": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+          "to": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6",
+          "value": "500"
+
+        },
+        "const_params": {
+          "initial_holder": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+          "total_supply": "1000",
+          "metadata_coin": "0x00"
+        },
+        "storage": {
+          "ledger": "{ Elt \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\" (Pair 1000 {  }) }",
+          "token_metadata": "{ Elt 0 (Pair 0 { Elt \"\" 0x00 }) }"
+        },
+        "storage_fa2": {
+          "owner": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+          "permits": "KT1EZQEzgkeV4yyqz8G86xTK2YPboHcDqcLV",
+          "owner_candidate": "None",
+          "paused": "False",
+          "royalties": "{  }",
+          "operator": "{  }",
+          "operator_for_all": "{  }",
+          "metadata": "{ Elt \"\" 0x }",
+          "ledger": "{ Elt 0 \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\" }",
+          "token_metadata": "{ Elt 0 (Pair 0 { Elt \"\" 0x00 }) }"
+        }
+      }
+    },
+		{
+			"type": "mock",
+			"request": "launch",
+			"name": "Debug readme.md",
+			"program": "/home/guillaume/archetype/resources-vscode/readme.md",
+			"stopOnEntry": true,
+			"trace": false
+		}
+  ]
+}

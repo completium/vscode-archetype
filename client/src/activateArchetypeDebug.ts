@@ -3,12 +3,13 @@
 import * as vscode from 'vscode';
 import { ProviderResult } from 'vscode';
 
+import { LoggingDebugSession } from '@vscode/debugadapter';
 import { ArchetypeDebugSession } from './archetypeDebug';
 import { FileAccessor } from './archetypeRuntime';
 
 export function activateArchetypeDebug(context: vscode.ExtensionContext) {
 	const factory = new InlineDebugAdapterFactory();
-	context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory('mock', factory));
+	context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory('archetype', factory));
 }
 
 export const workspaceFileAccessor: FileAccessor = {

@@ -1,0 +1,26 @@
+{ storage nat ;
+  parameter (unit %exec) ;
+  code { NIL operation ;
+         SWAP ;
+         CDR ;
+         PUSH nat 2 ;
+         DUP ;
+         DIP 1 { SWAP ; DROP 1 } ;
+         SWAP ;
+         NIL operation ;
+         NIL operation ;
+         DUP 5 ;
+         ITER { CONS } ;
+         PUSH address "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb" ;
+         CONTRACT unit ;
+         IF_NONE { PUSH string "ENTRY_NOT_FOUND" ; FAILWITH } {} ;
+         PUSH mutez 2000000 ;
+         UNIT ;
+         TRANSFER_TOKENS ;
+         CONS ;
+         ITER { CONS } ;
+         DIP 1 { DIG 2 ; DROP 1 } ;
+         DUG 2 ;
+         DROP 1 ;
+         SWAP ;
+         PAIR } }

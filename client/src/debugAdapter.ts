@@ -1,7 +1,3 @@
-/*---------------------------------------------------------
- * Copyright (C) Microsoft Corporation. All rights reserved.
- *--------------------------------------------------------*/
-
 import { ArchetypeDebugSession } from './archetypeDebug';
 
 import { promises as fs } from 'fs';

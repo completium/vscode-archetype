@@ -1,31 +1,41 @@
-/* --------------------------------------------------------------------------------------------
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
+import {
+	createConnection,
+	TextDocuments,
+	Diagnostic,
+	DiagnosticSeverity,
+	ProposedFeatures,
+	InitializeParams,
+	DidChangeConfigurationNotification,
+	CompletionItem,
+	CompletionItemKind,
+	TextDocumentPositionParams,
+	TextDocumentSyncKind,
+	InitializeResult
+} from 'vscode-languageserver/node';
 
-import { URL } from 'url';
-import { CompletionItem, CompletionItemKind, createConnection, Diagnostic, DiagnosticSeverity, DiagnosticRelatedInformation, DidChangeConfigurationNotification, DocumentSymbolParams, InitializeParams, Location, Position, ProposedFeatures, Range, SymbolInformation, SymbolKind, TextDocument, TextDocumentPositionParams, TextDocuments } from 'vscode-languageserver';
+import {
+	TextDocument
+} from 'vscode-languageserver-textdocument';
 
-const { spawn } = require('child_process');
-const archetype = require("@completium/archetype");
+import * as archetype from '@completium/archetype';
+import * as child_process from 'child_process';
 
-// Create a connection for the server. The connection uses Node's IPC as a transport.
+// Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
-let connection = createConnection(ProposedFeatures.all);
+const connection = createConnection(ProposedFeatures.all);
 
-// Create a simple text document manager. The text document manager
-// supports full document sync only
-let documents: TextDocuments = new TextDocuments();
+// Create a simple text document manager.
+const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
-let hasConfigurationCapability: boolean = false;
-let hasWorkspaceFolderCapability: boolean = false;
-let hasDiagnosticRelatedInformationCapability: boolean = false;
+let hasConfigurationCapability = false;
+let hasWorkspaceFolderCapability = false;
+let hasDiagnosticRelatedInformationCapability = false;
 
 connection.onInitialize((params: InitializeParams) => {
-	let capabilities = params.capabilities;
+	const capabilities = params.capabilities;
 
 	// Does the client support the `workspace/configuration` request?
-	// If not, we will fall back using global settings
+	// If not, we fall back using global settings.
 	hasConfigurationCapability = !!(
 		capabilities.workspace && !!capabilities.workspace.configuration
 	);
@@ -38,16 +48,23 @@ connection.onInitialize((params: InitializeParams) => {
 		capabilities.textDocument.publishDiagnostics.relatedInformation
 	);
 
-	return {
+	const result: InitializeResult = {
 		capabilities: {
-			textDocumentSync: documents.syncKind,
-			documentSymbolProvider: true,
-			// Tell the client that the server supports code completion
+			textDocumentSync: TextDocumentSyncKind.Incremental,
+			// Tell the client that this server supports code completion.
 			completionProvider: {
 				resolveProvider: true
 			}
 		}
 	};
+	if (hasWorkspaceFolderCapability) {
+		result.capabilities.workspace = {
+			workspaceFolders: {
+				supported: true
+			}
+		};
+	}
+	return result;
 });
 
 connection.onInitialized(() => {
@@ -63,27 +80,26 @@ connection.onInitialized(() => {
 });
 
 // The example settings
-interface LSPSettings {
-	archetypeMode: string;
-	archetypeBin: string;
+interface ExampleSettings {
+	maxNumberOfProblems: number;
 }
 
 // The global settings, used when the `workspace/configuration` request is not supported by the client.
 // Please note that this is not the case when using this server with the client provided in this example
 // but could happen with other clients.
-const defaultSettings: LSPSettings = { archetypeMode: 'js', archetypeBin: "archetype" };
-let globalSettings: LSPSettings = defaultSettings;
+const defaultSettings: ExampleSettings = { maxNumberOfProblems: 1000 };
+let globalSettings: ExampleSettings = defaultSettings;
 
 // Cache the settings of all open documents
-let documentSettings: Map<string, Thenable<LSPSettings>> = new Map();
+const documentSettings: Map<string, Thenable<ExampleSettings>> = new Map();
 
 connection.onDidChangeConfiguration(change => {
 	if (hasConfigurationCapability) {
 		// Reset all cached document settings
 		documentSettings.clear();
 	} else {
-		globalSettings = <LSPSettings>(
-			(change.settings.archetype || defaultSettings)
+		globalSettings = <ExampleSettings>(
+			(change.settings.languageServerExample || defaultSettings)
 		);
 	}
 
@@ -91,13 +107,18 @@ connection.onDidChangeConfiguration(change => {
 	documents.all().forEach(validateTextDocument);
 });
 
+interface LSPSettings {
+	archetypeMode: string;
+	archetypeBin: string;
+}
+
 function getDocumentSettings(resource: string): Thenable<LSPSettings> {
 	// if (!hasConfigurationCapability) {
 	// 	return Promise.resolve(globalSettings);
 	// }
 	// let result = documentSettings.get(resource);
 	// if (!result) {
-	let result = connection.workspace.getConfiguration({
+	const result = connection.workspace.getConfiguration({
 		scopeUri: resource,
 		section: 'archetype'
 	});
@@ -111,16 +132,10 @@ documents.onDidClose(e => {
 	documentSettings.delete(e.document.uri);
 });
 
-function all(change) {
-	symbols = []; // Ugly
-	validateTextDocument(change.document);
-	updateSymbols(change.document);
-}
-
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
-	all(change);
+	validateTextDocument(change.document);
 });
 
 function validateProcessing(textDocument: TextDocument, result: string) {
@@ -147,10 +162,9 @@ function validateProcessing(textDocument: TextDocument, result: string) {
 		items: Item[];
 	}
 
+	const obj: Result = JSON.parse(result);
 
-	let obj: Result = JSON.parse(result);
-
-	let diagnostics: Diagnostic[] = [];
+	const diagnostics: Diagnostic[] = [];
 	if (obj.status[0] === "Crash") {
 		const diagnostic: Diagnostic = {
 			severity: DiagnosticSeverity.Error,
@@ -163,15 +177,15 @@ function validateProcessing(textDocument: TextDocument, result: string) {
 		};
 		diagnostics.push(diagnostic);
 	} else if (obj.status[0] === "Error") {
-		for (var i = 0; i < obj.items.length; ++i) {
-			var lItem = obj.items[i];
+		for (let i = 0; i < obj.items.length; ++i) {
+			const lItem = obj.items[i];
 
-			let message = lItem.message;
-			let start = lItem.range.start.char;
-			let end = lItem.range.end.char;
-			let severity: DiagnosticSeverity = lItem.severity ? lItem.severity : DiagnosticSeverity.Error;
+			const message = lItem.message;
+			const start = lItem.range.start.char;
+			const end = lItem.range.end.char;
+			const severity: DiagnosticSeverity = lItem.severity ? lItem.severity : DiagnosticSeverity.Error;
 
-			let diagnostic: Diagnostic = {
+			const diagnostic: Diagnostic = {
 				severity: severity,
 				range: {
 					start: textDocument.positionAt(start),
@@ -188,53 +202,9 @@ function validateProcessing(textDocument: TextDocument, result: string) {
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
 
-function updateSymbolsProcessing(textDocument: TextDocument, result: string) {
-	interface Position {
-		line: number;
-		col: number;
-		char: number;
-	}
-
-	interface Outline {
-		children: Outline[];
-		name: string;
-		kind: number;
-		start: Position;
-		end: Position;
-	}
-
-	interface ResultOutine {
-		status: string[];
-		outlines: Outline[];
-	}
-
-
-	function mk_outline(o: Outline): SymbolInformation {
-
-		let res = SymbolInformation.create(
-			o.name,
-			o.kind as SymbolKind,
-			Range.create(Position.create(o.start.line, o.start.col),
-				Position.create(o.end.line, o.end.col)));
-
-
-		return res;
-	}
-
-	let obj: ResultOutine = JSON.parse(result);
-
-	for (var i = 0; i < obj.outlines.length; ++i) {
-		var lOutline = obj.outlines[i];
-
-		var a = mk_outline(lOutline);
-
-		symbols.push(a);
-	}
-}
-
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	// In this simple example we get the settings for every validate run.
-	let settings = await getDocumentSettings(textDocument.uri);
+	const settings = await getDocumentSettings(textDocument.uri);
 
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	const text = textDocument.getText();
@@ -242,23 +212,22 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	const path_doc = url.pathname;
 
 	if (settings.archetypeMode === 'binary' || settings.archetypeMode === 'docker') {
-		const { spawn } = require('child_process');
 
 		const bin = settings.archetypeMode === 'binary' ? settings.archetypeBin : 'docker';
 		const cwd = process.cwd();
 		const args = settings.archetypeMode === 'binary' ? ['-lsp', 'errors', '--path', path_doc] : ['run', '-i', '--rm', '-v', `${cwd}:${cwd}`, '-w', `${cwd}`, 'completium/archetype:latest', '-lsp', 'errors', '--path', path_doc];
 
-		const child = spawn(bin, args);
+		const child = child_process.spawn(bin, args);
 
-		child.stdin.setEncoding('utf8')
+		child.stdin.setDefaultEncoding('utf8');
 		child.stdin.write(text);
 		child.stdin.end();
 
-		let content = []
-		child.stdout.on('data', (chunk) => {
+		let content : any[] = [];
+		child.stdout.on('data', (chunk : string) => {
 			content = content.concat(...chunk);
 		});
-		child.stdout.on('close', (code) => {
+		child.stdout.on('close', (code : number) => {
 			if (code == 0 && content.length > 0) {
 				validateProcessing(textDocument, Buffer.from(content).toString());
 			}
@@ -269,47 +238,9 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	}
 }
 
-
-let symbols: SymbolInformation[] = [];
-
-async function updateSymbols(textDocument: TextDocument): Promise<void> {
-	// In this simple example we get the settings for every validate run.
-	let settings = await getDocumentSettings(textDocument.uri);
-
-	// The validator creates diagnostics for all uppercase words length 2 and more
-	let text = textDocument.getText();
-	const url = new URL(textDocument.uri);
-	const path_doc = url.pathname;
-
-	if (settings.archetypeMode === 'binary') {
-		const { spawn } = require('child_process');
-
-		const child = spawn(settings.archetypeBin, ['-lsp', 'outline', '--path', path_doc]);
-
-		child.stdin.setEncoding('utf8')
-		child.stdin.write(text);
-		child.stdin.end();
-
-		let content = []
-		child.stdout.on('data', (chunk) => {
-			content = content.concat(...chunk);
-		});
-		child.stdout.on('close', (code) => {
-			if (code == 0 && content.length > 0) {
-				updateSymbolsProcessing(textDocument, Buffer.from(content).toString());
-			}
-		});
-	} else {
-		// const res = await archetype.lsp("outline", text);
-		// updateSymbolsProcessing(textDocument, res);
-	}
-}
-
-
-connection.onDidChangeWatchedFiles(change => {
+connection.onDidChangeWatchedFiles(_change => {
 	// Monitored files have change in VSCode
 	connection.console.log('We received an file change event');
-	all(change);
 });
 
 // This handler provides the initial list of the completion items.
@@ -347,34 +278,6 @@ connection.onCompletionResolve(
 		return item;
 	}
 );
-// The content of a text document has changed. This event is emitted
-// when the text document first opened or when its content has changed.
-connection.onDocumentSymbol(
-	(documentSymbolParams: DocumentSymbolParams): SymbolInformation[] => {
-		return symbols;
-	}
-);
-
-
-/*
-connection.onDidOpenTextDocument((params) => {
-	// A text document got opened in VSCode.
-	// params.uri uniquely identifies the document. For documents store on disk this is a file URI.
-	// params.text the initial full content of the document.
-	connection.console.log(`${params.textDocument.uri} opened.`);
-});
-connection.onDidChangeTextDocument((params) => {
-	// The content of a text document did change in VSCode.
-	// params.uri uniquely identifies the document.
-	// params.contentChanges describe the content changes to the document.
-	connection.console.log(`${params.textDocument.uri} changed: ${JSON.stringify(params.contentChanges)}`);
-});
-connection.onDidCloseTextDocument((params) => {
-	// A text document got closed in VSCode.
-	// params.uri uniquely identifies the document.
-	connection.console.log(`${params.textDocument.uri} closed.`);
-});
-*/
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events

@@ -1,8 +1,11 @@
 import * as vscode from 'vscode';
+import * as archetype from '@completium/archetype';
+import * as child_process from 'child_process';
+import * as fs from 'fs';
 
 export function registerCommands(context: vscode.ExtensionContext) {
 
-	let genDocument = function (editor: vscode.TextEditor, target: string, fileExtension: string, action: string) {
+	const genDocument = function (editor: vscode.TextEditor, target: string, fileExtension: string, action: string) {
 		if (editor.document.languageId !== 'archetype') {
 			vscode.window.showErrorMessage('This command is for arl files only!');
 			return;
@@ -13,12 +16,12 @@ export function registerCommands(context: vscode.ExtensionContext) {
 			const caller: string = config.get('archetypeCallerAddress');
 			const fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
 			const outputFsPath = fsPath.replace(/arl$/, fileExtension);
-			let cb = (_err: string, stdout: string, stderr: string) => {
-				if (_err) {
+			const cb = (error: child_process.ExecException | null, stdout: string, stderr: string) => {
+				if (error !== null) {
 					vscode.window.showErrorMessage(stderr);
 					return;
 				}
-				let outputUri = vscode.Uri.file(outputFsPath);
+				const outputUri = vscode.Uri.file(outputFsPath);
 				if (action == "openFile") {
 					vscode.window.showTextDocument(outputUri);
 				} else if (action == "openFileAndPreview") {
@@ -26,9 +29,8 @@ export function registerCommands(context: vscode.ExtensionContext) {
 						.then(() => vscode.commands.executeCommand("markdown.showPreviewToSide"));
 				} else if (action == "openUrl") {
 					vscode.window.showErrorMessage("Open url");
-					let cp2 = require('child_process');
-					cp2.exec('xargs python -m webbrowser < ' + outputFsPath, (_err: string, stdout: string, stderr: string) => {
-						if (_err) {
+					child_process.exec('xargs python -m webbrowser < ' + outputFsPath, (error: child_process.ExecException | null, stdout: string, stderr: string) => {
+						if (error !== null) {
 							vscode.window.showErrorMessage(stderr);
 							return;
 						}
@@ -36,12 +38,11 @@ export function registerCommands(context: vscode.ExtensionContext) {
 				}
 			};
 			if (archetypeMode == 'binary' || archetypeMode == 'docker') {
-				let cp = require('child_process');
 				const archetype_bin = config.get('archetypeBin');
-				const cwd = vscode.workspace.workspaceFolders[0].uri.fsPath
+				const cwd = vscode.workspace.workspaceFolders[0].uri.fsPath;
 				const bin = archetypeMode == 'binary' ? archetype_bin : `docker run --platform=linux/amd64 --rm -v ${cwd}:${cwd} -w ${cwd} completium/archetype:latest`;
-				let cmd = bin + ' --set-caller-init=' + caller + ' -t ' + target + ' ' + fsPath + ' > ' + outputFsPath;
-				cp.exec(cmd, cb);
+				const cmd = bin + ' --set-caller-init=' + caller + ' -t ' + target + ' ' + fsPath + ' > ' + outputFsPath;
+				child_process.exec(cmd, cb);
 			} else {
 				const path = vscode.window.activeTextEditor.document.uri.path;
 				const settings = {
@@ -49,9 +50,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
 					caller: caller
 				};
 				try {
-					const archetype = require('@completium/archetype');
 					const res = archetype.compile(path, settings);
-					const fs = require("fs");
 					fs.writeFile(outputFsPath, res, 'utf8', (() => cb(null, null, null)));
 				} catch (e) {
 					vscode.window.showErrorMessage(e);
@@ -60,27 +59,25 @@ export function registerCommands(context: vscode.ExtensionContext) {
 		}
 	};
 
-	let openWhy3Ide = function (editor: vscode.TextEditor) {
+	const openWhy3Ide = function (editor: vscode.TextEditor) {
 		if (editor.document.languageId !== 'archetype') {
 			vscode.window.showErrorMessage('This command is for arl files only!');
 			return;
 		}
-		let cp0 = require('child_process');
-		let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
-		let inputFsPath = fsPath.replace(/arl$/, "mlw");
+		const fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
+		const inputFsPath = fsPath.replace(/arl$/, "mlw");
 		const config = vscode.workspace.getConfiguration('archetype');
 		const pathWhy3Lib: string = config.get('archetypeWhy3Lib');
-		let cmd = 'pkill why3ide; why3 ide -L ' + pathWhy3Lib + ' ' + inputFsPath;
-		let cp = require('child_process');
-		cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
-			if (_err) {
+		const cmd = 'pkill why3ide; why3 ide -L ' + pathWhy3Lib + ' ' + inputFsPath;
+		child_process.exec(cmd, (error: child_process.ExecException | null, stdout: string, stderr: string) => {
+			if (error !== null) {
 				vscode.window.showErrorMessage(stderr);
 				return;
-			};
+			}
 		});
-	}
+	};
 
-	let decompile = function (editor: vscode.TextEditor) {
+	const decompile = function (editor: vscode.TextEditor) {
 		if (editor.document.languageId !== 'michelson') {
 			vscode.window.showErrorMessage('This command is for tz files only!');
 			return;
@@ -89,38 +86,35 @@ export function registerCommands(context: vscode.ExtensionContext) {
 			const config = vscode.workspace.getConfiguration('archetype');
 			const archetypeMode: string = config.get('archetypeMode');
 
-			let fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
-			let outputFsPath = fsPath.replace(/tz$/, "d.arl");
+			const fsPath = vscode.window.activeTextEditor.document.uri.fsPath;
+			const outputFsPath = fsPath.replace(/tz$/, "d.arl");
 
 			if (archetypeMode == 'binary' || archetypeMode == 'docker') {
-				let cp = require('child_process');
 				const archetype_bin = config.get('archetypeBin');
-				const cwd = vscode.workspace.workspaceFolders[0].uri.fsPath
+				const cwd = vscode.workspace.workspaceFolders[0].uri.fsPath;
 				const bin = archetypeMode == 'binary' ? archetype_bin : `docker run --platform=linux/amd64 --rm -v ${cwd}:${cwd} -w ${cwd} completium/archetype:latest`;
-				let cmd = bin + ' -d ' + fsPath + ' > ' + outputFsPath;
-				cp.exec(cmd, (_err: string, stdout: string, stderr: string) => {
-					if (_err) {
+				const cmd = bin + ' -d ' + fsPath + ' > ' + outputFsPath;
+				child_process.exec(cmd, (error: child_process.ExecException | null, stdout: string, stderr: string) => {
+					if (error !== null) {
 						vscode.window.showErrorMessage(stderr);
 						return;
 					}
-					let outputUri = vscode.Uri.file(outputFsPath);
+					const outputUri = vscode.Uri.file(outputFsPath);
 					vscode.window.showTextDocument(outputUri);
 				});
 			} else {
-				const archetype = require('@completium/archetype');
 				const text = vscode.window.activeTextEditor.document.getText();
 
 				const res = archetype.decompile(text, {});
-				const fs = require("fs");
 				fs.writeFile(outputFsPath, res, 'utf8', (() => {
-					let outputUri = vscode.Uri.file(outputFsPath);
+					const outputUri = vscode.Uri.file(outputFsPath);
 					vscode.window.showTextDocument(outputUri);
 				}));
 			}
 		}
 	};
 
-	let targets = [
+	const targets = [
 		// { cmd: "genMarkdown", target: "markdown", ext: "md", action: "showPreviewToSide" },
 		{ cmd: "genTz", target: "michelson", ext: "tz", action: "openFile" },
 		{ cmd: "genTzStorage", target: "michelson-storage", ext: "storage.tz", action: "openFile" },
@@ -130,7 +124,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
 	];
 
 	targets.forEach((target) => {
-		let genTarget = vscode.commands.registerTextEditorCommand('archetype.' + target.cmd, editor => {
+		const genTarget = vscode.commands.registerTextEditorCommand('archetype.' + target.cmd, editor => {
 			genDocument(editor, target.target, target.ext, target.action);
 		});
 		context.subscriptions.push(genTarget);

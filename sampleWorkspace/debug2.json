@@ -1,0 +1,412 @@
+{
+  "name": "debug2",
+  "interface": {
+    "entrypoints": [
+      {
+        "name": "exec",
+        "args": [],
+        "range": {
+          "name": "./debug2.arl",
+          "begin_": {
+            "line": 5,
+            "col": 6,
+            "char": 46
+          },
+          "end_": {
+            "line": 5,
+            "col": 10,
+            "char": 50
+          }
+        }
+      },
+      {
+        "name": "exec2",
+        "args": [],
+        "range": {
+          "name": "./debug2.arl",
+          "begin_": {
+            "line": 10,
+            "col": 6,
+            "char": 84
+          },
+          "end_": {
+            "line": 10,
+            "col": 11,
+            "char": 89
+          }
+        }
+      }
+    ],
+    "storage": [
+      {
+        "name": "a",
+        "type_": "",
+        "value": null
+      }
+    ]
+  },
+  "contract": [
+    {
+      "prim": "storage",
+      "args": [
+        {
+          "prim": "nat"
+        }
+      ]
+    },
+    {
+      "prim": "parameter",
+      "args": [
+        {
+          "prim": "or",
+          "args": [
+            {
+              "prim": "unit",
+              "annots": [
+                "%exec"
+              ]
+            },
+            {
+              "prim": "unit",
+              "annots": [
+                "%exec2"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prim": "code",
+      "args": [
+        [
+          {
+            "prim": "UNPAIR"
+          },
+          {
+            "prim": "IF_LEFT",
+            "args": [
+              [
+                {
+                  "prim": "DROP",
+                  "args": [
+                    {
+                      "int": "1"
+                    }
+                  ],
+                  "debug": {
+                    "stack": [
+                      {
+                        "name": "a",
+                        "kind": "storage"
+                      }
+                    ],
+                    "decl_bound": {
+                      "kind": "entry",
+                      "name": "exec",
+                      "bound": "begin"
+                    }
+                  }
+                },
+                {
+                  "prim": "PUSH",
+                  "args": [
+                    {
+                      "prim": "nat"
+                    },
+                    {
+                      "int": "2"
+                    }
+                  ],
+                  "debug": {
+                    "stack": [
+                      {
+                        "name": "v",
+                        "kind": "local"
+                      },
+                      {
+                        "name": "a",
+                        "kind": "storage"
+                      }
+                    ],
+                    "range": {
+                      "name": "./debug2.arl",
+                      "begin": {
+                        "line": 6,
+                        "col": 1,
+                        "char": 56
+                      },
+                      "end": {
+                        "line": 6,
+                        "col": 10,
+                        "char": 65
+                      }
+                    }
+                  }
+                },
+                {
+                  "prim": "DUP"
+                },
+                {
+                  "prim": "DIP",
+                  "args": [
+                    {
+                      "int": "1"
+                    },
+                    [
+                      {
+                        "prim": "DIG",
+                        "args": [
+                          {
+                            "int": "1"
+                          }
+                        ]
+                      },
+                      {
+                        "prim": "DROP",
+                        "args": [
+                          {
+                            "int": "1"
+                          }
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "prim": "DUG",
+                  "args": [
+                    {
+                      "int": "1"
+                    }
+                  ],
+                  "debug": {
+                    "stack": [
+                      {
+                        "name": "v",
+                        "kind": "local"
+                      },
+                      {
+                        "name": "a",
+                        "kind": "storage"
+                      }
+                    ],
+                    "range": {
+                      "name": "./debug2.arl",
+                      "begin": {
+                        "line": 7,
+                        "col": 1,
+                        "char": 68
+                      },
+                      "end": {
+                        "line": 7,
+                        "col": 7,
+                        "char": 74
+                      }
+                    }
+                  }
+                },
+                {
+                  "prim": "DROP",
+                  "args": [
+                    {
+                      "int": "1"
+                    }
+                  ],
+                  "debug": {
+                    "stack": [
+                      {
+                        "name": "a",
+                        "kind": "storage"
+                      }
+                    ],
+                    "decl_bound": {
+                      "kind": "entry",
+                      "name": "exec",
+                      "bound": "end"
+                    }
+                  }
+                },
+                {
+                  "prim": "NIL",
+                  "args": [
+                    {
+                      "prim": "operation"
+                    }
+                  ]
+                },
+                {
+                  "prim": "PAIR"
+                }
+              ],
+              [
+                {
+                  "prim": "DROP",
+                  "args": [
+                    {
+                      "int": "1"
+                    }
+                  ],
+                  "debug": {
+                    "stack": [
+                      {
+                        "name": "a",
+                        "kind": "storage"
+                      }
+                    ],
+                    "decl_bound": {
+                      "kind": "entry",
+                      "name": "exec2",
+                      "bound": "begin"
+                    }
+                  }
+                },
+                {
+                  "prim": "PUSH",
+                  "args": [
+                    {
+                      "prim": "nat"
+                    },
+                    {
+                      "int": "3"
+                    }
+                  ],
+                  "debug": {
+                    "stack": [
+                      {
+                        "name": "v",
+                        "kind": "local"
+                      },
+                      {
+                        "name": "a",
+                        "kind": "storage"
+                      }
+                    ],
+                    "range": {
+                      "name": "./debug2.arl",
+                      "begin": {
+                        "line": 11,
+                        "col": 1,
+                        "char": 95
+                      },
+                      "end": {
+                        "line": 11,
+                        "col": 10,
+                        "char": 104
+                      }
+                    }
+                  }
+                },
+                {
+                  "prim": "DUP"
+                },
+                {
+                  "prim": "DUP",
+                  "args": [
+                    {
+                      "int": "3"
+                    }
+                  ]
+                },
+                {
+                  "prim": "ADD"
+                },
+                {
+                  "prim": "DIP",
+                  "args": [
+                    {
+                      "int": "1"
+                    },
+                    [
+                      {
+                        "prim": "DIG",
+                        "args": [
+                          {
+                            "int": "1"
+                          }
+                        ]
+                      },
+                      {
+                        "prim": "DROP",
+                        "args": [
+                          {
+                            "int": "1"
+                          }
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "prim": "DUG",
+                  "args": [
+                    {
+                      "int": "1"
+                    }
+                  ],
+                  "debug": {
+                    "stack": [
+                      {
+                        "name": "v",
+                        "kind": "local"
+                      },
+                      {
+                        "name": "a",
+                        "kind": "storage"
+                      }
+                    ],
+                    "range": {
+                      "name": "./debug2.arl",
+                      "begin": {
+                        "line": 12,
+                        "col": 1,
+                        "char": 107
+                      },
+                      "end": {
+                        "line": 12,
+                        "col": 7,
+                        "char": 113
+                      }
+                    }
+                  }
+                },
+                {
+                  "prim": "DROP",
+                  "args": [
+                    {
+                      "int": "1"
+                    }
+                  ],
+                  "debug": {
+                    "stack": [
+                      {
+                        "name": "a",
+                        "kind": "storage"
+                      }
+                    ],
+                    "decl_bound": {
+                      "kind": "entry",
+                      "name": "exec2",
+                      "bound": "end"
+                    }
+                  }
+                },
+                {
+                  "prim": "NIL",
+                  "args": [
+                    {
+                      "prim": "operation"
+                    }
+                  ]
+                },
+                {
+                  "prim": "PAIR"
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
+}
