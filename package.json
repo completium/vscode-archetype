@@ -10,6 +10,11 @@
     "url": "https://github.com/completium/vscode-archetype"
   },
   "publisher": "edukera",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#243564",
+    "theme": "dark"
+  },
   "categories": [
     "Programming Languages",
     "Debuggers",
