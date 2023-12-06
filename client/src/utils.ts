@@ -13,7 +13,7 @@ interface ItemTrace {
 }
 
 interface Trace {
-	fail ?: string,
+	fail?: string,
 	items: Array<ItemTrace>
 }
 
@@ -84,18 +84,18 @@ export type StackItemValue = {
 
 export type Step = {
 	"stack": Array<StackItemValue>
-	"gas" : number
-  "range"?: RangeItem
+	"gas": number
+	"range"?: RangeItem
 	"decl_bound"?: DeclBound
 }
 
 export type ArchetypeTrace = {
-	fail ?: string,
+	fail?: string,
 	steps: Array<Step>
 }
 
 function removeFirstLine(str: string): string {
-	let index = str.indexOf('\n');
+	const index = str.indexOf('\n');
 	return index !== -1 ? str.slice(index + 1) : '';
 }
 
@@ -107,20 +107,20 @@ function removeFirstAndLastCharacter(str: string): string {
 }
 
 function countCharOccurrences(inputString, charToCount) {
-  let count = 0;
+	let count = 0;
 
-  for (let i = 0; i < inputString.length; i++) {
-    if (inputString[i] === charToCount) {
-      count++;
-    }
-  }
+	for (let i = 0; i < inputString.length; i++) {
+		if (inputString[i] === charToCount) {
+			count++;
+		}
+	}
 
-  return count;
+	return count;
 }
 
-function is_micheline_valid(str : string) : boolean {
+function is_micheline_valid(str: string): boolean {
 	return (countCharOccurrences(str, "{") - countCharOccurrences(str, "}") == 0)
-	  && (countCharOccurrences(str, "(") - countCharOccurrences(str, ")") == 0)
+		&& (countCharOccurrences(str, "(") - countCharOccurrences(str, ")") == 0);
 }
 
 function extract_trace_simple(input: string): Trace {
@@ -131,15 +131,15 @@ function extract_trace_simple(input: string): Trace {
 	if (trIndex < 0) {
 		throw new Error("Input does not contain trace keyword.");
 	}
-	const tr_raw = input.split("trace")
-	const trs = tr_raw[1].split("\n  - ")
-	const res: Array<ItemTrace> = []
+	const tr_raw = input.split("trace");
+	const trs = tr_raw[1].split("\n  - ");
+	const res: Array<ItemTrace> = [];
 	for (const tr of trs) {
 		if (tr.length > 0) {
 			const lines = tr.split("\n");
 			const fl = lines[0];
 			const rx = /location:\s(\d+).*gas:\s([\d\.]+)/;
-			const arr = rx.exec(fl)
+			const arr = rx.exec(fl);
 			if (arr && arr.length === 3) {
 				const location = Number.parseInt(arr[1]);
 				const gas = Number.parseFloat(arr[2]);
@@ -149,12 +149,12 @@ function extract_trace_simple(input: string): Trace {
 				const stack: Array<string> = [];
 				let accu = "";
 				for (const cl of s2) {
-					accu += cl.trim()
+					accu += cl.trim();
 					if (is_micheline_valid(accu)) {
-						stack.push(accu)
+						stack.push(accu);
 						accu = "";
 					} else {
-						accu += " "
+						accu += " ";
 					}
 				}
 				res.push({ location: location, gas: gas, stack: stack });
@@ -164,7 +164,7 @@ function extract_trace_simple(input: string): Trace {
 			}
 		}
 	}
-	return { items: res }
+	return { items: res };
 }
 
 function extract_trace_fail(input: string): Trace {
@@ -177,198 +177,213 @@ function extract_trace_fail(input: string): Trace {
 	const a = input.split("Fatal error:");
 	const input_trace = a.length > 0 ? a[0] : input;
 	const trace = extract_trace_simple(input_trace);
-	return { ...trace, fail: fail }
+	return { ...trace, fail: fail };
 }
 
 export function extract_trace(input: string): Trace {
 	if (input != null && input.indexOf("Fatal error:") > 0) {
-		return extract_trace_fail(input)
+		return extract_trace_fail(input);
 	} else {
-		return extract_trace_simple(input)
+		return extract_trace_simple(input);
 	}
 }
 
 export function gen_contract_map_source(input: string): ContractMapSource {
 	const res: ContractMapSource = JSON.parse(input);
-	return res
+	return res;
 }
 
 function build_map_ext_micheline(micheline: ExtMicheline): Map<number, ExtMicheline> {
-	let res = new Map<number, ExtMicheline>();
+	const res = new Map<number, ExtMicheline>();
 
 	const aux = (micheline: ExtMicheline, location: number): number => {
-		const f = (micheline: ExtMicheline) : Array<ExtMicheline> => {
+		const f = (micheline: ExtMicheline): Array<ExtMicheline> => {
 			if ((micheline as Mprim).prim !== undefined) {
 				return (micheline as Mprim).args;
 			} else if ((micheline as Mint).int !== undefined) {
-				return []
+				return [];
 			} else if ((micheline as Mbytes).bytes !== undefined) {
-				return []
+				return [];
 			} else if ((micheline as Mstring).string !== undefined) {
-				return []
+				return [];
 			} else if ((micheline as Marray).length !== undefined) {
 				return (micheline as Marray);
 			}
-			throw new Error("error: f")
-		}
+			throw new Error("error: f");
+		};
 
-		res.set(location, micheline)
-		location = location + 1
+		res.set(location, micheline);
+		location = location + 1;
 		const args = f(micheline);
 		for (let i = 0; args !== undefined && i < args.length; ++i) {
 			const m = args[i];
-			location = aux(m, location)
+			location = aux(m, location);
 		}
-		return location
-	}
+		return location;
+	};
 
 	aux(micheline, 0);
 
-	return res
+	return res;
 }
 
-function compute_stack_value (stack: Array<StackItem>, values: Array<string>) : Array<StackItemValue> {
-	let res = new Array<StackItemValue>();
+function compute_stack_value(stack: Array<StackItem>, values: Array<string>): Array<StackItemValue> {
+	const res = new Array<StackItemValue>();
 	for (let i = 0; i < stack.length; ++i) {
 		const k = stack[i].name;
 		const v = values[i];
-		res.push({name: k, value: v});
+		res.push({ name: k, value: v });
 	}
-	return res
+	return res;
 }
 
 export type GasInfo = {
-  gas: number;
-  totalgas: number;
+	gas: number;
+	totalgas: number;
 };
 
 export function extractGasInfoFromTrace(trace: ArchetypeTrace): Map<number, Array<GasInfo>> {
-  const gasMap = new Map<number, Array<GasInfo>>();
+	const gasMap = new Map<number, Array<GasInfo>>();
 
-	let totalgas = 0
-  trace.steps.forEach(step => {
-    if (step.range) {
-      const lineNumber = step.range.end.line;
-			totalgas += step.gas
-      const gasInfo: GasInfo = {
-        gas: step.gas / 1000,
-        totalgas: totalgas / 1000
-      };
+	let totalgas = 0;
+	trace.steps.forEach(step => {
+		if (step.range) {
+			const lineNumber = step.range.end.line;
+			totalgas += step.gas;
+			const gasInfo: GasInfo = {
+				gas: step.gas / 1000,
+				totalgas: totalgas / 1000
+			};
 
-      // Si le numéro de ligne existe déjà dans la Map, ajoutez le nouvel GasInfo à la liste existante.
-      // Sinon, créez une nouvelle liste avec GasInfo.
-      if (gasMap.has(lineNumber)) {
-        gasMap.get(lineNumber)!.push(gasInfo);
-      } else {
-        gasMap.set(lineNumber, [gasInfo]);
-      }
-    }
-  });
+			// Si le numéro de ligne existe déjà dans la Map, ajoutez le nouvel GasInfo à la liste existante.
+			// Sinon, créez une nouvelle liste avec GasInfo.
+			if (gasMap.has(lineNumber)) {
+				gasMap.get(lineNumber)!.push(gasInfo);
+			} else {
+				gasMap.set(lineNumber, [gasInfo]);
+			}
+		}
+	});
 
-  return gasMap;
+	return gasMap;
 }
 
 
 export function build_execution(contract_map_source: ContractMapSource, trace: Trace): ArchetypeTrace {
-	let res: ArchetypeTrace = { fail: trace.fail, steps: [] }
+	const res: ArchetypeTrace = { fail: trace.fail, steps: [] };
 	const map_ext_micheline: Map<number, ExtMicheline> = build_map_ext_micheline(contract_map_source.contract);
 	// console.log(map_ext_micheline);
-	let stepgas = 0
+	let stepgas = 0;
 	for (let i = 0; i < trace.items.length; ++i) {
 		const trace_item = trace.items[i];
 		if (trace_item.gas == 0) {
-			continue
+			continue;
 		}
 		const ext_micheline: ExtMicheline = map_ext_micheline.get(trace_item.location);
-		stepgas += trace_item.gas * 1000
+		stepgas += trace_item.gas * 1000;
 		if ((ext_micheline as Mprim).debug !== undefined) {
 			const debug = (ext_micheline as Mprim).debug;
-			const stack_value : Array<StackItemValue> = compute_stack_value(debug.stack, trace_item.stack)
-			res.steps.push({
-				stack: stack_value,
-				gas: stepgas,
-				range: debug.range,
-				decl_bound: debug.decl_bound
-			});
-			stepgas = 0
+			const stack_value: Array<StackItemValue> = compute_stack_value(debug.stack, trace_item.stack);
+			if (debug.range && debug.decl_bound) {
+				res.steps.push({
+					stack: stack_value,
+					gas: stepgas,
+					range: debug.range,
+					decl_bound: undefined
+				});
+				res.steps.push({
+					stack: stack_value,
+					gas: stepgas,
+					range: undefined,
+					decl_bound: debug.decl_bound
+				});
+			} else {
+				res.steps.push({
+					stack: stack_value,
+					gas: stepgas,
+					range: debug.range,
+					decl_bound: debug.decl_bound
+				});
+			}
+			stepgas = 0;
 		}
 	}
-	return res
+	return res;
 }
 
 export function removeDoubleQuotes(input: string): string {
-  if (input.startsWith('"') && input.endsWith('"')) {
-    // Remove the first and last characters (the double quotes)
-    return input.substring(1, input.length - 1);
-  }
-  // Return the original string if it doesn't start and end with double quotes
-  return input;
+	if (input.startsWith('"') && input.endsWith('"')) {
+		// Remove the first and last characters (the double quotes)
+		return input.substring(1, input.length - 1);
+	}
+	// Return the original string if it doesn't start and end with double quotes
+	return input;
 }
 
 function isValidString(input: string): boolean {
-  for (let i = 0; i < input.length; i++) {
-    if (input.charCodeAt(i) > 127) {
-      return false; // caractère non-ASCII trouvé, donc la chaîne n'est pas valide
-    }
-  }
-  return true; // aucun caractère non-ASCII trouvé, donc la chaîne est valide
+	for (let i = 0; i < input.length; i++) {
+		if (input.charCodeAt(i) > 127) {
+			return false; // caractère non-ASCII trouvé, donc la chaîne n'est pas valide
+		}
+	}
+	return true; // aucun caractère non-ASCII trouvé, donc la chaîne est valide
 }
 
 
 export class EntryArg {
 	private _name: string;
 	private _value: any;
-	private _type  : string
+	private _type: string;
 
-	public static format(value : string, typ : string) : any {
-		switch(typ) {
+	public static format(value: string, typ: string): any {
+		switch (typ) {
 			case "nat":
-			case "int": return parseInt(value, 10)
-			case "bytes" :
-			case "string" : return removeDoubleQuotes(value)
-			case "bool" : return (value == "True" ? true : false)
-			default : return value
+			case "int": return parseInt(value, 10);
+			case "bytes":
+			case "string": return removeDoubleQuotes(value);
+			case "bool": return (value == "True" ? true : false);
+			default: return value;
 		}
 	}
 
-	constructor(name: string, value: string, typ ?: string) {
-		this._type = typ ? typ : "string"
-		switch(this._type) {
-			case 'nat' : if(!isNat(value)) throw new InputError("argument", "a nat value is expected"); break
-			case 'int' : if(!isInteger(value)) throw new InputError("argument", "an integer value is expected"); break
-			case 'address' : if(!isAddress(value)) throw new InputError("argument", "an address value is expected"); break
-			case 'timestamp': if(!isDate(value)) throw new InputError("argument", "a date value 'YYYY-MM-DD dd:mm:ss' is expected"); break
-			case 'string': if(!isValidString(removeDoubleQuotes(value))) throw new InputError("argument", "a string with non extended ASCII characters is expected")
-			default: {}
+	constructor(name: string, value: string, typ?: string) {
+		this._type = typ ? typ : "string";
+		switch (this._type) {
+			case 'nat': if (!isNat(value)) throw new InputError("argument", "a nat value is expected"); break;
+			case 'int': if (!isInteger(value)) throw new InputError("argument", "an integer value is expected"); break;
+			case 'address': if (!isAddress(value)) throw new InputError("argument", "an address value is expected"); break;
+			case 'timestamp': if (!isDate(value)) throw new InputError("argument", "a date value 'YYYY-MM-DD dd:mm:ss' is expected"); break;
+			case 'string': if (!isValidString(removeDoubleQuotes(value))) throw new InputError("argument", "a string with non extended ASCII characters is expected");
+			default: { }
 		}
 		this._name = name;
-		this._value = EntryArg.format(value, typ)
+		this._value = EntryArg.format(value, typ);
 	}
 
 	// Getters
 	public get name(): string {
-			return this._name;
+		return this._name;
 	}
 
 	public get value(): any {
-			return this._value;
+		return this._value;
 	}
 
 	// Setters
 	public set name(name: string) {
-			this._name = name;
+		this._name = name;
 	}
 
 	public set value(value: string) {
-			this._value = value;
+		this._value = value;
 	}
 
-	public get typ() : string {
-		return this._type
+	public get typ(): string {
+		return this._type;
 	}
 
 	public toString(): string {
-			return `EntryArg(name: ${this._name}, value: ${this._value}, type: ${this._type})`;
+		return `EntryArg(name: ${this._name}, value: ${this._value}, type: ${this._type})`;
 	}
 }
 
@@ -377,135 +392,135 @@ export class EntryPoint {
 	private _args: EntryArg[];
 
 	constructor(name: string) {
-			this._name = name;
-			this._args = []; // initialiser la liste comme vide
+		this._name = name;
+		this._args = []; // initialiser la liste comme vide
 	}
 
 	// Getters
 	public get name(): string {
-			return this._name;
+		return this._name;
 	}
 
 	public get args(): EntryArg[] {
-			return this._args;
+		return this._args;
 	}
 
 	// Setters
 	public set name(name: string) {
-			this._name = name;
+		this._name = name;
 	}
 
 	// Méthode pour ajouter un nouvel EntryArg
-	public addArg(name: string, val ?: string, typ ?: string): void {
-			this._args.push(new EntryArg(name, val, typ));
+	public addArg(name: string, val?: string, typ?: string): void {
+		this._args.push(new EntryArg(name, val, typ));
 	}
 
 	public toString(): string {
-			return `EntryPoint(name: ${this._name}, args: [${this._args.map(arg => arg.toString()).join(', ')}])`;
+		return `EntryPoint(name: ${this._name}, args: [${this._args.map(arg => arg.toString()).join(', ')}])`;
 	}
 }
 
 export class Storage {
 	constructor() {
-		this._args = []
+		this._args = [];
 	}
 	private _args: EntryArg[];
-	public addElement(name: string, val ?: string, typ ?: string): void {
+	public addElement(name: string, val?: string, typ?: string): void {
 		this._args.push(new EntryArg(name, val, typ));
 	}
 	public toString(): string {
 		return `Storage([${this._args.map(arg => arg.toString()).join(', ')}])`;
 	}
-	public elements() : Array<EntryArg> { return this._args }
-	public toMichelsonValue() : Array<ConstParam> { return this._args.map(x => {return {"name" : x.name, "value" : toMichelson(x.value, x.typ)}}) }
+	public elements(): Array<EntryArg> { return this._args; }
+	public toMichelsonValue(): Array<ConstParam> { return this._args.map(x => { return { "name": x.name, "value": toMichelson(x.value, x.typ) }; }); }
 
-	public getType(name : string) : string {
-		for(let i=0; i<this._args.length; i++) {
+	public getType(name: string): string {
+		for (let i = 0; i < this._args.length; i++) {
 			if (this._args[i].name == name) {
-				return this._args[i].typ
+				return this._args[i].typ;
 			}
 		}
-		return ""
+		return "";
 	}
 }
 
-export function toPair(elements : any[]) : string {
+export function toPair(elements: any[]): string {
 	if (elements.length == 0) {
-		return "Unit"
-	} else if(elements.length == 1) {
-		return "" + elements[0]
-	} else if(elements.length == 2) {
-		return `(Pair ${elements[0]} ${elements[1]})`
+		return "Unit";
+	} else if (elements.length == 1) {
+		return "" + elements[0];
+	} else if (elements.length == 2) {
+		return `(Pair ${elements[0]} ${elements[1]})`;
 	} else {
-		return `(Pair ${elements[0]} ${toPair(elements.slice(1))})`
+		return `(Pair ${elements[0]} ${toPair(elements.slice(1))})`;
 	}
 }
 
-function toMichelson(value : any, ty : string) : string {
+function toMichelson(value: any, ty: string): string {
 	switch (ty) {
 		case "string":
-  	case "address": return `"${value}"`
-		case "bool": return value ? "True" : "False"
-		default: return value.toString()
+		case "address": return `"${value}"`;
+		case "bool": return value ? "True" : "False";
+		default: return value.toString();
 	}
 }
 
-export function argsToMich(elements : EntryArg[]) : string {
-	return toPair(elements.map(x => toMichelson(x.value, x.typ)))
+export function argsToMich(elements: EntryArg[]): string {
+	return toPair(elements.map(x => toMichelson(x.value, x.typ)));
 }
 
 export interface DebugData {
-  name: string;
-  interface: {
-    entrypoints: Array<{
-      name: string;
-      args: Array<{
-        name: string;
-        type_: string;
-      }>;
-      range: {
-        name: string;
-        begin_: {
-          line: number;
-          col: number;
-          char: number;
-        };
-        end_: {
-          line: number;
-          col: number;
-          char: number;
-        };
-      };
-    }>;
-    storage: Array<{
-      name: string;
-      type_: string;
-      value: string;
-    }>;
-	  const_params: Array<{
-      name: string;
-      type_: string;
-      value: string;
-    }>;
-  };
-  contract: any
+	name: string;
+	interface: {
+		entrypoints: Array<{
+			name: string;
+			args: Array<{
+				name: string;
+				type_: string;
+			}>;
+			range: {
+				name: string;
+				begin_: {
+					line: number;
+					col: number;
+					char: number;
+				};
+				end_: {
+					line: number;
+					col: number;
+					char: number;
+				};
+			};
+		}>;
+		storage: Array<{
+			name: string;
+			type_: string;
+			value: string;
+		}>;
+		const_params: Array<{
+			name: string;
+			type_: string;
+			value: string;
+		}>;
+	};
+	contract: any
 }
 
 export class InputError extends Error {
-	constructor(errorTyp: string, detail : string) {
-			// Appel du constructeur de la classe parent `Error`
-			super("Invalid " + errorTyp + " value: " + detail);
+	constructor(errorTyp: string, detail: string) {
+		// Appel du constructeur de la classe parent `Error`
+		super("Invalid " + errorTyp + " value: " + detail);
 
-			// Rétablissement du prototype, une correction nécessaire pour faire fonctionner `instanceof` avec les classes personnalisées d'erreur étendant Error en TypeScript
-			Object.setPrototypeOf(this, new.target.prototype);
+		// Rétablissement du prototype, une correction nécessaire pour faire fonctionner `instanceof` avec les classes personnalisées d'erreur étendant Error en TypeScript
+		Object.setPrototypeOf(this, new.target.prototype);
 
-			// Préservation du nom de la classe
-			this.name = InputError.name; // ou hard-codez le nom si la minification du code est un problème
+		// Préservation du nom de la classe
+		this.name = InputError.name; // ou hard-codez le nom si la minification du code est un problème
 
-			// Capturer la trace de la pile si disponible
-			if (Error.captureStackTrace) {
-					Error.captureStackTrace(this, InputError);
-			}
+		// Capturer la trace de la pile si disponible
+		if (Error.captureStackTrace) {
+			Error.captureStackTrace(this, InputError);
+		}
 	}
 }
 
@@ -517,9 +532,9 @@ function isNat(value: string): boolean {
 	return Number.isInteger(number) && number >= 0;
 }
 
-function isInteger(value: string) : boolean {
+function isInteger(value: string): boolean {
 	const number = Number(value);
-	return  Number.isInteger(number)
+	return Number.isInteger(number);
 }
 
 function isAddress(address: string): boolean {
@@ -528,9 +543,9 @@ function isAddress(address: string): boolean {
 
 	// Vérifie si l'adresse commence par l'un des préfixes valides
 	for (const prefix of validPrefixes) {
-			if (address.startsWith(prefix)) {
-					return true;
-			}
+		if (address.startsWith(prefix)) {
+			return true;
+		}
 	}
 
 	// Si l'adresse n'a pas passé les vérifications, retourne false
@@ -543,7 +558,7 @@ function isDate(dateTimeString: string): boolean {
 
 	// Vérifier si la chaîne correspond au format
 	if (!regex.test(dateTimeString)) {
-			return false;
+		return false;
 	}
 
 	// Vérifier si la chaîne représente une date valide
@@ -574,8 +589,8 @@ export function dateStringToSeconds(dateString: string): number | null {
 	// Vérifier le format de la chaîne de date
 	const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
 	if (!regex.test(dateString)) {
-			console.error("Invalid date. Use 'YYYY-MM-DD hh:mm:ss'.");
-			return null;
+		console.error("Invalid date. Use 'YYYY-MM-DD hh:mm:ss'.");
+		return null;
 	}
 
 	// Convertir la chaîne de date en objet Date
@@ -583,8 +598,8 @@ export function dateStringToSeconds(dateString: string): number | null {
 
 	// Vérifier si la date est valide
 	if (isNaN(date.getTime())) {
-			console.error("Invalid date");
-			return null;
+		console.error("Invalid date");
+		return null;
 	}
 
 	// Convertir l'objet Date en nombre de secondes depuis l'époque Unix
@@ -613,65 +628,65 @@ function secondsToDateString(seconds: number): string {
 }
 
 export class ContractEnv implements IContractEnv {
-	private _transferred : string = ""
-	private _caller : string = ""
-	private _source : string = ""
-	private _now : string = ""
-	private _level : string = ""
-	private _balance : string = ""
+	private _transferred: string = "";
+	private _caller: string = "";
+	private _source: string = "";
+	private _now: string = "";
+	private _level: string = "";
+	private _balance: string = "";
 	//private _sefladdress : string = ""
 	constructor(now, transferred, balance, level, caller, source) {
-		this._now = now
-		this._transferred = transferred
-		this._balance = balance
-		this._level = level
-		this._caller = caller
-		this._source = source
+		this._now = now;
+		this._transferred = transferred;
+		this._balance = balance;
+		this._level = level;
+		this._caller = caller;
+		this._source = source;
 		//this._sefladdress = "KT1BEqzn5Wx8uJrZNvuS9DVHmLvG9td3fDLi"
 	}
 	/**
 	 * @throws Error when transferred amount is not a positive integer
 	 */
-	public setTransferred(v : string) {
-		if(isNat(v)) {
-			this._transferred = v
+	public setTransferred(v: string) {
+		if (isNat(v)) {
+			this._transferred = v;
 		} else {
-			throw new InputError("transferred", "should be a positive integer value")
+			throw new InputError("transferred", "should be a positive integer value");
 		}
 	}
-	public setCaller(v : string) {
-		if(isAddress(v)) {
-			this._caller = v
+	public setCaller(v: string) {
+		if (isAddress(v)) {
+			this._caller = v;
 		} else {
-			throw new InputError("caller", "value is not a valid Tezos address")
+			throw new InputError("caller", "value is not a valid Tezos address");
 		}
 	}
-	public setSource(v : string) {
-		if(isAddress(v)) {
-			this._source = v
+	public setSource(v: string) {
+		if (isAddress(v)) {
+			this._source = v;
 		} else {
-			throw new InputError("caller", "value is not a valid Tezos address")
+			throw new InputError("caller", "value is not a valid Tezos address");
 		}
 	}
-	public setNow(v : string) {
-		if(isDate(v)) {
-			this._now = v
+	public setNow(v: string) {
+		if (isDate(v)) {
+			this._now = v;
 		} else {
-			throw new InputError("now", "invalid date value (should not have milliseconds)")
+			throw new InputError("now", "invalid date value (should not have milliseconds)");
 		}
 	}
-	public setLevel(v : string) {
-		if(isNat(v)) {
-			this._level = v
+	public setLevel(v: string) {
+		if (isNat(v)) {
+			this._level = v;
 		} else {
-			throw new InputError("level", "should be a positive integer")
+			throw new InputError("level", "should be a positive integer");
 		}
 	}
-	public setBalance(v : string) {
-		if(isNat(v)) {
-			this._balance = v
+	public setBalance(v: string) {
+		if (isNat(v)) {
+			this._balance = v;
 		} else {
-			throw new InputError("balance", "should be a positive integer")
+			throw new InputError("balance", "should be a positive integer");
 		}
 	}
 	//public setSelfAddress(v : string) {
@@ -701,8 +716,8 @@ export class ContractEnv implements IContractEnv {
 		return this._now;
 	}
 
-	public get balance() : any {
-		return this._balance
+	public get balance(): any {
+		return this._balance;
 	}
 
 	//public get selfaddress() : any {
@@ -712,7 +727,7 @@ export class ContractEnv implements IContractEnv {
 
 export type Transaction = {
 	kind: 'transaction';
-	source : string;
+	source: string;
 	nonce: number;
 	amount: string;
 	destination: string;
@@ -755,71 +770,71 @@ export function parseToOperation(data: string): Operation {
 
 	// Vérifier la validité de l'objet en fonction du type d'opération
 	switch (parsedObject.kind) {
-			case "transaction":
-					if (
-							"source" in parsedObject &&
-							"nonce" in parsedObject &&
-							"amount" in parsedObject &&
-							"destination" in parsedObject
-					) {
-							return {
-								kind : 'transaction',
-								nonce : parsedObject.nonce,
-								source : parsedObject.source,
-								amount : parsedObject.amount,
-								destination : parsedObject.destination,
-								parameters : parsedObject.parameters ? {
-									entrypoint : parsedObject.parameters.entrypoint,
-									value : JSON.stringify(parsedObject.parameters.value)
-								} : undefined
-							} as Transaction;
-					}
-					break;
-			case "event":
-					if (
-							"source" in parsedObject &&
-							"nonce" in parsedObject &&
-							"type" in parsedObject &&
-							"payload" in parsedObject
-					) {
-							return {
-								kind : 'event',
-								nonce : parsedObject.nonce,
-								type : JSON.stringify(parsedObject.type),
-								payload : JSON.stringify(parsedObject.payload)
-							} as TzEvent;
-					}
-					break;
-			case "delegation":
-					if (
-							"source" in parsedObject &&
-							"nonce" in parsedObject &&
-							"delegate" in parsedObject
-					) {
-							return parsedObject as Delegation;
-					}
-					break;
-			case "origination":
-					if (
-							"source" in parsedObject &&
-							"nonce" in parsedObject &&
-							"balance" in parsedObject &&
-							"script" in parsedObject
-					) {
-							return {
-								kind : 'origination',
-								source : parsedObject.source,
-								nonce : parsedObject.nonce,
-								balance : parsedObject.balance,
-								script : {
-									code: JSON.stringify(parsedObject.script.code),
-									storage : JSON.stringify(parsedObject.script.storage)
-								},
-							} as Origination;
-					}
-					break;
-			default:
-					throw new Error("Type d'opération invalide");
+		case "transaction":
+			if (
+				"source" in parsedObject &&
+				"nonce" in parsedObject &&
+				"amount" in parsedObject &&
+				"destination" in parsedObject
+			) {
+				return {
+					kind: 'transaction',
+					nonce: parsedObject.nonce,
+					source: parsedObject.source,
+					amount: parsedObject.amount,
+					destination: parsedObject.destination,
+					parameters: parsedObject.parameters ? {
+						entrypoint: parsedObject.parameters.entrypoint,
+						value: JSON.stringify(parsedObject.parameters.value)
+					} : undefined
+				} as Transaction;
+			}
+			break;
+		case "event":
+			if (
+				"source" in parsedObject &&
+				"nonce" in parsedObject &&
+				"type" in parsedObject &&
+				"payload" in parsedObject
+			) {
+				return {
+					kind: 'event',
+					nonce: parsedObject.nonce,
+					type: JSON.stringify(parsedObject.type),
+					payload: JSON.stringify(parsedObject.payload)
+				} as TzEvent;
+			}
+			break;
+		case "delegation":
+			if (
+				"source" in parsedObject &&
+				"nonce" in parsedObject &&
+				"delegate" in parsedObject
+			) {
+				return parsedObject as Delegation;
+			}
+			break;
+		case "origination":
+			if (
+				"source" in parsedObject &&
+				"nonce" in parsedObject &&
+				"balance" in parsedObject &&
+				"script" in parsedObject
+			) {
+				return {
+					kind: 'origination',
+					source: parsedObject.source,
+					nonce: parsedObject.nonce,
+					balance: parsedObject.balance,
+					script: {
+						code: JSON.stringify(parsedObject.script.code),
+						storage: JSON.stringify(parsedObject.script.storage)
+					},
+				} as Origination;
+			}
+			break;
+		default:
+			throw new Error("Type d'opération invalide");
 	}
 
 	throw new Error("Not a tezos operation");
@@ -830,11 +845,11 @@ export type ConstParam = {
 	"value": string
 }
 
-function getConstName(name : string) : string {
-	return "const_" + name + "__"
+function getConstName(name: string): string {
+	return "const_" + name + "__";
 }
 
-function isParenthesisValue(input : string) : boolean {
+function isParenthesisValue(input: string): boolean {
 	if (input.length > 0) {
 		if (input[0] == '{' && input[input.length - 1] == '}') {
 			return false;
@@ -843,21 +858,21 @@ function isParenthesisValue(input : string) : boolean {
 	return input.indexOf(" ") > -1;
 }
 
-function getConstValue(value : string) : string {
-	const res = value.trim()
-	return isParenthesisValue(res) ? "(" + res + ")" : res
+function getConstValue(value: string): string {
+	const res = value.trim();
+	return isParenthesisValue(res) ? "(" + res + ")" : res;
 }
 
 export function processConstParams(input: string, params: Array<ConstParam>): string {
 	if (input == null) {
-		return null
+		return null;
 	}
 	let res = input;
 	for (const param of params) {
 		const constName = getConstName(param.name);
-		const constValue = getConstValue(param.value)
+		const constValue = getConstValue(param.value);
 		const regex = new RegExp(constName, 'g');
-		res = res.replace(regex, constValue)
+		res = res.replace(regex, constValue);
 	}
-	return res
+	return res;
 }
