@@ -4,7 +4,7 @@
   "description": "DSL to develop smart contracts on the Tezos blockchain.",
   "author": "edukera",
   "license": "MIT",
-  "version": "0.82.0",
+  "version": "0.83.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/completium/vscode-archetype"
