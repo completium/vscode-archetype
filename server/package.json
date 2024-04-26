@@ -12,7 +12,7 @@
 		"url": "https://github.com/completium/vscode-archetype"
 	},
 	"dependencies": {
-		"@completium/archetype": "1.0.4",
+		"@completium/archetype": "1.0.5",
 		"vscode-languageserver": "^8.1.0",
 		"vscode-languageserver-textdocument": "^1.0.8"
 	},

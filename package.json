@@ -331,10 +331,10 @@
     "postinstall": "cd client && npm install && cd ../server && npm install && cd .."
   },
   "dependencies": {
-    "@completium/archetype": "1.0.4"
+    "@completium/archetype": "1.0.5"
   },
   "devDependencies": {
-    "@completium/archetype": "1.0.4",
+    "@completium/archetype": "1.0.5",
     "@types/mocha": "^9.1.0",
     "@types/node": "^16.18.34",
     "@typescript-eslint/eslint-plugin": "^6.7.0",

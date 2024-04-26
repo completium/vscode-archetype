@@ -13,7 +13,7 @@
     "vscode": "^1.75.0"
   },
   "dependencies": {
-    "@completium/archetype": "1.0.4",
+    "@completium/archetype": "1.0.5",
     "await-notify": "^1.0.1",
     "nth-check": ">=2.0.1",
     "path-browserify": "^1.0.1",
